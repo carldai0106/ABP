@@ -1,0 +1,33 @@
+﻿{
+    "Culture": "en-US",
+    "KeyValuePairs": {
+        "TenancyNameIsAlreadyTaken": "Tenancy name {0} is already taken.",
+        "Identity.UserAlreadyInRole": "User already in role.",
+        "Identity.UserNotInRole": "User is not in role.",
+        "Identity.RoleNotFound": "Role {0} does not exist.",
+        "Identity.PasswordMismatch": "Incorrect password.",
+        "Identity.InvalidUserName": "User name {0} is invalid, can only contain letters or digits.",
+        "Identity.PasswordTooShort": "Passwords must be at least {0} characters.",
+        "Identity.PropertyTooShort": "{0} cannot be null or empty.",
+        "Identity.DuplicateName": "Name {0} is already taken.",
+        "Identity.UserAlreadyHasPassword": "User already has a password set.",
+        "Identity.PasswordRequireNonLetterOrDigit": "Passwords must have at least one non letter or digit character.",
+        "Identity.UserIdNotFound": "UserId not found.",
+        "Identity.InvalidToken": "Invalid token.",
+        "Identity.InvalidEmail": "Email '{0}' is invalid.",
+        "Identity.UserNameNotFound": "User {0} does not exist.",
+        "Identity.LockoutNotEnabled": "Lockout is not enabled for this user.",
+        "Identity.PasswordRequireUpper": "Passwords must have at least one uppercase ('A'-'Z').",
+        "Identity.PasswordRequireDigit": "Passwords must have at least one digit ('0'-'9').",
+        "Identity.PasswordRequireLower": "Passwords must have at least one lowercase ('a'-'z').",
+        "Identity.DuplicateEmail": "Email '{0}' is already taken.",
+        "Identity.ExternalLoginExists": "A user with that external login already exists.",
+        "Identity.DefaultError": "An unknown failure has occured.",
+        "InvalidTenancyName": "Tenancy name is not valid!",        
+        "RoleNameIsAlreadyTaken": "Role name {0} is already taken.",
+        "RoleDisplayNameIsAlreadyTaken": "Role display name {0} is already taken.",
+        "CanNotDeleteStaticRole": "Can not delete a static role: {0}",
+        "CanNotRenameAdminUser": "Can not rename user name of the {0} since this is the default admin user!",
+        "CanNotDeleteAdminUser": "Can not delete user {0} since this is the default admin user!"
+    }
+}

@@ -1,0 +1,14 @@
+﻿{
+    "Culture": "en",
+    "KeyValuePairs": {
+        "SmtpHost": "SMTP host",
+        "SmtpPort": "SMTP port",
+        "Username": "User name",
+        "Password": "Password",
+        "DomainName": "Domain Name",
+        "UseSSL": "Use SSL",
+        "UseDefaultCredentials": "Use default credentials",
+        "DefaultFromSenderEmailAddress": "Default from (sender) email address",
+        "DefaultFromSenderDisplayName": "Default from (sender) display name"        
+    }
+}

@@ -1,0 +1,14 @@
+﻿{
+    "Culture": "zh-CN",
+    "KeyValuePairs": {
+        "SmtpHost": "SMTP主机",
+        "SmtpPort": "SMTP端口",
+        "Username": "用户名",
+        "Password": "密码",
+        "DomainName": "域名",
+        "UseSSL": "使用SSL",
+        "UseDefaultCredentials": "使用默认验证",
+        "DefaultFromSenderEmailAddress": "默认发件人邮箱地址",
+        "DefaultFromSenderDisplayName": "默认发件人名字"        
+    }
+}

@@ -1,0 +1,108 @@
+﻿@media (min-width: 764px) {
+    .header .logo {
+        display: inline-block;
+        width: 220px;
+    }
+}
+@media only screen and (max-width: 764px) {
+    .navbar-header {
+        float: none !important;
+        display: block;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+    }
+
+    .ace-nav {
+        display: block;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-width: 1px 0 0;
+        float: right;
+    }
+
+    .navbr-buttons {
+        background-color: #438eb9;
+        height: 52px;
+    }
+}
+
+@media only screen and (max-width: 534px) {
+    .ace-nav {
+        display: block;
+        text-align: center;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-width: 1px 0 0;
+        float: none !important;
+        width: 312px;
+        margin: 0 auto !important;
+    }
+}
+
+
+@media (max-width: 534px) {
+    .nav-aside {
+        left: -220px;
+    }
+}
+
+
+@media (min-width: 764px) {
+    #main-container {
+        top: 50px;
+        width: auto;
+        left: 220px;
+    }
+}
+
+@media (max-width: 534px) {
+    #main-container {
+        top: 102px;
+        width: 100%;
+        left: 0;
+    }
+}
+
+@media(max-width:765px) {
+    .btns-group.btns-right {
+        float: none;
+        margin-top: 15px;
+        margin-bottom: -5px;
+        overflow: hidden;
+    }
+}
+
+
+@media(min-width:765px) {
+    .btns-group.btns-right {
+        display: table;
+    }
+}
+
+@media(max-width:454px) {
+
+    .btns-group #searchform {
+        min-width: 314px;
+    }
+}
+
+
+@media(max-width:764px) {
+    .dyh-tree ul > li > a > span.title {
+        max-width: 200px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: left;
+        position: relative;
+        top: 6px;
+        line-height: 20px;
+    }
+}
+
+@media(max-width:990px) {
+    #navbar-collapse-type {
+        border-top: 1px solid #ddd;
+    }
+}
+

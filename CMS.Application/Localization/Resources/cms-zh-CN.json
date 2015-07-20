@@ -1,0 +1,33 @@
+﻿{
+    "Culture": "zh-CN",
+    "KeyValuePairs": {
+        "Identity.UserAlreadyInRole": "用户已拥有此角色.",
+        "Identity.UserNotInRole": "用户不包含此角色.",
+        "Identity.RoleNotFound": "角色{0}不存在.",
+        "Identity.PasswordMismatch": "密码错误.",
+        "Identity.InvalidUserName": "用户名{0}不符合要求, 只能包含字母和数字.",
+        "Identity.PasswordTooShort": "密码至少要{0}位.",
+        "Identity.PropertyTooShort": "{0}不能为空.",
+        "Identity.DuplicateName": "名字{0}已被占用.",
+        "Identity.UserAlreadyHasPassword": "用户已设置密码.",
+        "Identity.PasswordRequireNonLetterOrDigit": "密码必须包含一位非字母特殊符号或数字.",
+        "Identity.UserIdNotFound": "用户不存在.",
+        "Identity.InvalidToken": "无效的token.",
+        "Identity.InvalidEmail": "邮箱地址 '{0}' 不符合要求.",
+        "Identity.UserNameNotFound": "用户 {0} 不存在.",
+        "Identity.LockoutNotEnabled": "对此用户，不能启用锁定.",
+        "Identity.PasswordRequireUpper": "密码至少要包含一位大写字母 ('A'-'Z').",
+        "Identity.PasswordRequireDigit": "密码至少要包含一位数字 ('0'-'9').",
+        "Identity.PasswordRequireLower": "密码至少要包含一位小写字母 ('a'-'z').",
+        "Identity.DuplicateEmail": "邮箱地址 '{0}' 已被占用.",
+        "Identity.ExternalLoginExists": "已存在此外部登陆用户.",
+        "Identity.DefaultError": "发生了一个未知的异常错误.",
+        "InvalidTenancyName": "租户名无效!",
+        "TenancyNameIsAlreadyTaken": "租户名{0} 已被占用.",
+        "RoleNameIsAlreadyTaken": "角色名{0}已被占用.",
+        "RoleDisplayNameIsAlreadyTaken": "角色显示名称 {0}已被占用.",
+        "CanNotDeleteStaticRole": "不能删除系统预定义角色: {0}",
+        "CanNotRenameAdminUser": "不能重命名默认管理员的用户名 {0}",
+        "CanNotDeleteAdminUser": "不能删除默认管理员{0}!"
+    }
+}

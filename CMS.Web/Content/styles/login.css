@@ -1,0 +1,276 @@
+body{
+    font-size: 1.4em;
+    font-family: /*"Segoe UI"*/Arial, Verdana, Helvetica, Sans-Serif;
+    color: #232323;
+    background-color: #fff;
+	background:
+	radial-gradient(black 15%, transparent 16%) 0 0,
+	radial-gradient(black 15%, transparent 16%) 8px 8px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+	radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px;
+	background-color:#282828;
+	background-size:16px 16px;
+}
+ul, li, ol {
+    margin: 0;
+    padding: 0;
+    list-style: none outside none;
+}
+.wrapper a{
+	text-decoration: none;
+}
+.logo a{
+	color:#fff;
+}
+#content {
+	position: absolute;
+	top: 100px;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	left: 0;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: -blackberry-touch;
+	-moz-transition: none;
+	-o-transition: none;
+	-webkit-transition: none;
+	transition: none;
+}
+
+@media (min-width: 768px){
+	#content {
+		top: 50px;
+		width: auto;
+		left: 220px;
+	}
+}
+#content {
+	z-index: 2;
+	top: 0;
+	left: 0;
+}
+.signin-block .signin-header, 
+.signup-block .signin-header {
+	padding: 25px 0;	
+}
+
+@media (min-width: 1200px){
+.container {
+	width: 1170px;
+	}
+}
+@media (min-width: 992px){
+	.container {
+		width: 970px;
+	}
+}
+@media (min-width: 768px){
+	.container {
+		width: 750px;
+	}
+}
+.container {
+	margin-right: auto;
+	margin-left: auto;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+.text-center {
+	text-align: center;
+}
+.container:before, .container:after {
+	content: " ";
+	display: table;
+}
+.signin-block .logo, .signup-block .logo {
+	font-size: 46px;
+	font-weight: bold;
+}
+
+.signin-block{	
+	margin-top: 10%;
+}
+
+.signin-block .signin-body, 
+.signin-block .signup-body, 
+.signup-block .signin-body, 
+.signup-block .signup-body {
+	border-top: 1px solid #f8f8f8;
+	padding: 20px 10px;
+}
+
+.signin-block .form-container, 
+.signup-block .form-container {
+	max-width: 420px;
+	margin: 10px auto;
+	padding: 20px 40px;
+	background: #fff;
+	border-radius: 5px;
+	border: 1px solid #ccc;
+}
+
+.line-thru {
+	margin: 1em 0;
+	display: block;
+	font-size: .875em;
+	font-weight: bold;
+	margin-bottom: 1em;
+	position: relative;
+	text-align: center;
+	width: 100%;
+	z-index: 1;
+}
+
+
+
+.form-container header{
+	text-align: center;
+	line-height: 50px;
+	height: 50px;
+	font-size: 26px;
+	font-weight: bold;
+	margin: -21px -41px 20px -41px;
+	border-radius: 5px 5px 0px 0px;
+	color: #fff;
+	background: rgb(75,184,240); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(75,184,240,1) 0%, rgba(58,139,194,1) 51%, rgba(38,85,139,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(75,184,240,1)), color-stop(51%,rgba(58,139,194,1)), color-stop(100%,rgba(38,85,139,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(75,184,240,1) 0%,rgba(58,139,194,1) 51%,rgba(38,85,139,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(75,184,240,1) 0%,rgba(58,139,194,1) 51%,rgba(38,85,139,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(75,184,240,1) 0%,rgba(58,139,194,1) 51%,rgba(38,85,139,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(75,184,240,1) 0%,rgba(58,139,194,1) 51%,rgba(38,85,139,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4bb8f0', endColorstr='#26558b',GradientType=0 ); /* IE6-9 */
+}
+
+input[type="checkbox"], input[type="radio"] {
+    border: 1px solid #bbb;
+    clear: none;
+    cursor: pointer;
+    display: inline-block;
+    line-height: 0;
+    height: 16px;
+    margin: -4px 4px 0 0;
+    outline: 0;
+    padding: 0 !important;
+    text-align: center;
+    vertical-align: middle;
+    width: 16px;
+    min-width: 16px;
+    -webkit-appearance: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #555;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+    border-radius: 2px;
+}
+
+input[type="radio"] {
+    border-radius: 50%;
+}
+
+input[type="checkbox"]:checked:before, input[type="radio"]:checked:before {
+    float: left;
+    display: inline-block;
+    vertical-align: middle;
+    width: 16px;
+    font-family: FontAwesome;
+    font-size: 14px;
+    font-weight: normal;
+    speak: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: '\f00c';
+    margin: 7px 0 0 -1px;
+    color: #1e8cbe;
+}
+
+input[type="radio"]:checked:before {
+    content: '\f111';
+}
+
+a.btn-sm>i{
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.form-group .checkbox label>input[type='checkbox']{
+	margin: 2px 4px 0px -20px;
+}
+
+.forgot{
+	line-height: 35px;
+	display: block;
+}
+
+.field-validation-error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border: 1px solid #eed3d7;
+    line-height: 20px;
+    border-radius: 2px;
+    padding: 5px 8px;
+    display: block;
+    margin-top: 5px;
+    font-size: 1em;
+}
+/* custom validation-summary-errors css */
+.message-box {
+    position: absolute;
+    width: 50%;
+    text-align: center;
+    left: 25%;
+    top: 2px;
+    z-index: 99;
+    display: none;
+}
+
+/* tip box */
+.warning, .success, .info, .error {
+    line-height: 20px;
+    border-radius: 2px;
+    padding: 5px 8px;
+}
+
+.validation-summary-errors {
+    line-height: 20px;
+    border-radius: 2px;
+    padding: 5px 8px;
+    color: #b94a48;
+    background-color: #f2dede;
+    border: 1px solid #eed3d7;
+}
+
+.validation-summary-errors.summary {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+}
+
+.warning {
+    color: #c09853;
+    background-color: #fcf8e3;
+    border: 1px solid #fbeed5;
+}
+
+.success {
+    color: #468847;
+    background-color: #dff0d8;
+    border: 1px solid #d6e9c6;
+}
+
+.info {
+    color: #3a87ad;
+    background-color: #d9edf7;
+    border: 1px solid #bce8f1;
+}
+
+.error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border: 1px solid #eed3d7;
+}
+
