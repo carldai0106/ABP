@@ -23,11 +23,13 @@
         "Identity.DuplicateEmail": "Email '{0}' is already taken.",
         "Identity.ExternalLoginExists": "A user with that external login already exists.",
         "Identity.DefaultError": "An unknown failure has occured.",
+        "Identity.DuplicateActionCode": "The type of action '{0}' is already taken.",
         "InvalidTenancyName": "Tenancy name is not valid!",        
         "RoleNameIsAlreadyTaken": "Role name {0} is already taken.",
         "RoleDisplayNameIsAlreadyTaken": "Role display name {0} is already taken.",
         "CanNotDeleteStaticRole": "Can not delete a static role: {0}",
         "CanNotRenameAdminUser": "Can not rename user name of the {0} since this is the default admin user!",
-        "CanNotDeleteAdminUser": "Can not delete user {0} since this is the default admin user!"
+        "CanNotDeleteAdminUser": "Can not delete user {0} since this is the default admin user!",
+        "DuplicateModuleCode" :  "Module Code/Menu Code '{0}' is already taken."
     }
 }

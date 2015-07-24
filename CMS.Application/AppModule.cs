@@ -29,6 +29,10 @@ namespace CMS.Application
                  new JsonEmbeddedFileLocalizationDictionaryProvider(
                      Assembly.GetExecutingAssembly(), "CMS.Application.Localization.Resources"
                      )));
+
+            //Configuration.MultiTenancy.IsEnabled = true;
+            
+            
         }
 
         public override void Initialize<TTenantId, TUserId>()
@@ -36,10 +40,7 @@ namespace CMS.Application
             //This code is used to register classes to dependency injection system for this assembly using conventions.
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
-            //We must declare mappings to be able to use AutoMapper
-            //DtoMappings.Map();
-
-           
+            CustomDtoMapper.CreateMappings();
         }
     }
 }

@@ -311,7 +311,6 @@
     <Compile Include="Configuration\SettingProvider.cs" />
     <Compile Include="Configuration\ISettingManager.cs" />
     <Compile Include="Configuration\ISettingStore.cs" />
-    <Compile Include="Configuration\NullSettingStore.cs" />
     <Compile Include="Configuration\SettingDefinition.cs" />
     <Compile Include="Configuration\SettingDefinitionGroup.cs" />
     <Compile Include="Configuration\SettingHelper.cs" />

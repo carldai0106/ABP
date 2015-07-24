@@ -9,31 +9,45 @@ using System.Text;
 using System.Threading.Tasks;
 using Abp.EntityFramework;
 using CMS.Domain;
+using CMS.Domain.Action;
+using CMS.Domain.ActionModule;
+using CMS.Domain.Module;
+using CMS.Domain.Role;
+using CMS.Domain.RoleRight;
+using CMS.Domain.Tenant;
+using CMS.Domain.User;
+using CMS.Domain.UserRole;
 
 namespace CMS.Data.EntityFramework
 {
     public class CmsDbContext : AbpDbContext<Guid, Guid>
-      
     {
-        //public virtual IDbSet<UserEntity> Users { get; set; }
+        public virtual IDbSet<TenantEntity> Tenants { get; set; }
+        public virtual IDbSet<UserEntity> Users { get; set; }
+        public virtual IDbSet<RoleEntity> Roles { get; set; }
+        public virtual IDbSet<UserRoleEntity> UserRoles { get; set; }
+        public virtual IDbSet<ActionEntity> Actions { get; set; }
+        public virtual IDbSet<ModuleEntity> Modules { get; set; }
+        public virtual IDbSet<ActionModuleEntity> ActionModules { get; set; }
+        public virtual IDbSet<RoleRightEntity> RoleRights { get; set; }
 
         public CmsDbContext()
-            : base("AbpCmsConn")
+            : base(@"Server=CARL\MSSQL2012; Database=AbpCms; uid=sa;pwd=Bcsint2014;")
         {
-            //Console.WriteLine(this.Database.Connection.ConnectionString);
+            
         }
 
-        //public CmsDbContext(string nameOrConnectionString)
-        //    : base(nameOrConnectionString)
-        //{
+        public CmsDbContext(string nameOrConnectionString)
+            : base(nameOrConnectionString)
+        {
+            System.Diagnostics.Debug.WriteLine(nameOrConnectionString);
+        }
 
-        //}
+        public CmsDbContext(DbConnection connection)
+            : base(connection, true)
+        {
 
-        //public CmsDbContext(DbConnection connection)
-        //    : base(connection, true)
-        //{
-
-        //}
+        }
 
         static CmsDbContext()
         {

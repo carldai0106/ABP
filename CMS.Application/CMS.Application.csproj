@@ -35,6 +35,22 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
       <Private>True</Private>
@@ -42,6 +58,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Linq.Dynamic, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Linq.Dynamic.1.0.4\lib\net40\System.Linq.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -49,18 +69,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Action\ActionAppService.cs" />
+    <Compile Include="Action\Dto\ActionCreateDto.cs" />
+    <Compile Include="Action\Dto\ActionEditDto.cs" />
+    <Compile Include="Action\Dto\GetActionsInput.cs" />
+    <Compile Include="Action\IActionAppService.cs" />
+    <Compile Include="AppConsts.cs" />
     <Compile Include="AppModule.cs" />
+    <Compile Include="CustomDtoMapper.cs" />
     <Compile Include="IdentityFramework\AbpIdentityResult.cs" />
     <Compile Include="IdentityFramework\IdentityResultExtensions.cs" />
     <Compile Include="Localization\CmsConsts.cs" />
+    <Compile Include="Module\Dto\ModuleCreateDto.cs" />
+    <Compile Include="Module\Dto\ModuleEditDto.cs" />
+    <Compile Include="Module\IModuleAppService.cs" />
+    <Compile Include="Module\ModuleAppService.cs" />
     <Compile Include="MultiTenancy\Dto\CreateTenantDto.cs" />
+    <Compile Include="MultiTenancy\Dto\TenantEditDto.cs" />
     <Compile Include="MultiTenancy\ITenantAppService.cs" />
     <Compile Include="MultiTenancy\TenantAppService.cs" />
+    <Compile Include="PagedAndSortedInputDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="User\Dto\CreateUserDto.cs" />
+    <Compile Include="User\Dto\GetUsersInput.cs" />
+    <Compile Include="User\Dto\UserEditDto.cs" />
+    <Compile Include="User\IUserAppService.cs" />
+    <Compile Include="User\UserAppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Localization\Resources\cms-en-US.json" />
     <EmbeddedResource Include="Localization\Resources\cms-zh-CN.json" />
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +119,10 @@
       <Project>{bf813e48-d151-4e31-bb2d-1fea44a9a2e5}</Project>
       <Name>CMS.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CMS.FW\CMS.FW.csproj">
+      <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
+      <Name>CMS.FW</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -90,6 +133,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

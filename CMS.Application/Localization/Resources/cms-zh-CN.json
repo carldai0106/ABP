@@ -22,12 +22,14 @@
         "Identity.DuplicateEmail": "邮箱地址 '{0}' 已被占用.",
         "Identity.ExternalLoginExists": "已存在此外部登陆用户.",
         "Identity.DefaultError": "发生了一个未知的异常错误.",
+        "Identity.DuplicateActionCode": "权限类型 '{0}' 已被占用.",
         "InvalidTenancyName": "租户名无效!",
         "TenancyNameIsAlreadyTaken": "租户名{0} 已被占用.",
         "RoleNameIsAlreadyTaken": "角色名{0}已被占用.",
         "RoleDisplayNameIsAlreadyTaken": "角色显示名称 {0}已被占用.",
         "CanNotDeleteStaticRole": "不能删除系统预定义角色: {0}",
         "CanNotRenameAdminUser": "不能重命名默认管理员的用户名 {0}",
-        "CanNotDeleteAdminUser": "不能删除默认管理员{0}!"
+        "CanNotDeleteAdminUser": "不能删除默认管理员{0}!",
+        "DuplicateModuleCode" :  "模块编码/菜单编码 '{0}' 已被占用."
     }
 }

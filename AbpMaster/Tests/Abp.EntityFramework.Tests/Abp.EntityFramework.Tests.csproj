@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Repositories\EntityFrameworkConventionalRegisterer_Test.cs" />
+    <Compile Include="Repositories\EntityFrameworkGenericRepositoryRegistrar1_Tests.cs" />
     <Compile Include="Repositories\EntityFrameworkGenericRepositoryRegistrar_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

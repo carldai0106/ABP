@@ -120,13 +120,24 @@ namespace Abp.EntityFramework
             base.OnModelCreating(modelBuilder);
             modelBuilder.Filter(AbpDataFilters.SoftDelete, (ISoftDelete d) => d.IsDeleted, false);
 
-            modelBuilder.Filter(AbpDataFilters.MustHaveTenant, (IMustHaveTenant<TTenantId> t, TTenantId tenantId)
-                => t.TenantId.Equals(tenantId),
-                default(TTenantId));
+            var parMust1 = Expression.Parameter(typeof(IMustHaveTenant<TTenantId>), "t");
+            var parMust2 = Expression.Parameter(typeof(TTenantId), "tenantId");
 
-            modelBuilder.Filter(AbpDataFilters.MayHaveTenant, (IMayHaveTenant<TTenantId> t, TTenantId? tenantId)
-                => t.TenantId.Equals(tenantId),
-                default(TTenantId));
+            var expMust = Expression.Lambda<Func<IMustHaveTenant<TTenantId>, TTenantId, bool>>(
+                    Expression.Equal(Expression.PropertyOrField(parMust1, "TenantId"), parMust2), parMust1, parMust2
+                );
+
+            modelBuilder.Filter(AbpDataFilters.MustHaveTenant, expMust, default(TTenantId));
+
+
+            var parMay1 = Expression.Parameter(typeof(IMayHaveTenant<TTenantId>), "t");
+            var parMay2 = Expression.Parameter(typeof(TTenantId?), "tenantId");
+
+            var expMay = Expression.Lambda<Func<IMayHaveTenant<TTenantId>, TTenantId?, bool>>(
+                    Expression.Equal(Expression.PropertyOrField(parMay1, "TenantId"), parMay2), parMay1, parMay2
+                );
+
+            modelBuilder.Filter(AbpDataFilters.MayHaveTenant, expMay, default(TTenantId));
         }
        
 
@@ -199,34 +210,6 @@ namespace Abp.EntityFramework
 
         protected virtual void CheckAndSetMustHaveTenant(DbEntityEntry entry)
         {
-            //var entity = entry.Cast<IMustHaveTenant>().Entity;
-
-            //if (!this.IsFilterEnabled(AbpDataFilters.MustHaveTenant))
-            //{
-            //    if (AbpSession.TenantId != null && entity.TenantId == 0)
-            //    {
-            //        entity.TenantId = AbpSession.GetTenantId();
-            //    }
-
-            //    return;
-            //}
-
-            //var currentTenantId = (int)this.GetFilterParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId);
-
-            //if (currentTenantId == 0)
-            //{
-            //    throw new DbEntityValidationException("Can not save a IMustHaveTenant entity while MustHaveTenant filter is enabled and current filter parameter value is not set (Probably, no tenant user logged in)!");
-            //}
-
-            //if (entity.TenantId == 0)
-            //{
-            //    entity.TenantId = currentTenantId;
-            //}
-            //else if (entity.TenantId != currentTenantId && entity.TenantId != AbpSession.TenantId)
-            //{
-            //    throw new DbEntityValidationException("Can not set IMustHaveTenant.TenantId to a different value than the current filter parameter value or IAbpSession.TenantId while MustHaveTenant filter is enabled!");
-            //}
-
             var entity = entry.Cast<IMustHaveTenant<TTenantId>>().Entity;
 
             if (!this.IsFilterEnabled(AbpDataFilters.MustHaveTenant))
@@ -239,8 +222,10 @@ namespace Abp.EntityFramework
                 return;
             }
 
-            
-            var currentTenantId = (TTenantId)this.GetFilterParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId);
+            var currentTenantId =
+               Convert.ChangeType(
+                   this.GetFilterParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId),
+                   typeof(TTenantId));
 
             if (currentTenantId.Equals(default(TTenantId)))
             {
@@ -249,7 +234,7 @@ namespace Abp.EntityFramework
 
             if (entity.TenantId.Equals(default(TTenantId)))
             {
-                entity.TenantId = currentTenantId;
+                entity.TenantId = (TTenantId)currentTenantId;
             }
             else if (!entity.TenantId.Equals(currentTenantId) && !entity.TenantId.Equals(AbpSession.TenantId))
             {
@@ -261,32 +246,17 @@ namespace Abp.EntityFramework
 
         protected virtual void CheckMayHaveTenant(DbEntityEntry entry)
         {
-            //if (!this.IsFilterEnabled(AbpDataFilters.MayHaveTenant))
-            //{
-            //    return;
-            //}
-
-            //var currentTenantId = (int?)this.GetFilterParameterValue(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId);
-
-            //var entity = entry.Cast<IMayHaveTenant>().Entity;
-
-            //if (entity.TenantId != currentTenantId && entity.TenantId != AbpSession.TenantId)
-            //{
-            //    throw new DbEntityValidationException("Can not set TenantId to a different value than the current filter parameter value or IAbpSession.TenantId while MayHaveTenant filter is enabled!");
-            //}
-
             if (!this.IsFilterEnabled(AbpDataFilters.MayHaveTenant))
             {
                 return;
             }
-
 
             var currentTenantId =
                 Convert.ChangeType(
                     this.GetFilterParameterValue(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId),
                     typeof (TTenantId));
 
-            var entity = entry.Cast<IMayHaveTenant>().Entity;
+            var entity = entry.Cast<IMayHaveTenant<TTenantId>>().Entity;
 
             if (!entity.TenantId.Equals(currentTenantId) && !entity.TenantId.Equals(AbpSession.TenantId))
             {

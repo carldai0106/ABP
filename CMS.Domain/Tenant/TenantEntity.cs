@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using CMS.Domain.User;
 
 namespace CMS.Domain.Tenant
 {
+    [Table("Tenants")]
     public class TenantEntity : FullAuditedEntity<Guid, Guid>, IPassivable
     {
         public const int MaxTenancyNameLength = 128;
@@ -18,15 +20,15 @@ namespace CMS.Domain.Tenant
 
         [Required]
         [StringLength(MaxTenancyNameLength)]
-        public string TenancyName { get; private set; }
+        public virtual string TenancyName { get;  set; }
 
         [Required]
         [StringLength(MaxDisplayNameLength)]
-        public string DisplayName { get; private set; }
+        public virtual string DisplayName { get;  set; }
 
-        public bool IsActive { get; set; }
+        public virtual bool IsActive { get; set; }
 
-        public ICollection<UserEntity> Users { get; private set; }
+        public virtual ICollection<UserEntity> Users { get;  set; }
 
         public TenantEntity()
         {

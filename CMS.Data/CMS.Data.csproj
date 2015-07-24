@@ -55,13 +55,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityFramework\Repositories\Reponsitory.cs" />
     <Compile Include="EntityFramework\Repositories\CmsRepository.cs" />
-    <Compile Include="Mapping\TenantEntityMap.cs" />
-    <Compile Include="Mapping\UserEntityMap.cs" />
-    <Compile Include="Migrations\201507020233433_InitialCreate.cs" />
-    <Compile Include="Migrations\201507020233433_InitialCreate.Designer.cs">
-      <DependentUpon>201507020233433_InitialCreate.cs</DependentUpon>
+    <Compile Include="Mapping\RoleRightEntityMap.cs" />
+    <Compile Include="Mapping\ActionModuleEntityMap.cs" />
+    <Compile Include="Mapping\UserRoleEntityMap.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Migrations\201507240310323_InitialCreate.cs" />
+    <Compile Include="Migrations\201507240310323_InitialCreate.Designer.cs">
+      <DependentUpon>201507240310323_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -96,8 +98,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201507020233433_InitialCreate.resx">
-      <DependentUpon>201507020233433_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201507240310323_InitialCreate.resx">
+      <DependentUpon>201507240310323_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

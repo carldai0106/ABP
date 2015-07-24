@@ -51,6 +51,10 @@
       <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework.DynamicFilters, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\EntityFramework.DynamicFilters.1.4.0\lib\net40\EntityFramework.DynamicFilters.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
@@ -101,10 +105,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\EntityFramework.DynamicFilters\EntityFramework.DynamicFilters.csproj">
-      <Project>{56e36ad1-e675-42f0-96cb-7f475e05e491}</Project>
-      <Name>EntityFramework.DynamicFilters</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Abp.EntityFramework\Abp.EntityFramework.csproj">
       <Project>{948F0CAF-3382-4E03-9A0F-0DDB206FE40D}</Project>
       <Name>Abp.EntityFramework</Name>

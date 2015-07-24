@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 
 using System.Threading.Tasks;
-
+using Abp;
 using Abp.Application.Services;
+using Abp.Application.Services.Dto;
+using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using CMS.Application.MultiTenancy.Dto;
@@ -20,12 +22,10 @@ namespace CMS.Application.MultiTenancy
 {
     public class TenantAppService : ApplicationService<Guid, Guid>, ITenantAppService
     {
-        private readonly IRepository<TenantEntity, Guid> _repository;
-        public TenantAppService(IRepository<TenantEntity, Guid> repository)
+        private readonly ICmsRepository<TenantEntity, Guid> _repository;
+        public TenantAppService(ICmsRepository<TenantEntity, Guid> repository)
         {
             _repository = repository;
-            //LocalizationManager = NullLocalizationManager.Instance;
-            //LocalizationSource
             LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
@@ -35,9 +35,15 @@ namespace CMS.Application.MultiTenancy
             {
                 IsActive = input.IsActive
             };
+
+            if (await _repository.FirstOrDefaultAsync(x => x.TenancyName == tenant.TenancyName) != null)
+            {
+               var rs = IdentityResult.Failed(string.Format(L("TenancyNameIsAlreadyTaken"), tenant.TenancyName));
+                rs.CheckErrors();
+            }
+
+            await _repository.InsertAsync(tenant);
             
-            var rs = await CreateAsync(tenant);
-            rs.CheckErrors();
 
             await CurrentUnitOfWork.SaveChangesAsync(); //To get new tenant's id.
 
@@ -45,19 +51,44 @@ namespace CMS.Application.MultiTenancy
             CurrentUnitOfWork.SetFilterParameter(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId, tenant.Id);
         }
 
-        protected void CheckErrors(IdentityResult identityResult)
+        public async Task<TenantEditDto> GetTenant(EntityRequestInput<Guid> input)
         {
-            identityResult.CheckErrors(LocalizationManager);
+            return (await _repository.FirstOrDefaultAsync(input.Id)).MapTo<TenantEditDto>();
         }
 
-        private async Task<IdentityResult> CreateAsync(TenantEntity tenant)
+        public async Task UpdateTenant(TenantEditDto input)
         {
-            if (await _repository.FirstOrDefaultAsync(x => x.TenancyName == tenant.TenancyName) != null)
+            if (await _repository.FirstOrDefaultAsync(t => t.TenancyName == input.TenancyName && t.Id != input.Id) != null)
             {
-                return IdentityResult.Failed(string.Format(L("TenancyNameIsAlreadyTaken"), tenant.TenancyName));
+                var rs = IdentityResult.Failed(string.Format(L("TenancyNameIsAlreadyTaken"), input.TenancyName));
+                rs.CheckErrors();
             }
-            await _repository.InsertAsync(tenant);
-            return IdentityResult.Success;
+
+            var tenant = await _repository.FirstOrDefaultAsync(input.Id);
+            if (tenant == null)
+            {
+                throw new AbpException("There is no tenant with id: " + input.Id);
+            }
+
+            input.MapTo(tenant);
+
+            await _repository.UpdateAsync(tenant);
+        }
+
+        public async Task DeleteTenant(EntityRequestInput<Guid> input)
+        {
+            var tenant = await _repository.FirstOrDefaultAsync(input.Id);
+            if (tenant == null)
+            {
+                throw new AbpException("There is no tenant with id: " + input.Id);
+            }
+
+            await _repository.DeleteAsync(tenant);
+        }
+
+        public async Task<TenantEditDto> GetTenant(string tenancyName)
+        {
+            return (await _repository.FirstOrDefaultAsync(x => x.TenancyName == tenancyName)).MapTo<TenantEditDto>();
         }
     }
 }

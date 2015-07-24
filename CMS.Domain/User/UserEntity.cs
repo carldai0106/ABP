@@ -1,20 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
+using Abp.Extensions;
 using CMS.Domain.Tenant;
+using CMS.Domain.UserRole;
 using CMS.FW;
 
 namespace CMS.Domain.User
 {
-    public class UserEntity : FullAuditedAndTenantEntity
+    [Table("Users")]
+    public class UserEntity : FullAuditedAndTenantEntity, IPassivable
     {
         public const int MaxUserNameLength = 64;
         public const int MaxPasswordLength = 128;
+        
         public const int MaxEmailLength = 256;
         public const int MaxFirstNameLength = 128;
         public const int MaxLastNameLength = 128;
@@ -36,5 +41,34 @@ namespace CMS.Domain.User
         public virtual string LastName { get;  set; }
 
         public virtual TenantEntity Tenant { get; set; }
+        [ForeignKey("UserId")]
+        public virtual ICollection<UserRoleEntity> UserRoles
+        {
+            get;
+            set;
+        }
+
+        public UserEntity()
+        {
+
+        }
+
+        public UserEntity(Guid tenantId, string userName, string password, string email, string firstName, string lastName)
+        {
+            this.Id = Guid.NewGuid();
+            TenantId = tenantId;
+            UserName = userName;
+            Password = password;
+            Email = email;
+            FirstName = firstName;
+            LastName = lastName;
+        }
+
+        public virtual bool IsActive { get; set; }
+
+        public static string CreateRandomPassword()
+        {
+            return Guid.NewGuid().ToString("N").Truncate(16);
+        }
     }
 }

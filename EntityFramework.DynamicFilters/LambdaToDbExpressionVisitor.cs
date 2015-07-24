@@ -520,7 +520,7 @@ namespace EntityFramework.DynamicFilters
         private void MapEqualsExpression(MethodCallExpression expression)
         {
             if ((expression.Arguments == null) || (expression.Arguments.Count != 1))
-                throw new ApplicationException("Did not find exactly 1 Argument to StartsWith function");
+                throw new ApplicationException("Did not find exactly 1 Argument to Equals function");
 
             DbExpression srcExpression = GetDbExpressionForExpression(expression.Object);
 
@@ -530,7 +530,7 @@ namespace EntityFramework.DynamicFilters
             {
                 var constantExpression = GetDbExpressionForExpression(expression.Arguments[0]) as DbConstantExpression;
                 if ((constantExpression == null) || (constantExpression.Value == null))
-                    throw new NullReferenceException("Parameter to StartsWith cannot be null");
+                    throw new NullReferenceException("Parameter to Equals cannot be null");
 
                 dbExpression = DbExpressionBuilder.Equal(srcExpression, constantExpression);
             }
@@ -542,7 +542,8 @@ namespace EntityFramework.DynamicFilters
                 //  It works but generates some crazy conditions using charindex which I don't think will use indexes as well as "like"...
                 //dbExpression = DbExpressionBuilder.Equal(DbExpressionBuilder.True, srcExpression.StartsWith(argExpression));
 
-                dbExpression = DbExpressionBuilder.Equal(srcExpression, argExpression);
+                //dbExpression = DbExpressionBuilder.Equal(srcExpression, argExpression);
+                dbExpression = srcExpression.Equal(argExpression);
             }
 
             MapExpressionToDbExpression(expression, dbExpression);

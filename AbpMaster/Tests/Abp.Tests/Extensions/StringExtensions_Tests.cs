@@ -1,4 +1,4 @@
-using System;
+Ôªøusing System;
 using System.Globalization;
 using System.Linq;
 using Abp.Extensions;
@@ -23,8 +23,8 @@ namespace Abp.Tests.Extensions
             "TurkeY".EnsureEndsWith('y', StringComparison.InvariantCultureIgnoreCase).ShouldBe("TurkeY");
 
             //Edge cases for Turkish 'i'.
-            "TAKS".EnsureEndsWith('i', true, new CultureInfo("tr-TR")).ShouldBe("TAKS");
-            "TAKS".EnsureEndsWith('i', false, new CultureInfo("tr-TR")).ShouldBe("TAKS");
+            "TAKS√ù".EnsureEndsWith('i', true, new CultureInfo("tr-TR")).ShouldBe("TAKS√ù");
+            "TAKS√ù".EnsureEndsWith('i', false, new CultureInfo("tr-TR")).ShouldBe("TAKS√ùi");
         }
 
         [Fact]
@@ -39,8 +39,8 @@ namespace Abp.Tests.Extensions
             "Turkey".EnsureStartsWith('t', StringComparison.InvariantCultureIgnoreCase).ShouldBe("Turkey");
 
             //Edge cases for Turkish 'i'.
-            "›stanbul".EnsureStartsWith('i', true, new CultureInfo("tr-TR")).ShouldBe("›stanbul");
-            "›stanbul".EnsureStartsWith('i', false, new CultureInfo("tr-TR")).ShouldBe("i›stanbul");
+            "√ùstanbul".EnsureStartsWith('i', true, new CultureInfo("tr-TR")).ShouldBe("√ùstanbul");
+            "√ùstanbul".EnsureStartsWith('i', false, new CultureInfo("tr-TR")).ShouldBe("i√ùstanbul");
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace Abp.Tests.Extensions
         {
             "helloWorld".ToPascalCase().ShouldBe("HelloWorld");
             "istanbul".ToPascalCase().ShouldBe("Istanbul");
-            "istanbul".ToPascalCase(new CultureInfo("tr-TR")).ShouldBe("›stanbul");
+            "istanbul".ToPascalCase(new CultureInfo("tr-TR")).ShouldBe("√ùstanbul");
         }
 
         [Fact]
@@ -56,8 +56,8 @@ namespace Abp.Tests.Extensions
         {
             "HelloWorld".ToCamelCase().ShouldBe("helloWorld");
             "Istanbul".ToCamelCase().ShouldBe("istanbul");
-            "Istanbul".ToCamelCase(new CultureInfo("tr-TR")).ShouldBe("˝stanbul");
-            "›stanbul".ToCamelCase(new CultureInfo("tr-TR")).ShouldBe("istanbul");
+            "Istanbul".ToCamelCase(new CultureInfo("tr-TR")).ShouldBe("√Ωstanbul");
+            "√ùstanbul".ToCamelCase(new CultureInfo("tr-TR")).ShouldBe("istanbul");
         }
 
         [Fact]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Abp.Collections.Extensions;
 using Abp.Dependency;
 using Abp.Domain.Entities;
@@ -50,6 +51,18 @@ namespace Abp.EntityFramework.Repositories
             where TTenantId : struct
             where TUserId : struct
         {
+            var autoRepositoryAttr = dbContextType.GetSingleAttributeOrNull<AutoRepositoryTypeAttribute>();
+
+            if (autoRepositoryAttr == null)
+            {
+                autoRepositoryAttr = new AutoRepositoryTypeAttribute( //TODO: Make a default static property!
+                    typeof(IRepository<>),
+                    typeof(IRepository<,>),
+                    typeof(EfRepositoryBase<,,,>),
+                    typeof(EfRepositoryBase<,,,,>)
+                    );
+            }
+
             foreach (var entityType in entities)
             {
                 var interfaces = entityType.GetInterfaces();
@@ -66,45 +79,29 @@ namespace Abp.EntityFramework.Repositories
 
                         if (primaryKeyType == typeof(int))
                         {
-                            var genericRepositoryType = typeof(IRepository<>).MakeGenericType(entityType);
+                            var genericRepositoryType = autoRepositoryAttr.RepositoryInterface.MakeGenericType(entityType);
                             if (!iocManager.IsRegistered(genericRepositoryType))
                             {
-                                var makedGenericType = typeof(EfRepositoryBase<,,,>).MakeGenericType(dbContextType, entityType, typeof(TTenantId), typeof(TUserId));
-                                if (string.IsNullOrEmpty(makedGenericType.FullName))
-                                {
-                                    dbContextType = dbContextType.MakeGenericType(typeof(TTenantId), typeof(TUserId));
-                                    if (!iocManager.IsRegistered(dbContextType))
-                                    {
-                                        iocManager.Register(dbContextType, DependencyLifeStyle.Transient);
-                                    }
-                                    makedGenericType = typeof(EfRepositoryBase<,,,>).MakeGenericType(dbContextType, entityType, typeof(TTenantId), typeof(TUserId));
-                                }
+                                var implType = GetMakedGenericType<TTenantId, TUserId>(false, iocManager, autoRepositoryAttr,
+                                    dbContextType, entityType, primaryKeyType);
 
                                 iocManager.Register(
                                     genericRepositoryType,
-                                    makedGenericType,
+                                    implType,
                                     DependencyLifeStyle.Transient
                                     );
                             }
                         }
 
-                        var genericRepositoryTypeWithPrimaryKey = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                        var genericRepositoryTypeWithPrimaryKey = autoRepositoryAttr.RepositoryInterfaceWithPrimaryKey.MakeGenericType(entityType, primaryKeyType);
                         if (!iocManager.IsRegistered(genericRepositoryTypeWithPrimaryKey))
                         {
-                            var makedGenericType = typeof(EfRepositoryBase<,,,,>).MakeGenericType(dbContextType, entityType, primaryKeyType, typeof(TTenantId), typeof(TUserId));
-                            if (string.IsNullOrEmpty(makedGenericType.FullName))
-                            {
-                                dbContextType = dbContextType.MakeGenericType(typeof(TTenantId), typeof(TUserId));
-                                if (!iocManager.IsRegistered(dbContextType))
-                                {
-                                    iocManager.Register(dbContextType, DependencyLifeStyle.Transient);
-                                }
-                                makedGenericType = typeof(EfRepositoryBase<,,,,>).MakeGenericType(dbContextType, entityType, primaryKeyType, typeof(TTenantId), typeof(TUserId));
-                            }
+                            var implType = GetMakedGenericType<TTenantId, TUserId>(true, iocManager, autoRepositoryAttr,
+                                   dbContextType, entityType, primaryKeyType);
 
                             iocManager.Register(
                                 genericRepositoryTypeWithPrimaryKey,
-                                makedGenericType,
+                                implType,
                                 DependencyLifeStyle.Transient
                                 );
                         }
@@ -112,19 +109,27 @@ namespace Abp.EntityFramework.Repositories
                 }
             }
         }
-       
 
-        //modify by carl
         public static void RegisterForDbContext<TTenantId, TUserId>(Type dbContextType, IIocManager iocManager)
             where TTenantId : struct
             where TUserId : struct
         {
+            var autoRepositoryAttr = dbContextType.GetSingleAttributeOrNull<AutoRepositoryTypeAttribute>();
+
+            if (autoRepositoryAttr == null)
+            {
+                autoRepositoryAttr = new AutoRepositoryTypeAttribute( //TODO: Make a default static property!
+                    typeof(IRepository<>),
+                    typeof(IRepository<,>),
+                    typeof(EfRepositoryBase<,,,>),
+                    typeof(EfRepositoryBase<,,,,>)
+                    );
+            }
 
             var entities = dbContextType.GetEntityTypes();
             foreach (var entityType in entities)
             {
-                var interfaces = entityType.GetInterfaces();
-                foreach (var interfaceType in interfaces)
+                foreach (var interfaceType in entityType.GetInterfaces())
                 {
                     if (interfaceType.IsGenericType && interfaceType.GetGenericTypeDefinition() == typeof(IEntity<>))
                     {
@@ -133,48 +138,32 @@ namespace Abp.EntityFramework.Repositories
                         {
                             continue;
                         }
-
+                        
                         if (primaryKeyType == typeof(int))
                         {
-                            var genericRepositoryType = typeof(IRepository<>).MakeGenericType(entityType);
+                            var genericRepositoryType = autoRepositoryAttr.RepositoryInterface.MakeGenericType(entityType);
                             if (!iocManager.IsRegistered(genericRepositoryType))
                             {
-                                var makedGenericType = typeof(EfRepositoryBase<,,,>).MakeGenericType(dbContextType, entityType, typeof(TTenantId), typeof(TUserId));
-                                if (string.IsNullOrEmpty(makedGenericType.FullName))
-                                {
-                                    dbContextType = dbContextType.MakeGenericType(typeof(TTenantId), typeof(TUserId));
-                                    if (!iocManager.IsRegistered(dbContextType))
-                                    {
-                                        iocManager.Register(dbContextType, DependencyLifeStyle.Transient);
-                                    }
-                                    makedGenericType = typeof(EfRepositoryBase<,,,>).MakeGenericType(dbContextType, entityType, typeof(TTenantId), typeof(TUserId));
-                                }
+                                var implType = GetMakedGenericType<TTenantId, TUserId>(false, iocManager, autoRepositoryAttr,
+                                    dbContextType, entityType, primaryKeyType);
 
                                 iocManager.Register(
                                     genericRepositoryType,
-                                    makedGenericType,
+                                    implType,
                                     DependencyLifeStyle.Transient
                                     );
                             }
                         }
 
-                        var genericRepositoryTypeWithPrimaryKey = typeof(IRepository<,>).MakeGenericType(entityType, primaryKeyType);
+                        var genericRepositoryTypeWithPrimaryKey = autoRepositoryAttr.RepositoryInterfaceWithPrimaryKey.MakeGenericType(entityType, primaryKeyType);
                         if (!iocManager.IsRegistered(genericRepositoryTypeWithPrimaryKey))
                         {
-                            var makedGenericType = typeof(EfRepositoryBase<,,,,>).MakeGenericType(dbContextType, entityType, primaryKeyType, typeof(TTenantId), typeof(TUserId));
-                            if (string.IsNullOrEmpty(makedGenericType.FullName))
-                            {
-                                dbContextType = dbContextType.MakeGenericType(typeof(TTenantId), typeof(TUserId));
-                                if (!iocManager.IsRegistered(dbContextType))
-                                {
-                                    iocManager.Register(dbContextType, DependencyLifeStyle.Transient);
-                                }
-                                makedGenericType = typeof(EfRepositoryBase<,,,,>).MakeGenericType(dbContextType, entityType, primaryKeyType, typeof(TTenantId), typeof(TUserId));
-                            }
+                            var implType = GetMakedGenericType<TTenantId, TUserId>(true, iocManager, autoRepositoryAttr,
+                                   dbContextType, entityType, primaryKeyType);
 
                             iocManager.Register(
                                 genericRepositoryTypeWithPrimaryKey,
-                                makedGenericType,
+                                implType,
                                 DependencyLifeStyle.Transient
                                 );
                         }
@@ -182,5 +171,67 @@ namespace Abp.EntityFramework.Repositories
                 }
             }
         }
+
+        private static Type GetMakedGenericType<TTenantId, TUserId>(bool hasPrimaryKey, IIocManager iocManager, 
+            AutoRepositoryTypeAttribute autoRepositoryAttr, 
+            Type dbContextType, Type entityType, Type primaryKeyType)
+        {
+            var genericArgs = hasPrimaryKey
+                ? autoRepositoryAttr.RepositoryImplementationWithPrimaryKey.GetGenericArguments()
+                : autoRepositoryAttr.RepositoryImplementation.GetGenericArguments();
+
+            var types = new List<Type>();
+            foreach (var ga in genericArgs)
+            {
+                switch (ga.Name)
+                {
+                    case "TDbContext":
+                        types.Add(dbContextType);
+                        break;
+                    case "TEntity":
+                        types.Add(entityType);
+                        break;
+                    case "TPrimaryKey":
+                        types.Add(primaryKeyType);
+                        break;
+                    case "TTenantId":
+                        types.Add(typeof(TTenantId));
+                        break;
+                    case "TUserId":
+                        types.Add(typeof(TUserId));
+                        break;
+                }
+            }
+
+            var implType = hasPrimaryKey
+                ? autoRepositoryAttr.RepositoryImplementationWithPrimaryKey.MakeGenericType(types.ToArray())
+                : autoRepositoryAttr.RepositoryImplementation.MakeGenericType(types.ToArray());
+
+            if (string.IsNullOrEmpty(implType.FullName))
+            {
+                var makedDbContextType = dbContextType.MakeGenericType(typeof(TTenantId), typeof(TUserId));
+
+                if (!iocManager.IsRegistered(makedDbContextType))
+                {
+                    iocManager.Register(makedDbContextType, DependencyLifeStyle.Transient);
+                }
+
+                if (types[0] == dbContextType)
+                {
+                    types[0] = makedDbContextType;
+                }
+                else
+                {
+                    throw new InvalidOperationException("Type of TDbContext can not be substituted.");
+                }
+
+                implType = hasPrimaryKey
+                    ? autoRepositoryAttr.RepositoryImplementationWithPrimaryKey.MakeGenericType(types.ToArray())
+                    : autoRepositoryAttr.RepositoryImplementation.MakeGenericType(types.ToArray());
+            }
+
+            return implType;
+        }
+        
     }
 }
