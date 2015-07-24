@@ -80,6 +80,7 @@
     <Compile Include="IdentityFramework\AbpIdentityResult.cs" />
     <Compile Include="IdentityFramework\IdentityResultExtensions.cs" />
     <Compile Include="Localization\CmsConsts.cs" />
+    <Compile Include="Module\Dto\GetModulesInput.cs" />
     <Compile Include="Module\Dto\ModuleCreateDto.cs" />
     <Compile Include="Module\Dto\ModuleEditDto.cs" />
     <Compile Include="Module\IModuleAppService.cs" />

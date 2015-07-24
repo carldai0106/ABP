@@ -13,5 +13,6 @@ namespace CMS.Application.Module
         Task<ModuleEditDto> GetModule(IdInput<Guid> input);
         Task Update(ModuleEditDto input);
         Task Delete(IdInput<Guid> inpput);
+        Task Create(ModuleCreateDto input);
     }
 }
