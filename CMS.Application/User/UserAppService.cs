@@ -11,6 +11,7 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Dependency;
+using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using CMS.Application.IdentityFramework;
@@ -18,6 +19,7 @@ using CMS.Application.Localization;
 using CMS.Application.User.Dto;
 using CMS.Domain;
 using CMS.Domain.User;
+using CMS.Domain.UserRole;
 using Microsoft.AspNet.Identity;
 
 namespace CMS.Application.User
@@ -25,9 +27,11 @@ namespace CMS.Application.User
     public class UserAppService : ApplicationService<Guid, Guid>, IUserAppService
     {
         private readonly ICmsRepository<UserEntity, Guid> _repository;
-        public UserAppService(ICmsRepository<UserEntity, Guid> repository)
+        private readonly ICmsRepository<UserRoleEntity, Guid> _userRoleRepository;
+        public UserAppService(ICmsRepository<UserEntity, Guid> repository, ICmsRepository<UserRoleEntity, Guid> userRoleRepository)
         {
             _repository = repository;
+            _userRoleRepository = userRoleRepository;
             LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
@@ -35,7 +39,7 @@ namespace CMS.Application.User
         {
             var user = input.MapTo<UserEntity>();
             user.Id = Guid.NewGuid();
-            
+
             if (!input.Password.IsNullOrEmpty())
             {
                 var rs = await new PasswordValidator().ValidateAsync(input.Password);
@@ -47,6 +51,7 @@ namespace CMS.Application.User
             }
 
             user.Password = new PasswordHasher().HashPassword(input.Password);
+
 
             if (await _repository.FirstOrDefaultAsync(x => x.UserName == user.UserName) != null)
             {
@@ -66,10 +71,6 @@ namespace CMS.Application.User
             }
 
             await _repository.InsertAsync(user);
-
-            await CurrentUnitOfWork.SaveChangesAsync(); //To get new user's Id.
-
-            
         }
 
         public async Task<UserEditDto> GetUser(string userName)
@@ -109,15 +110,16 @@ namespace CMS.Application.User
                 user.Password = new PasswordHasher().HashPassword(input.Password);
             }
 
+
             var usr = await _repository.FirstOrDefaultAsync(x => x.UserName == user.UserName);
-            if ( usr != null && usr.Id != input.Id)
+            if (usr != null && usr.Id != input.Id)
             {
                 var rs = IdentityResult.Failed(string.Format(L("Identity.DuplicateName"), user.UserName));
                 rs.CheckErrors();
             }
 
             usr = await _repository.FirstOrDefaultAsync(x => x.Email == user.Email);
-            if ( usr != null && usr.Id != input.Id)
+            if (usr != null && usr.Id != input.Id)
             {
                 var rs = IdentityResult.Failed(string.Format(L("Identity.DuplicateEmail"), user.Email));
                 rs.CheckErrors();
@@ -131,6 +133,7 @@ namespace CMS.Application.User
             }
 
             await _repository.UpdateAsync(user);
+
         }
 
         public async Task DeleteUser(IdInput<Guid> input)
@@ -146,7 +149,7 @@ namespace CMS.Application.User
 
         public async Task<PagedResultOutput<UserEditDto>> GetUsers(GetUsersInput input)
         {
-            var query =  _repository.GetAll().WhereIf(!input.Filter.IsNullOrWhiteSpace(),
+            var query = _repository.GetAll().WhereIf(!input.Filter.IsNullOrWhiteSpace(),
                 u => u.FirstName.Contains(input.Filter) ||
                      u.LastName.Contains(input.Filter)
                      || u.UserName.Contains(input.Filter)
@@ -162,10 +165,21 @@ namespace CMS.Application.User
             return new PagedResultOutput<UserEditDto>(count, userListDtos);
         }
 
-        public int Add(int a, int b)
+        public async Task CreateOrUpdate(IEnumerable<UserRoleDto> inputs)
         {
-            var us = IocManager.Instance.Resolve<UserService>();
-            return us.Add(a, b);
+            foreach (var item in inputs)
+            {
+                var rs = item.MapTo<UserRoleEntity>();
+                if (!item.Id.HasValue)
+                {
+                    rs.Id = Guid.NewGuid();
+                    await _userRoleRepository.InsertAsync(rs);
+                }
+                else
+                {
+                    await _userRoleRepository.UpdateAsync(rs);
+                }
+            }
         }
     }
 }

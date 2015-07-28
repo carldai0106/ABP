@@ -7,7 +7,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUserId">Type of </typeparam>
     public interface IFullAudited<TUserId, TUser> : IFullAudited<TUserId>, IDeletionAudited<TUserId, TUser> 
         where TUserId : struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
 
     }

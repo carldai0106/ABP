@@ -14,10 +14,7 @@ namespace CMS.Domain
         public override void Initialize<TTenantId, TUserId>()
         {
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
-            if (!Abp.Dependency.IocManager.Instance.IsRegistered<UserService>())
-            {
-                Abp.Dependency.IocManager.Instance.Register<UserService>();
-            }
+           
         }
     }
 }

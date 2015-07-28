@@ -176,7 +176,7 @@ namespace CMS.Data.Migrations
                 c => new
                     {
                         Id = c.Guid(nullable: false),
-                        ParentId = c.Guid(nullable: false),
+                        ParentId = c.Guid(),
                         ModuleCode = c.String(nullable: false, maxLength: 128),
                         DisplayName = c.String(nullable: false, maxLength: 256),
                         DisplayAsMenu = c.Boolean(nullable: false),

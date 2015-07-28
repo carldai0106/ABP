@@ -18,7 +18,6 @@ namespace CMS.Application.User.Dto
         public const int MaxPasswordLength = 20;
 
         public Guid Id { get; set; }
-
         [Required]
         [StringLength(UserEntity.MaxUserNameLength)]
         public virtual string UserName { get; set; }
@@ -34,5 +33,6 @@ namespace CMS.Application.User.Dto
         [StringLength(UserEntity.MaxLastNameLength)]
         public virtual string LastName { get; set; }
         public virtual bool IsActive { get; set; }
+        public virtual ICollection<UserRoleDto> UserRoles { get; set; }
     }
 }

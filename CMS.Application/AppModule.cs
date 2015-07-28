@@ -31,8 +31,6 @@ namespace CMS.Application
                      )));
 
             //Configuration.MultiTenancy.IsEnabled = true;
-            
-            
         }
 
         public override void Initialize<TTenantId, TUserId>()

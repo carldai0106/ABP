@@ -30,6 +30,7 @@
         "CanNotDeleteStaticRole": "不能删除系统预定义角色: {0}",
         "CanNotRenameAdminUser": "不能重命名默认管理员的用户名 {0}",
         "CanNotDeleteAdminUser": "不能删除默认管理员{0}!",
-        "DuplicateModuleCode" :  "模块编码/菜单编码 '{0}' 已被占用."
+        "DuplicateModuleCode": "模块编码/菜单编码 '{0}' 已被占用.",
+        "DuplicateRoleCode": "角色编码 '{0}' 已被占用."
     }
 }

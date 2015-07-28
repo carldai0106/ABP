@@ -38,5 +38,7 @@ namespace CMS.Application.Module.Dto
         [StringLength(MaxDescriptionLength)]
         public virtual string Description { get; set; }
         public virtual bool IsActive { get; set; }
+        
+        public virtual ICollection<ActionModuleDto> ActionModules { get; set; }
     }
 }

@@ -19,24 +19,7 @@ namespace CMS.Test
         }
 
         [Fact]
-        public async Task Create_Tenant_Test()
-        {
-            
-            var dto = new CreateTenantDto
-            {
-                DisplayName = "TKM_TEST",
-                IsActive = true,
-                TenancyName = "TKM_TEST"
-            };
-
-            await _tenantAppService.CreateTenant(dto);
-
-            var rs = await _tenantAppService.GetTenant(dto.TenancyName);
-            rs.ShouldNotBe(null);
-        }
-
-        [Fact]
-        public async Task Create_Update_And_Delete_Tenant_Test()
+        public async Task Create_Get_Update_Delete_Tenant_Test()
         {
             var dto = new CreateTenantDto
             {
@@ -58,9 +41,6 @@ namespace CMS.Test
             var dtoGet = await _tenantAppService.GetTenant("BCS_TEST_UPDATE");
             dtoGet.ShouldNotBe(null);
             dtoEdit.TenancyName.ShouldBe("BCS_TEST_UPDATE");
-
-            var rs = await _tenantAppService.GetTenant(new Abp.Application.Services.Dto.EntityRequestInput<Guid>(dtoGet.Id));
-            rs.ShouldNotBe(null);
 
             await _tenantAppService.DeleteTenant(new Abp.Application.Services.Dto.EntityRequestInput<Guid>(dtoGet.Id));
 

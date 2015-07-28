@@ -13,7 +13,7 @@ namespace Abp.Domain.Entities.Auditing
     public abstract class FullAuditedEntity<TPrimaryKey, TUserId, TUser> : AuditedEntity<TPrimaryKey, TUserId, TUser>, 
         IFullAudited<TUserId, TUser>
         where TUserId : struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
         /// <summary>
         /// Is this entity Deleted?

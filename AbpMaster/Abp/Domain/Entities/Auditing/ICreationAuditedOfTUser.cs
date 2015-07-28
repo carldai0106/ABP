@@ -7,7 +7,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUserId">Type of the CreatorUserId</typeparam>
     public interface ICreationAudited<TUserId, TUser> : ICreationAudited<TUserId>
         where TUserId : struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

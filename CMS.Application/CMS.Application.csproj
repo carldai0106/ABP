@@ -80,6 +80,7 @@
     <Compile Include="IdentityFramework\AbpIdentityResult.cs" />
     <Compile Include="IdentityFramework\IdentityResultExtensions.cs" />
     <Compile Include="Localization\CmsConsts.cs" />
+    <Compile Include="Module\Dto\ActionModuleDto.cs" />
     <Compile Include="Module\Dto\GetModulesInput.cs" />
     <Compile Include="Module\Dto\ModuleCreateDto.cs" />
     <Compile Include="Module\Dto\ModuleEditDto.cs" />
@@ -91,9 +92,16 @@
     <Compile Include="MultiTenancy\TenantAppService.cs" />
     <Compile Include="PagedAndSortedInputDto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role\Dto\GetRolesInput.cs" />
+    <Compile Include="Role\Dto\RoleCreateDto.cs" />
+    <Compile Include="Role\Dto\RoleEditDto.cs" />
+    <Compile Include="Role\Dto\RoleRightDto.cs" />
+    <Compile Include="Role\IRoleAppService.cs" />
+    <Compile Include="Role\RoleAppService.cs" />
     <Compile Include="User\Dto\CreateUserDto.cs" />
     <Compile Include="User\Dto\GetUsersInput.cs" />
     <Compile Include="User\Dto\UserEditDto.cs" />
+    <Compile Include="User\Dto\UserRoleDto.cs" />
     <Compile Include="User\IUserAppService.cs" />
     <Compile Include="User\UserAppService.cs" />
   </ItemGroup>

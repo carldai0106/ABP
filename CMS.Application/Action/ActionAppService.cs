@@ -9,7 +9,9 @@ using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Collections.Extensions;
+using Abp.Domain.Uow;
 using Abp.Linq.Extensions;
+using Abp.UI;
 using CMS.Application.Action.Dto;
 using CMS.Application.IdentityFramework;
 using CMS.Application.Localization;
@@ -21,7 +23,7 @@ using Microsoft.AspNet.Identity;
 
 namespace CMS.Application.Action
 {
-    public class ActionAppService : ApplicationService<Guid,Guid>, IActionAppService
+    public class ActionAppService : ApplicationService<Guid, Guid>, IActionAppService
     {
         private readonly ICmsRepository<ActionEntity, Guid> _repository;
         public ActionAppService(ICmsRepository<ActionEntity, Guid> repository)
@@ -36,29 +38,47 @@ namespace CMS.Application.Action
             return action.MapTo<ActionEditDto>();
         }
 
+        public async Task<ActionEditDto> GetAction(string actionCode)
+        {
+            var action = await _repository.FirstOrDefaultAsync(x => x.ActionCode == actionCode);
+            return action.MapTo<ActionEditDto>();
+        }
+
         public async Task Create(ActionCreateDto input)
         {
+
             if (await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode) != null)
             {
-                IdentityResult.Failed(string.Format(L("Identity.DuplicateActionCode"), input.ActionCode)).CheckErrors();
+                IdentityResult.Failed(string.Format(L("Identity.DuplicateActionCode"), input.ActionCode))
+                    .CheckErrors();
             }
 
             var action = input.MapTo<ActionEntity>();
             action.Id = Guid.NewGuid();
-            
+
             await _repository.InsertAsync(action);
+
         }
 
         public async Task Update(ActionEditDto input)
         {
-            var rs = await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode);
-            if (rs != null && rs.Id != input.Id)
+            var rs = await _repository.FirstOrDefaultAsync(x => x.Id == input.Id);
+            if (rs == null)
             {
-                IdentityResult.Failed(string.Format(L("Identity.DuplicateActionCode"), input.ActionCode)).CheckErrors();
+                throw new UserFriendlyException(string.Format("There is no actin with id : {0}", input.Id));
             }
 
-            var action = rs.MapTo<ActionEntity>();
-            await _repository.UpdateAsync(action);
+            input.MapTo(rs);
+
+            rs = await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode);
+
+            if (rs != null && rs.Id != input.Id)
+            {
+                throw new UserFriendlyException(string.Format(L("DuplicateActionCode"), input.ActionCode));
+            }
+
+            await _repository.UpdateAsync(rs);
+
         }
 
         public async Task Delete(IdInput<Guid> id)

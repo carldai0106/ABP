@@ -38,11 +38,11 @@ namespace Abp.EntityFramework.Tests.Repositories
                    )
                );
 
-            EntityFrameworkGenericRepositoryRegistrar.RegisterGenericRepositories<int, long>(finder,
-                LocalIocManager);
+            //EntityFrameworkGenericRepositoryRegistrar.RegisterGenericRepositories<int, long>(finder,
+            //    LocalIocManager);
 
-            //var dbContextType = typeof(MyDbContext<int, long>);
-            //EntityFrameworkGenericRepositoryRegistrar.RegisterForDbContext<int, long>(dbContextType, LocalIocManager);
+            var dbContextType = typeof(MyDbContext<int, long>);
+            EntityFrameworkGenericRepositoryRegistrar.RegisterForDbContext<int, long>(dbContextType, LocalIocManager);
 
             var entity1Repository = LocalIocManager.Resolve<IRepository<MyEntity1>>();
             entity1Repository.ShouldNotBe(null);

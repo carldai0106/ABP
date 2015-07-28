@@ -7,7 +7,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUserId">Type of the LastModifierUserId</typeparam>
     public interface IModificationAudited<TUserId, TUser> : IModificationAudited<TUserId>
         where TUserId : struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
         /// <summary>
         /// Reference to the last modifier user of this entity.

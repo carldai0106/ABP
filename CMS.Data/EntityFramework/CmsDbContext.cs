@@ -34,13 +34,13 @@ namespace CMS.Data.EntityFramework
         public CmsDbContext()
             : base(@"Server=CARL\MSSQL2012; Database=AbpCms; uid=sa;pwd=Bcsint2014;")
         {
-            
+           
         }
 
         public CmsDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-            System.Diagnostics.Debug.WriteLine(nameOrConnectionString);
+            
         }
 
         public CmsDbContext(DbConnection connection)

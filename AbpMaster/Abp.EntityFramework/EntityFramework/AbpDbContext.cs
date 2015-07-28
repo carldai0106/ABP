@@ -38,6 +38,8 @@ namespace Abp.EntityFramework
         /// </summary>
         public IEntityChangedEventHelper<TTenantId, TUserId> EntityChangedEventHelper { get; set; }
 
+        public bool IsTest { get; set; }
+
         /// <summary>
         /// Constructor.
         /// Uses <see cref="IAbpStartupConfiguration.DefaultNameOrConnectionString"/> as connection string.
@@ -227,6 +229,9 @@ namespace Abp.EntityFramework
                    this.GetFilterParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId),
                    typeof(TTenantId));
 
+            if (IsTest)
+                return;
+
             if (currentTenantId.Equals(default(TTenantId)))
             {
                 throw new DbEntityValidationException("Can not save a IMustHaveTenant entity while MustHaveTenant filter is enabled and current filter parameter value is not set (Probably, no tenant user logged in)!");
@@ -257,6 +262,9 @@ namespace Abp.EntityFramework
                     typeof (TTenantId));
 
             var entity = entry.Cast<IMayHaveTenant<TTenantId>>().Entity;
+
+            if (IsTest)
+                return;
 
             if (!entity.TenantId.Equals(currentTenantId) && !entity.TenantId.Equals(AbpSession.TenantId))
             {

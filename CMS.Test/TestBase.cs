@@ -4,13 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Common;
+using System.Linq.Expressions;
 using Abp.Collections;
+using Abp.Configuration.Startup;
+using Abp.Domain.Entities;
 using Abp.Modules;
 using Abp.TestBase;
 using CMS.Application;
 using CMS.Data;
 using CMS.Data.EntityFramework;
 using CMS.Domain;
+using CMS.Domain.User;
+using EntityFramework.DynamicFilters;
 
 namespace CMS.Test
 {
@@ -27,6 +32,8 @@ namespace CMS.Test
             //    );
 
             //LocalIocManager.IocContainer.Register(Component.For<CmsDbContext>());
+            Resolve<IMultiTenancyConfig>().IsEnabled = true;
+            LoginAsTenant("bcsint", "admin");
         }
 
         protected override void AddModules(ITypeList<AbpModule> modules)
@@ -36,5 +43,45 @@ namespace CMS.Test
             //Adding testing modules. Depended modules of these modules are automatically added.
             modules.Add<AppModule>();
         }
+
+        protected void LoginAsTenant(string tenancyName, string userName)
+        {
+            var tenant = UsingDbContext(context => context.Tenants.FirstOrDefault(t => t.TenancyName == tenancyName));
+            if (tenant == null)
+            {
+                throw new Exception("There is no tenant: " + tenancyName);
+            }
+
+            TTenantId? tenantId = (TTenantId)Convert.ChangeType(tenant.Id, typeof(TTenantId));
+
+            AbpSession.TenantId = tenantId;
+
+            Guid guid = (Guid)Convert.ChangeType(tenantId, typeof(Guid));
+
+            var user = UsingDbContext(context => context.Users.FirstOrDefault(u => u.TenantId == guid && u.UserName == userName));
+            if (user == null)
+            {
+                throw new Exception("There is no user: " + userName + " for tenant: " + tenancyName);
+            }
+
+            AbpSession.UserId = (TUserId) Convert.ChangeType(user.Id, typeof (TUserId));
+        }
+
+        protected T UsingDbContext<T>(Func<CmsDbContext, T> func)
+        {
+            T result;
+
+            using (var context = LocalIocManager.Resolve<CmsDbContext>())
+            {
+                //context.Database.Initialize(false);
+                context.DisableAllFilters();
+                result = func(context);
+                context.SaveChanges();
+            }
+
+            return result;
+        }
+
+        
     }
 }

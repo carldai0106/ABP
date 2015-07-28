@@ -13,7 +13,7 @@ namespace Abp.Domain.Entities.Auditing
     public abstract class CreationAuditedEntity<TPrimaryKey, TUserId, TUser> : CreationAuditedEntity<TPrimaryKey, TUserId>, 
         ICreationAudited<TUserId, TUser>
         where TUserId : struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

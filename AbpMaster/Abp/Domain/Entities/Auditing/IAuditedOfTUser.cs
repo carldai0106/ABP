@@ -7,7 +7,7 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUserId">Type of the Creator or Modifier UserId</typeparam>
     public interface IAudited<TUserId, TUser> : IAudited<TUserId>, ICreationAudited<TUserId, TUser>, IModificationAudited<TUserId, TUser>
         where TUserId :struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
 
     }

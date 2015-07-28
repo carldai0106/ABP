@@ -10,9 +10,9 @@ namespace Abp.Domain.Entities.Auditing
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserId">Type of the Creator or Modifier UserId</typeparam>
     [Serializable]
-    public abstract class AuditedEntity<TPrimaryKey,TUserId, TUser> : AuditedEntity<TPrimaryKey, TUserId>, IAudited<TUserId, TUser>
+    public abstract class AuditedEntity<TPrimaryKey, TUserId, TUser> : AuditedEntity<TPrimaryKey, TUserId>, IAudited<TUserId, TUser>
         where TUserId : struct
-        where TUser : IEntity<long>
+        where TUser : IEntity<TUserId>
     {
         /// <summary>
         /// Reference to the creator user of this entity.

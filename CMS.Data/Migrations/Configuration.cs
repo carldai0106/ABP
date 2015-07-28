@@ -12,7 +12,7 @@ namespace CMS.Data.Migrations
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
+            AutomaticMigrationsEnabled = false;
         }
 
         protected override void Seed(CMS.Data.EntityFramework.CmsDbContext context)
@@ -29,6 +29,8 @@ namespace CMS.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
+
+            context.IsTest = true;
 
             context.Tenants.AddOrUpdate(
                     new TenantEntity
