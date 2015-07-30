@@ -23,24 +23,24 @@ namespace CMS.Test
         {
             var dto = new CreateTenantDto
             {
-                DisplayName = "BCS_TEST",
+                DisplayName = "Tenant_TEST",
                 IsActive = true,
-                TenancyName = "BCS_TEST"
+                TenancyName = "Tenant_TEST"
             };
 
             await _tenantAppService.CreateTenant(dto);
 
             var dtoEdit = await _tenantAppService.GetTenant(dto.TenancyName);
             dtoEdit.ShouldNotBe(null);
-            dtoEdit.TenancyName.ShouldBe("BCS_TEST");
+            dtoEdit.TenancyName.ShouldBe("Tenant_TEST");
 
-            dtoEdit.TenancyName = "BCS_TEST_UPDATE";
+            dtoEdit.TenancyName = "Tenant_TEST_UPDATE";
 
             await _tenantAppService.UpdateTenant(dtoEdit);
 
-            var dtoGet = await _tenantAppService.GetTenant("BCS_TEST_UPDATE");
+            var dtoGet = await _tenantAppService.GetTenant("Tenant_TEST_UPDATE");
             dtoGet.ShouldNotBe(null);
-            dtoEdit.TenancyName.ShouldBe("BCS_TEST_UPDATE");
+            dtoEdit.TenancyName.ShouldBe("Tenant_TEST_UPDATE");
 
             await _tenantAppService.DeleteTenant(new Abp.Application.Services.Dto.EntityRequestInput<Guid>(dtoGet.Id));
 

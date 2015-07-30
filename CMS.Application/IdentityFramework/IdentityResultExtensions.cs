@@ -54,56 +54,5 @@ namespace CMS.Application.IdentityFramework
 
             throw new UserFriendlyException(identityResult.Errors.JoinAsString(" "));
         }
-
-        /// <summary>
-        /// Checks errors of given <see cref="IdentityResult"/> and throws <see cref="UserFriendlyException"/> if it's not succeeded.
-        /// </summary>
-        /// <param name="identityResult">Identity result to check</param>
-        /// <param name="localizationManager">Localization manager to localize error messages</param>
-        public static void CheckErrors(this IdentityResult identityResult, ILocalizationManager localizationManager)
-        {
-            if (identityResult.Succeeded)
-            {
-                return;
-            }
-
-            throw new UserFriendlyException(identityResult.LocalizeErrors(localizationManager));
-        }
-
-        public static string LocalizeErrors(this IdentityResult identityResult, ILocalizationManager localizationManager)
-        {
-            if (identityResult.Succeeded)
-            {
-                throw new ArgumentException("identityResult.Succeeded should be false in order to localize errors.");
-            }
-
-            if (identityResult.Errors == null)
-            {
-                throw new ArgumentException("identityResult.Errors should not be null.");
-            }
-
-            if (identityResult is AbpIdentityResult)
-            {
-                return identityResult.Errors.JoinAsString(" ");
-            }
-
-            return identityResult.Errors.Select(err => LocalizeErrorMessage(err, localizationManager)).JoinAsString(" ");
-        }
-
-        private static string LocalizeErrorMessage(string identityErrorMessage, ILocalizationManager localizationManager)
-        {
-            var localizationSource = localizationManager.GetSource(CmsConsts.LocalizationSourceName);
-
-            foreach (var identityLocalization in IdentityLocalizations)
-            {
-                string[] values;
-                if (FormattedStringValueExtracter.IsMatch(identityErrorMessage, identityLocalization.Key, out values))
-                {
-                    return localizationSource.GetString(identityLocalization.Value, values.Cast<object>().ToArray());
-                }
-            }
-
-            return localizationSource.GetString("Identity.DefaultError");
-        }
     }
 }

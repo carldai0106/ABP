@@ -77,7 +77,6 @@
     <Compile Include="AppConsts.cs" />
     <Compile Include="AppModule.cs" />
     <Compile Include="CustomDtoMapper.cs" />
-    <Compile Include="IdentityFramework\AbpIdentityResult.cs" />
     <Compile Include="IdentityFramework\IdentityResultExtensions.cs" />
     <Compile Include="Localization\CmsConsts.cs" />
     <Compile Include="Module\Dto\ActionModuleDto.cs" />
@@ -100,6 +99,7 @@
     <Compile Include="Role\RoleAppService.cs" />
     <Compile Include="User\Dto\CreateUserDto.cs" />
     <Compile Include="User\Dto\GetUsersInput.cs" />
+    <Compile Include="User\Dto\PermissionDto.cs" />
     <Compile Include="User\Dto\UserEditDto.cs" />
     <Compile Include="User\Dto\UserRoleDto.cs" />
     <Compile Include="User\IUserAppService.cs" />

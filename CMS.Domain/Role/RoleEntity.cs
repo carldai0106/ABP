@@ -34,6 +34,7 @@ namespace CMS.Domain.Role
 
         [ForeignKey("RoleId")]
         public virtual ICollection<UserRoleEntity> UserRoles { get; set; }
+
         [ForeignKey("RoleId")]
         public virtual ICollection<RoleRightEntity> RoleRights { get; set; }
 

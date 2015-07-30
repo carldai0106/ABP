@@ -91,8 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionAppService_Tests.cs" />
-    <Compile Include="Example.cs" />
     <Compile Include="ModuleAppService_Tests.cs" />
+    <Compile Include="PriorityOrderExamples.cs" />
     <Compile Include="RoleAppService_Tests.cs" />
     <Compile Include="TenantAppService_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -139,6 +139,10 @@
     <ProjectReference Include="..\EntityFramework.DynamicFilters\EntityFramework.DynamicFilters.csproj">
       <Project>{56E36AD1-E675-42F0-96CB-7F475E05E491}</Project>
       <Name>EntityFramework.DynamicFilters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Xunit.Extensions\Xunit.Extensions.csproj">
+      <Project>{4a01cd22-7cc5-4c73-a41c-755d96fa3c87}</Project>
+      <Name>Xunit.Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

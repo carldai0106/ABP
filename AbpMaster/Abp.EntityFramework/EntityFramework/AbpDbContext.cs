@@ -38,7 +38,7 @@ namespace Abp.EntityFramework
         /// </summary>
         public IEntityChangedEventHelper<TTenantId, TUserId> EntityChangedEventHelper { get; set; }
 
-        public bool IsTest { get; set; }
+        
 
         /// <summary>
         /// Constructor.
@@ -228,9 +228,7 @@ namespace Abp.EntityFramework
                Convert.ChangeType(
                    this.GetFilterParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId),
                    typeof(TTenantId));
-
-            if (IsTest)
-                return;
+           
 
             if (currentTenantId.Equals(default(TTenantId)))
             {
@@ -262,9 +260,7 @@ namespace Abp.EntityFramework
                     typeof (TTenantId));
 
             var entity = entry.Cast<IMayHaveTenant<TTenantId>>().Entity;
-
-            if (IsTest)
-                return;
+          
 
             if (!entity.TenantId.Equals(currentTenantId) && !entity.TenantId.Equals(AbpSession.TenantId))
             {

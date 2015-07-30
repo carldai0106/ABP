@@ -14,9 +14,9 @@ namespace CMS.Domain.UserRole
     [Table("UserRoles")]
     public class UserRoleEntity : AuditedEntity<Guid, Guid>
     {
-        public Guid UserId { get; set; }
-        public Guid RoleId { get; set; }
-        public RoleEntity Role { get; set; }
+        public virtual Guid UserId { get; set; }
+        public virtual Guid RoleId { get; set; }
+        public virtual RoleEntity Role { get; set; }
         public virtual bool Status { get; set; }
     }
 }

@@ -14,10 +14,15 @@ using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Abp.UI;
 using CMS.Application.IdentityFramework;
 using CMS.Application.Localization;
 using CMS.Application.User.Dto;
 using CMS.Domain;
+using CMS.Domain.Action;
+using CMS.Domain.Module;
+using CMS.Domain.Role;
+using CMS.Domain.RoleRight;
 using CMS.Domain.User;
 using CMS.Domain.UserRole;
 using Microsoft.AspNet.Identity;
@@ -28,10 +33,26 @@ namespace CMS.Application.User
     {
         private readonly ICmsRepository<UserEntity, Guid> _repository;
         private readonly ICmsRepository<UserRoleEntity, Guid> _userRoleRepository;
-        public UserAppService(ICmsRepository<UserEntity, Guid> repository, ICmsRepository<UserRoleEntity, Guid> userRoleRepository)
+
+        private readonly ICmsRepository<ModuleEntity, Guid> _moduleRepository;
+        private readonly ICmsRepository<ActionEntity, Guid> _actionRepository;
+        private readonly ICmsRepository<RoleRightEntity, Guid> _roleRightRepository;
+
+
+        public UserAppService(
+            ICmsRepository<UserEntity, Guid> repository, 
+            ICmsRepository<UserRoleEntity, Guid> userRoleRepository,
+            ICmsRepository<ModuleEntity, Guid> moduleRepository,
+            ICmsRepository<ActionEntity, Guid> actionRepository,
+            ICmsRepository<RoleRightEntity, Guid> roleRightRepository
+            )
         {
             _repository = repository;
             _userRoleRepository = userRoleRepository;
+            _moduleRepository = moduleRepository;
+            _actionRepository = actionRepository;
+            _roleRightRepository = roleRightRepository;
+
             LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
@@ -55,14 +76,12 @@ namespace CMS.Application.User
 
             if (await _repository.FirstOrDefaultAsync(x => x.UserName == user.UserName) != null)
             {
-                var rs = IdentityResult.Failed(string.Format(L("Identity.DuplicateName"), user.UserName));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("Identity.DuplicateName"), user.UserName));
             }
 
             if (await _repository.FirstOrDefaultAsync(x => x.Email == user.Email) != null)
             {
-                var rs = IdentityResult.Failed(string.Format(L("Identity.DuplicateEmail"), user.Email));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("Identity.DuplicateEmail"), user.Email));
             }
 
             if (AbpSession.TenantId.HasValue && AbpSession.TenantId != default(Guid))
@@ -114,22 +133,19 @@ namespace CMS.Application.User
             var usr = await _repository.FirstOrDefaultAsync(x => x.UserName == user.UserName);
             if (usr != null && usr.Id != input.Id)
             {
-                var rs = IdentityResult.Failed(string.Format(L("Identity.DuplicateName"), user.UserName));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("Identity.DuplicateName"), user.UserName));
             }
 
             usr = await _repository.FirstOrDefaultAsync(x => x.Email == user.Email);
             if (usr != null && usr.Id != input.Id)
             {
-                var rs = IdentityResult.Failed(string.Format(L("Identity.DuplicateEmail"), user.Email));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("Identity.DuplicateEmail"), user.Email));
             }
 
             var oldUserName = user.UserName;
             if (oldUserName == "admin" && input.UserName != "admin")
             {
-                var rs = IdentityResult.Failed(string.Format(L("CanNotRenameAdminUser"), "admin"));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("CanNotRenameAdminUser"), "admin"));
             }
 
             await _repository.UpdateAsync(user);
@@ -141,7 +157,7 @@ namespace CMS.Application.User
             var usr = await _repository.FirstOrDefaultAsync(x => x.Id == input.Id);
             if (usr.UserName == "admin")
             {
-                IdentityResult.Failed(string.Format(L("CanNotDeleteAdminUser"), "admin")).CheckErrors();
+                throw new UserFriendlyException(string.Format(L("CanNotDeleteAdminUser"), "admin"));
             }
 
             await _repository.DeleteAsync(input.Id);
@@ -172,14 +188,65 @@ namespace CMS.Application.User
                 var rs = item.MapTo<UserRoleEntity>();
                 if (!item.Id.HasValue)
                 {
-                    rs.Id = Guid.NewGuid();
-                    await _userRoleRepository.InsertAsync(rs);
+                    if (
+                        await
+                            _userRoleRepository.FirstOrDefaultAsync(
+                                x => x.UserId == item.UserId && x.RoleId == item.RoleId) == null)
+                    {
+                        rs.Id = Guid.NewGuid();
+                        await _userRoleRepository.InsertAsync(rs);
+                    }
                 }
                 else
                 {
                     await _userRoleRepository.UpdateAsync(rs);
                 }
             }
+        }
+
+        public async Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode, string actionCode)
+        {
+            var modules = _moduleRepository.GetAll();
+            var actions = _actionRepository.GetAll();
+            var roleRightQuery = _roleRightRepository.GetAll();
+            var userRoles = _userRoleRepository.GetAll();
+
+            var userRole_JoinRole_Right_Query = userRoles.WhereIf(userId.Id != null, x => x.UserId == userId.Id).Join(roleRightQuery, x => x.RoleId, y => y.RoleId, (x, y) => new
+            {
+                RoleId = y.RoleId,
+                RoleCode = x.Role.RoleCode,
+                Status = y.Status,
+                ModuleId = y.ActionModule.ModuleId,
+                ActionId = y.ActionModule.ActionId,
+                ActionModuleStatus = y.ActionModule.Status
+            }).Where(x => x.ActionModuleStatus);
+
+            var userRole_JoinRole_Right_Query_Join_Module_Query = userRole_JoinRole_Right_Query.Join(modules, x => x.ModuleId, y => y.Id, (x, y) => new
+            {
+                RoleId = x.RoleId,
+                RoleCode = x.RoleCode,
+                ModuleId = y.Id,
+                ModuleCode = y.ModuleCode,
+                DisplayName = y.DisplayName,
+                ActionId = x.ActionId,
+                Status = x.Status,
+            }).WhereIf(!moduleCode.IsNullOrWhiteSpace(), x => x.ModuleCode == moduleCode);
+
+            var query = userRole_JoinRole_Right_Query_Join_Module_Query.Join(actions, x => x.ActionId, y => y.Id, (x, y) => new PermissionDto
+            {
+                ActionId = x.ActionId,
+                ActionCode = y.ActionCode,
+                ModuleId = x.ModuleId,
+                ModuleCode = x.ModuleCode,
+                DisplayName = x.DisplayName,
+                RoleId = x.RoleId,
+                RoleCode = x.RoleCode,
+                Status = x.Status
+            }).WhereIf(!actionCode.IsNullOrWhiteSpace(), x=> x.ActionCode == actionCode);
+
+            var rs = await query.ToListAsync();
+
+            return rs;
         }
     }
 }

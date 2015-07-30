@@ -72,8 +72,8 @@ namespace CMS.Application.Module
 
             input.MapTo(rs);
 
-            rs = await _repository.FirstOrDefaultAsync(x => x.ModuleCode == input.ModuleCode);
-            if (rs != null && rs.Id != input.Id)
+            var result = await _repository.FirstOrDefaultAsync(x => x.ModuleCode == input.ModuleCode);
+            if (result != null && result.Id != input.Id)
             {
                 throw new UserFriendlyException(string.Format(L("DuplicateModuleCode"), input.ModuleCode));
             }
@@ -109,8 +109,14 @@ namespace CMS.Application.Module
 
                 if (!item.Id.HasValue)
                 {
-                    mapped.Id = Guid.NewGuid();
-                    await _actionModuleRepository.InsertAsync(mapped);
+                    if (
+                        await
+                            _actionModuleRepository.FirstOrDefaultAsync(
+                                x => x.ActionId == item.ActionId && x.ModuleId == item.ModuleId) == null)
+                    {
+                        mapped.Id = Guid.NewGuid();
+                        await _actionModuleRepository.InsertAsync(mapped);
+                    }
                 }
                 else
                     await _actionModuleRepository.UpdateAsync(mapped);

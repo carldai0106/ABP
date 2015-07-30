@@ -13,7 +13,7 @@ using Abp.Domain.Uow;
 using Abp.Linq.Extensions;
 using Abp.UI;
 using CMS.Application.Action.Dto;
-using CMS.Application.IdentityFramework;
+
 using CMS.Application.Localization;
 using CMS.Application.User.Dto;
 using CMS.Domain;
@@ -49,8 +49,7 @@ namespace CMS.Application.Action
 
             if (await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode) != null)
             {
-                IdentityResult.Failed(string.Format(L("Identity.DuplicateActionCode"), input.ActionCode))
-                    .CheckErrors();
+                throw new UserFriendlyException(string.Format(L("Identity.DuplicateActionCode"), input.ActionCode));
             }
 
             var action = input.MapTo<ActionEntity>();
@@ -70,9 +69,9 @@ namespace CMS.Application.Action
 
             input.MapTo(rs);
 
-            rs = await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode);
+            var result = await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode);
 
-            if (rs != null && rs.Id != input.Id)
+            if (result != null && result.Id != input.Id)
             {
                 throw new UserFriendlyException(string.Format(L("DuplicateActionCode"), input.ActionCode));
             }

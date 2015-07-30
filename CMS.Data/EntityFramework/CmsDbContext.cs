@@ -32,9 +32,9 @@ namespace CMS.Data.EntityFramework
         public virtual IDbSet<RoleRightEntity> RoleRights { get; set; }
 
         public CmsDbContext()
-            : base(@"Server=CARL\MSSQL2012; Database=AbpCms; uid=sa;pwd=Bcsint2014;")
+            : base("Default")
         {
-           
+            //Update-Database -ConnectionString "Server=CARL\MSSQL2012; Database=AbpCms; Trusted_Connection=Yes;" -ConnectionProviderName "System.Data.SqlClient" -Verbose -ProjectName "CMS.Data"
         }
 
         public CmsDbContext(string nameOrConnectionString)

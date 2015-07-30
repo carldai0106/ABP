@@ -33,7 +33,7 @@ namespace CMS.Test
 
             //LocalIocManager.IocContainer.Register(Component.For<CmsDbContext>());
             Resolve<IMultiTenancyConfig>().IsEnabled = true;
-            LoginAsTenant("bcsint", "admin");
+            LoginAsTenant("Default", "admin");
         }
 
         protected override void AddModules(ITypeList<AbpModule> modules)

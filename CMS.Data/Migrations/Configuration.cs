@@ -1,5 +1,6 @@
 using CMS.Domain.Tenant;
 using CMS.Domain.User;
+using EntityFramework.DynamicFilters;
 
 namespace CMS.Data.Migrations
 {
@@ -29,9 +30,8 @@ namespace CMS.Data.Migrations
             //      new Person { FullName = "Rowan Miller" }
             //    );
             //
-
-            context.IsTest = true;
-
+           
+            context.DisableAllFilters();
             context.Tenants.AddOrUpdate(
                     new TenantEntity
                     {
@@ -43,8 +43,8 @@ namespace CMS.Data.Migrations
                     new TenantEntity
                     {
                         Id = Guid.Parse("7c7f548b-7ad2-4186-8ce2-20479f0b1b15"),
-                        TenancyName = "bcsint",
-                        DisplayName = "bcsint",
+                        TenancyName = "Default",
+                        DisplayName = "Default",
                         IsActive = true
                     }
                 );
@@ -65,8 +65,8 @@ namespace CMS.Data.Migrations
                     {
                         Id = Guid.Parse("1094dc1d-58ab-4968-925f-76583a08159a"),
                         UserName = "admin",
-                        FirstName = "dai",
-                        LastName = "change",
+                        FirstName = "carl",
+                        LastName = "dai",
                         Email = "280141563@qq.com",
                         IsActive = true,
                         Password = "ABIWKasL8u8gAj8ZVRQJuRlBFu1oxO6Tk2eYm6iRezcL4F75SF1ns9IH0Gd0+K79kw==",

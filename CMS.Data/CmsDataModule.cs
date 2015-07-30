@@ -11,7 +11,7 @@ namespace CMS.Data
         public override void PreInitialize<TTenantId, TUserId>()
         {
             //web.config (or app.config for non-web projects) file should containt a connection string named "Default".
-            Configuration.DefaultNameOrConnectionString = "AbpCmsConn";
+            Configuration.DefaultNameOrConnectionString = "Default";
         }
 
         public override void Initialize<TTenantId, TUserId>()

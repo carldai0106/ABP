@@ -10,9 +10,9 @@ using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
+using Abp.UI;
 using CMS.Application.MultiTenancy.Dto;
 using CMS.Domain;
-using CMS.Application.IdentityFramework;
 using CMS.Application.Localization;
 using CMS.Domain.Tenant;
 using Microsoft.AspNet.Identity;
@@ -38,8 +38,7 @@ namespace CMS.Application.MultiTenancy
 
             if (await _repository.FirstOrDefaultAsync(x => x.TenancyName == tenant.TenancyName) != null)
             {
-               var rs = IdentityResult.Failed(string.Format(L("TenancyNameIsAlreadyTaken"), tenant.TenancyName));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("TenancyNameIsAlreadyTaken"), tenant.TenancyName));
             }
 
             await _repository.InsertAsync(tenant);
@@ -60,8 +59,7 @@ namespace CMS.Application.MultiTenancy
         {
             if (await _repository.FirstOrDefaultAsync(t => t.TenancyName == input.TenancyName && t.Id != input.Id) != null)
             {
-                var rs = IdentityResult.Failed(string.Format(L("TenancyNameIsAlreadyTaken"), input.TenancyName));
-                rs.CheckErrors();
+                throw new UserFriendlyException(string.Format(L("TenancyNameIsAlreadyTaken"), input.TenancyName));
             }
 
             var tenant = await _repository.FirstOrDefaultAsync(input.Id);

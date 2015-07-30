@@ -18,5 +18,6 @@ namespace CMS.Application.User
         Task DeleteUser(IdInput<Guid> input);
         Task<PagedResultOutput<UserEditDto>> GetUsers(GetUsersInput input);
         Task CreateOrUpdate(IEnumerable<UserRoleDto> inputs);
+        Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode, string actionCode);
     }
 }

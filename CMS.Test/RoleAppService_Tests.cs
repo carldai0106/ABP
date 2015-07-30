@@ -8,32 +8,37 @@ using CMS.Application.Module;
 using CMS.Application.Module.Dto;
 using CMS.Application.Role;
 using CMS.Application.Role.Dto;
+using CMS.Application.User;
+using CMS.Application.User.Dto;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Extensions;
 
 namespace CMS.Test
 {
+    [TestCaseOrderer("Xunit.Extensions.PriorityOrderer", "Xunit.Extensions")]
     public class RoleAppService_Tests : TestBase<Guid, Guid>
     {
         private readonly IRoleAppService _roleAppService;
         private readonly IModuleAppService _moduleAppService;
         private readonly IActionAppService _actionAppService;
+        private readonly IUserAppService _userAppService;
         private readonly ITestOutputHelper _output;
 
         public RoleAppService_Tests(ITestOutputHelper output)
         {
+            
             _roleAppService = Resolve<IRoleAppService>();
             _moduleAppService = Resolve<IModuleAppService>();
             _actionAppService = Resolve<IActionAppService>();
+            _userAppService = Resolve<IUserAppService>();
             _output = output;
             Resolve<IMultiTenancyConfig>().IsEnabled = true;
         }
 
-       
-
-        [Fact]
+        [Fact, TestPriority(0)]
         public async Task Create_Update_Get_Delete_Role_Test()
         {
             var list = new List<RoleCreateDto>
@@ -101,7 +106,99 @@ namespace CMS.Test
             rs.ShouldBe(null);
         }
 
-        [Fact]
+        [Fact, TestPriority(1)]
+        public async Task Create_UserRole_Test()
+        {
+            var pageResult = await _roleAppService.GetRoles(new GetRolesInput());
+            string str = JsonConvert.SerializeObject(pageResult.Items, Formatting.Indented);
+            _output.WriteLine(str);
+
+            var userAdmin = await _userAppService.GetUser("admin");
+            var userPerry = await _userAppService.GetUser("Perry");
+
+            str = JsonConvert.SerializeObject(userAdmin, Formatting.Indented);
+            _output.WriteLine(str);
+
+            var users = await _userAppService.GetUsers(new GetUsersInput());
+
+            str = JsonConvert.SerializeObject(users.Items, Formatting.Indented);
+            _output.WriteLine(str);
+
+            var list = pageResult.Items.Where(x => x.RoleCode == "GroupLeader" || x.RoleCode == "Manager");
+
+            var usrRoles = new List<UserRoleDto>();
+            foreach (var item in list)
+            {
+                usrRoles.Add(new UserRoleDto
+                {
+                    RoleId = item.Id,
+                    Status = true,
+                    UserId = userPerry.Id
+                });
+            }
+
+            foreach (var item in pageResult.Items)
+            {
+                usrRoles.Add(new UserRoleDto
+                {
+                    RoleId = item.Id,
+                    Status = true,
+                    UserId = userAdmin.Id
+                });
+            }
+
+            await _userAppService.CreateOrUpdate(usrRoles);
+        }
+
+        [Fact, TestPriority(2)]
+        public async Task Update_UserRole_Test()
+        {
+            var pageResult = await _roleAppService.GetRoles(new GetRolesInput());
+
+            var userAdmin = await _userAppService.GetUser("admin");
+            foreach (var item in userAdmin.UserRoles)
+            {
+                foreach (var rs in pageResult.Items)
+                {
+                    if (item.RoleId == rs.Id && (rs.RoleCode == "Staff" || rs.RoleCode == "Accountant"))
+                    {
+                        item.Status = false;
+                    }
+                }
+            }
+
+            await _userAppService.CreateOrUpdate(userAdmin.UserRoles);
+        }
+
+        [Fact, TestPriority(3)]
+        public async Task Get_UserRole_Test()
+        {
+            var userAdmin = await _userAppService.GetUser("admin");
+            var userPerry = await _userAppService.GetUser("Perry");
+
+            var str = JsonConvert.SerializeObject(userAdmin, Formatting.Indented);
+
+            _output.WriteLine(str);
+            _output.WriteLine(Environment.NewLine + "-----------------------------------------------------" +
+                              Environment.NewLine);
+
+            str = JsonConvert.SerializeObject(userPerry, Formatting.Indented);
+            _output.WriteLine(str);
+
+            var rs = await _userAppService.GetPermission(new Abp.Application.Services.Dto.NullableIdInput<Guid>
+            {
+                Id = userAdmin.Id
+            }, "CMS.Admin.RoleRights", "");
+
+            _output.WriteLine(str);
+            _output.WriteLine(Environment.NewLine + "-----------------------------------------------------" +
+                              Environment.NewLine);
+
+            str = JsonConvert.SerializeObject(rs, Formatting.Indented);
+            _output.WriteLine(str);
+        }
+
+        [Fact, TestPriority(4)]
         public async Task Create_RoleRight_Test()
         {
             var roles = await _roleAppService.GetRoles(new GetRolesInput());
@@ -125,9 +222,27 @@ namespace CMS.Test
             }
 
             await _roleAppService.CreateOrUpdate(list);
+
+            role = roles.Items.FirstOrDefault(x => x.RoleCode == "GroupLeader");
+            
+            list = new List<RoleRightDto>();
+            foreach (var m in items.Where(x => x.ModuleCode == "CMS.Admin.Setup" || x.ModuleCode == "CMS.Admin.Modules"))
+            {
+                foreach (var am in m.ActionModules)
+                {
+                    list.Add(new RoleRightDto
+                    {
+                        ActionModuleId = am.Id.Value,
+                        RoleId = role.Id,
+                        Status = true
+                    });
+                }
+            }
+
+            await _roleAppService.CreateOrUpdate(list);
         }
 
-        [Fact]
+        [Fact, TestPriority(5)]
         public async Task Update_RoleRight_Test()
         {
             var role = await _roleAppService.GetRole("Administrator");
@@ -159,7 +274,7 @@ namespace CMS.Test
             _output.WriteLine(str);
         }
 
-        [Fact]
+        [Fact, TestPriority(6)]
         public async Task Get_RoleRight_Test()
         {
             var role = await _roleAppService.GetRole("Administrator");

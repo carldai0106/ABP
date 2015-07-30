@@ -61,9 +61,9 @@
     <Compile Include="Mapping\UserRoleEntityMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Migrations\201507270211319_InitialCreate.cs" />
-    <Compile Include="Migrations\201507270211319_InitialCreate.Designer.cs">
-      <DependentUpon>201507270211319_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201507290722163_InitialCreate.cs" />
+    <Compile Include="Migrations\201507290722163_InitialCreate.Designer.cs">
+      <DependentUpon>201507290722163_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -92,14 +92,18 @@
       <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
       <Name>CMS.FW</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EntityFramework.DynamicFilters\EntityFramework.DynamicFilters.csproj">
+      <Project>{56E36AD1-E675-42F0-96CB-7F475E05E491}</Project>
+      <Name>EntityFramework.DynamicFilters</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201507270211319_InitialCreate.resx">
-      <DependentUpon>201507270211319_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201507290722163_InitialCreate.resx">
+      <DependentUpon>201507290722163_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

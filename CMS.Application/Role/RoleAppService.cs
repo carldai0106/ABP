@@ -32,7 +32,7 @@ namespace CMS.Application.Role
         {
             if (await _repository.FirstOrDefaultAsync(x => x.RoleCode == input.RoleCode) != null)
             {
-                throw new UserFriendlyException(string.Format(L("Identity.DuplicateRoleCode"), input.RoleCode));
+                throw new UserFriendlyException(string.Format(L("DuplicateRoleCode"), input.RoleCode));
             }
 
             var role = input.MapTo<RoleEntity>();
@@ -52,9 +52,9 @@ namespace CMS.Application.Role
 
             input.MapTo(rs);
 
-            rs = await _repository.FirstOrDefaultAsync(x => x.RoleCode == input.RoleCode);
+            var result = await _repository.FirstOrDefaultAsync(x => x.RoleCode == input.RoleCode);
 
-            if (rs != null && rs.Id != input.Id)
+            if (result != null && result.Id != input.Id)
             {
                 throw new UserFriendlyException(string.Format(L("DuplicateRoleCode"), input.RoleCode));
             }
@@ -97,8 +97,12 @@ namespace CMS.Application.Role
                 var rs = item.MapTo<RoleRightEntity>();
                 if (!item.Id.HasValue)
                 {
-                    rs.Id = Guid.NewGuid();
-                    await _roleRightRepository.InsertAsync(rs);
+                    if (await _roleRightRepository.FirstOrDefaultAsync(
+                            x => x.ActionModuleId == item.ActionModuleId && x.RoleId == item.RoleId) == null)
+                    {
+                        rs.Id = Guid.NewGuid();
+                        await _roleRightRepository.InsertAsync(rs);
+                    }
                 }
                 else
                 {
