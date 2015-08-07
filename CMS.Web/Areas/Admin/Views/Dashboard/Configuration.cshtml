@@ -1,0 +1,153 @@
+﻿@model System.Collections.Hashtable
+@{
+    ViewBag.Title = Html.Lang("Configuration");
+}
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <nav class="navbar navbar-default navbar-custom navbar-border-bottom">
+        <div class="row clear-lr-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <div class="navbar-header">
+                    @*<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-type">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>*@
+                    <ul class="nav-tools">
+                        <li><a href="~/Admin/Dashboard/Index" class="nav-btn"><i class="fa fa-dashboard"></i><span>@Html.Lang("Dashboard")</span></a></li>
+                        <li><a href="~/Admin/Dashboard/Configuration" class="nav-btn dashboard-active"><i class="fa fa-gears"></i><span>@Html.Lang("Configuration")</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+
+            </div>
+        </div><!-- /.row -->
+    </nav>
+
+
+    <div id="configuration">
+        <div class="all-margin">
+            <div class="row cust-row">
+                <div class="col-lg-9">
+                    <form action="~/Admin/Dashboard/Configuration" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Company Name")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="company_name" name="company_name" type="text" class="form-control" value="@Model["company_name"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Logo")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input type="hidden" name="file-logo" value="@Model["logo"]" />
+                                <input id="logo" name="logo" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Website URL")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="website_url" name="website_url" type="text" class="form-control" value="@Model["website_url"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Address")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="address" name="address" type="text" class="form-control" value="@Model["address"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Telphone")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="telphone" name="telphone" type="text" class="form-control" value="@Model["telphone"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Email")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="email" name="email" type="text" class="form-control" value="@Model["email"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Fax")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="fax" name="fax" type="text" class="form-control" value="@Model["fax"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("ICP")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="icp" name="icp" type="text" class="form-control" value="@Model["icp"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Postal Code")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="zipcode" name="zipcode" type="text" class="form-control" value="@Model["zipcode"]" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Page Size")</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input id="pagesize" name="pagesize" type="text" class="form-control" value="@Model["pagesize"]" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Banner Image")1</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input type="hidden" name="file-banner1" value="@Model["banner1"]" />
+                                <input id="banner1" name="banner1" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Banner Image")2</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input type="hidden" name="file-banner2" value="@Model["banner2"]" />
+                                <input id="banner2" name="banner2" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Banner Image")3</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input type="hidden" name="file-banner3" value="@Model["banner3"]" />
+                                <input id="banner3" name="banner3" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Banner Image")4</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input type="hidden" name="file-banner4" value="@Model["banner4"]" />
+                                <input id="banner4" name="banner4" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Banner Image")5</label>
+                            <div class="col-md-4 col-sm-5 col-xs-12">
+                                <input type="hidden" name="file-banner5" value="@Model["banner5"]" />
+                                <input id="banner5" name="banner5" type="file" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label"></label>
+                            <div class="col-md-4 col-sm-5 col-xs-12 text-center">
+                                <a href="~/Admin/Dashboard/Configuration" class="btn btn-info btn-sm">@Html.Lang("Cancel")</a>
+                                <span class="btn-space"></span>
+                                <button type="submit" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

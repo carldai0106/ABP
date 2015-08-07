@@ -15,6 +15,7 @@ namespace Abp.Web.Mvc
         public override void PreInitialize<TTenantId, TUserId>()
         {
             IocManager.AddConventionalRegistrar(new ControllerConventionalRegistrar());
+            
         }
 
         /// <inheritdoc/>

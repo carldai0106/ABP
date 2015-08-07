@@ -75,7 +75,7 @@
     <Compile Include="Action\Dto\GetActionsInput.cs" />
     <Compile Include="Action\IActionAppService.cs" />
     <Compile Include="AppConsts.cs" />
-    <Compile Include="AppModule.cs" />
+    <Compile Include="CmsAppModule.cs" />
     <Compile Include="CustomDtoMapper.cs" />
     <Compile Include="IdentityFramework\IdentityResultExtensions.cs" />
     <Compile Include="Localization\CmsConsts.cs" />

@@ -33,5 +33,16 @@ namespace Abp.Authorization
         {
 
         }
+
+        /// <summary>
+        /// Checks if a user is granted for a module code and permission.
+        /// </summary>
+        /// <param name="userId">Id of the user to check</param>
+        /// <param name="moduleCode">Code of the menu or module</param>
+        /// <param name="permissionName">Name of the permission</param>
+        public Task<bool> IsGrantedAsync(TUserId userId, string moduleCode, string permissionName)
+        {
+            return Task.FromResult(true);
+        }
     }
 }

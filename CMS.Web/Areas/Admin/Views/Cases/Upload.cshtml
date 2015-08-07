@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+    ViewBag.Title = Html.Lang("Upload");    
+}
+<h3 class="fb-title">@ViewBag.Title</h3>
+<form action="#" method="post" class="formbox form-horizontal" id="FrmNew">
+    <div class="files-box">
+        <div class="files-tools">
+            <div class="row">
+                <div class="col-xs-4"><a href="javascript:$('#uploadify').uploadify('upload','*')" class="uploadify-button">开始上传</a></div>
+                <div class="col-xs-4"><a href="javascript:$('#uploadify').uploadify('cancel', '*')" class="uploadify-button">全部取消</a></div>
+                <div class="col-xs-4"><input type="file" name="uploadify" id="uploadify" /></div>
+            </div>
+        </div>
+        <div id="fileQueue"></div>
+        <div id="files-msg" class="info"></div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        var hidMsg = function () {
+            setTimeout(function () {
+                $("#files-msg").hide();
+                $("#files-msg").html("");
+            }, 5000);
+        };
+
+        $("#uploadify").uploadify({
+            'swf': '@Url.Content("~/Content/uploadify/uploadify.swf")', // 做上传的Flash插件
+            'uploader': '@Url.Content("~/Admin/Cases/Upload/" + ViewBag.NewsId)', // 服务器处理页面（支持多种语言，例如您可以修改成PHP、ASP、JSP等语言）
+            'formData': { 'folder': 'cases/', 'NewsId': "@ViewBag.NewsId" },
+            'queueID': 'fileQueue',
+            'fileTypeDesc': "Image Files (*.jpg | *.gif | *.png)", // 描述（必须和fileExt一起使用）
+            'fileTypeExts': "*.jpg;*.gif;*.png", // 允许浏览上传的文件扩展名（必须和fileDesc一起使用）
+            'fileSizeLimit': 104857600, // 文件大小限制100M（注意，在ASP.NET中Web.Config也要配置）
+            'auto': false,
+            'queueSizeLimit': 6,
+            'width': 'auto',
+            'multi': true, // 是否支持多文件上传
+            'buttonText': '选择文件', // 按钮上的文本
+            'onSelectError': function (file, errorCode, errorMsg) {
+                var pars = this.settings;
+                var errorName = '';
+
+                switch (errorCode) {
+                    case SWFUpload.QUEUE_ERROR.QUEUE_LIMIT_EXCEEDED:
+                        errorName = "只能同时上传 " + pars.file_queue_limit + " 个文件";
+                        break;
+                    case SWFUpload.QUEUE_ERROR.FILE_EXCEEDS_SIZE_LIMIT:
+                        errorName = "选择的文件超过了当前大小限制：" + pars.file_size_limit;
+                        break;
+                    case SWFUpload.QUEUE_ERROR.ZERO_BYTE_FILE:
+                        errorName = "当前上传的文件大小是零";
+                        break;
+                    case SWFUpload.QUEUE_ERROR.INVALID_FILETYPE:
+                        errorName = "文件扩展名必需为：" + pars.file_types_description + " (" + pars.file_types + ")";
+                        break;
+                    default:
+                        errorName = "未知错误";
+                        break;
+                }
+
+                $("#files-msg").html(errorName).show();
+                hidMsg();
+            },
+            'overrideEvents': ['onDialogClose'], //不使用缺省事件
+            'onQueueComplete': function (queueData) {   // 完成所有上传后执行
+                $("#files-msg").html("所有文件上传完毕！").show();
+                hidMsg();
+
+                window.location.reload();
+            }
+        });
+
+    });
+</script>

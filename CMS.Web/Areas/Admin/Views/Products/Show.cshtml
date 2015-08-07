@@ -1,0 +1,139 @@
+﻿@using Framework.Web.Admission
+@model IEnumerable<PhotoEntry>
+@{
+    ViewBag.Title = Html.Lang("Photos View");
+    string url = Url.Content("~/Admin/Products/Show/" + ViewBag.NewsId + "?page=");
+    var hasEdit = Authority.CheckRight("Products", "Edit");
+    var hasDelete = Authority.CheckRight("Products", "Edit");
+}
+@section styles{
+    <link href="~/Content/uploadify/uploadify.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="~/Content/uploadify/jquery.uploadify.js"></script>
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="~/Admin/Products/Index?MenuID=@ViewBag.MenuId">@Html.Lang("Product List")</a>
+        <a href="~/Admin/Products/Edit/@ViewBag.NewsId">@Html.Lang("Edit Product")</a>
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <nav class="navbar navbar-default navbar-custom navbar-border-bottom">
+        <div class="row clear-lr-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-type">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav-tools">
+                        @if (hasEdit)
+                        {
+                            <li><a href="~/Admin/Products/Upload/@ViewBag.NewsId" class="nav-btn fancybox fancybox.ajax"><i class="fa fa-upload"></i><span>@Html.Lang("Upload")</span></a></li>
+                        }
+                        @if (hasDelete)
+                        {
+                            <li><a href="#" rel="~/Admin/Products/DeletePhoto?NewsId=@ViewBag.NewsId" class="nav-btn" id="btnDelete"><i class="fa fa-remove"></i><span>@Html.Lang("Delete")</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="all-margin">
+        <div class="row cust-row" id="thumbs">
+            @foreach (var item in Model)
+            {
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 imgbox">
+                    <div class="thumbnail">
+                        <a name="btnCheck" href="#">
+                            <img data-check="0" data-id="@item.PhotoId" class="check-remove" src="~/Content/images/checked.png" />
+                            <img data-src="holder.js/300x300" src="@Url.Content(item.Thumbnail)">
+                        </a>
+                        <div class="caption">
+                            <p id="photo_desc_@item.PhotoId">@item.Description</p>
+                            <div class="caption-btns">
+                                <div class="btn-group">
+                                    @if (hasEdit)
+                                    {
+                                        <a href="~/Admin/Products/EditPhoto/@item.PhotoId" class="btn btn-info fancybox fancybox.ajax"><i class="fa fa-edit"></i><span>@Html.Lang("Edit")</span></a>
+                                    }
+                                    @if (hasDelete)
+                                    {
+                                        <a name="btnDeleteItem" href="#" rel="~/Admin/Products/DeletePhoto/@item.PhotoId?NewsId=@ViewBag.NewsId" class="btn btn-danger"><i class="fa fa-trash"></i><span>@Html.Lang("Delete")</span></a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        @Html.Pager(ViewBag.PageModel as PageEntry, url)
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(function () {
+        $("a[name='btnCheck']").on("click", function () {
+            var img = $(this).children("img.check-remove");
+            var data = img.attr("data-check");
+            if (data == 0) {
+                img.show();
+                img.attr("data-check", "1");
+            } else {
+                img.hide();
+                img.attr("data-check", "0");
+            }
+            return false;
+        });
+
+        var lang = $.parseJSON($("#LocalizationLang").html());
+        $("a[name='btnDeleteItem']").on("click", function() {
+            var url = $(this).attr("rel");
+            openConfirm(lang.SureDelete, function () {
+                window.location = url;
+            });
+
+            return false;
+        });
+
+        $("#btnDelete").on("click", function () {
+            var arr = [];
+
+            $("a[name='btnCheck']>img.check-remove").each(function() {
+                var data = $(this).attr("data-check");
+                if (data == "1") {
+                    arr.push($(this).attr("data-id"));
+                }
+            });
+
+            if (arr.length === 0) {
+                openAlert(lang.SelectToDelete);
+                return false;
+            } else {
+                var url = $(this).attr("rel");
+                openConfirm(lang.SureDelete, function () {
+                    var toUrl = "";
+                    if (url.indexOf("?") >= 0) {
+                        toUrl = url + "&id=" + arr.join(",");
+                    } else {
+                        toUrl = url + arr.join(",");
+                    }
+                    window.location = toUrl;
+                });
+
+                return false;
+            }
+        });
+    });
+</script>

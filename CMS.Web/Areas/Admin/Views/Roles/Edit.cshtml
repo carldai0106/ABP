@@ -1,0 +1,55 @@
+﻿@model RoleEntry
+@{
+    ViewBag.Title = "编辑角色";
+    Layout = null;
+}
+<h3 class="fb-title">@ViewBag.Title</h3>
+<form action="@Url.Content("~/Admin/Roles/Edit")" method="post" class="formbox form-horizontal" id="FrmEdit">
+    <div class="fb-wrapper-box">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.RoleId)
+        @Html.HiddenFor(x => x.RoleCode)
+        <div class="form-group">
+            @Html.LabelFor(x => x.RoleCode, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-8">
+                <input type="text" class="form-control" value="@Model.RoleCode" disabled />
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.DisplayName, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-8">
+                @Html.TextBoxFor(x => x.DisplayName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.DisplayName)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.SeqNo, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-8">
+                @Html.TextBoxFor(x => x.SeqNo, new { @class = "form-control" })
+                @Html.ValidationMessageFor(x => x.SeqNo)
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(x => x.Description, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-8">
+                @Html.TextAreaFor(x => x.Description, new { @class = "form-control", style = "height:80px;" })
+            </div>
+        </div>
+
+        <div class="form-group"></div>
+        <div class="form-group text-center">
+            <a href="#" class="btn cancel btn-info btn-sm">@Html.Lang("Cancel")</a>
+            <span class="btn-space"></span>
+            <button type="submit" id="btnSave" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.validator.unobtrusive.parse("#FrmEdit");
+
+        $("#btnSave").on('click', function () {
+            setTimeout($.fancybox.reposition, 100);
+        });
+    });
+</script>

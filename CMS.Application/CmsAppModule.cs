@@ -14,8 +14,8 @@ using CMS.Domain;
 
 namespace CMS.Application
 {
-    [DependsOn(typeof(DomainModule), typeof(AbpAutoMapperModule), typeof(CmsDataModule))]
-    public class AppModule : AbpModule
+    [DependsOn(typeof(CmsDomainModule), typeof(AbpAutoMapperModule), typeof(CmsDataModule))]
+    public class CmsAppModule : AbpModule
     {
         public override void PreInitialize<TTenantId, TUserId>()
         {

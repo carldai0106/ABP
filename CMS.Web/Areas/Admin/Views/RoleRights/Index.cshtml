@@ -1,0 +1,294 @@
+﻿@using Framework.Web.Admission
+@model IEnumerable<ActionModuleEntry>
+
+@{
+    ViewBag.Title = Html.Lang("Role's Rights");
+    var module = ViewBag.Module as ModuleEntry ?? new ModuleEntry();
+    var modules = (ViewBag.ModuleList as IEnumerable<ModuleEntry> ?? new List<ModuleEntry>()).OrderBy(x => x.ModuleId);
+    var roleRights = ViewBag.RoleRights as List<RoleRightEntry> ?? new List<RoleRightEntry>();
+    var actions = ViewBag.Actions as List<ActionEntry> ?? new List<ActionEntry>();
+    
+    var currentId = ViewBag.CurrentId ?? 0;
+    IEnumerable<ModuleEntry> list = currentId != 0 ? modules.Where(x => x.ModuleId == currentId) : modules.Where(x => x.ParentId == currentId);
+
+    var hasAdd = Authority.CheckRight("RoleRights", "Add");
+    var hasEdit = Authority.CheckRight("RoleRights", "Edit");
+}
+
+@helper SubMenuItem(ModuleEntry model)
+{
+    if (model.Children.Count > 0)
+    {
+        var currentId = ViewBag.CurrentId ?? 0;
+        <ul class="cascade-children">
+            @foreach (var item in model.Children)
+            {
+                string clsName = string.Empty;
+                if (item.ModuleId == currentId && item.IsActived)
+                {
+                    clsName = "current";
+                }
+                else if (item.IsActived)
+                {
+                    clsName = "active";
+                }
+                <li class="@clsName">
+                    <div class="cascade-item-box">
+                        <a href="~/Admin/RoleRights/Index/@item.ModuleId?RoleId=@ViewBag.RoleId">
+                            @item.DisplayName
+                            @if (item.Children.Count > 0)
+                            {
+                                string spread = string.Empty;
+                                if (!string.IsNullOrEmpty(clsName))
+                                {
+                                    spread = "icon-spread";
+                                }
+                                <i class="icon-play icon-has-ul @spread"></i>
+                            }
+                        </a>
+                    </div>
+                    @SubMenuItem(item)
+                </li>
+            }
+        </ul>
+    }
+}
+
+@helper SubItem(IEnumerable<ModuleEntry> source, List<RoleRightEntry> roleRights, int parentId, int paddingLeft = 0)
+{
+    var actions = ViewBag.Actions as List<ActionEntry> ?? new List<ActionEntry>();
+    int left = paddingLeft + 20;
+    string style = "background-position-x:" + paddingLeft + "px; padding-left:" + left + "px;";
+    var children = source.Where(x => x.ParentId == parentId);
+    foreach (var item in children)
+    {
+        if (!item.DisplayAsMenu)
+        {
+            continue;
+        }
+        var actionModules = Model.Where(x => x.ModuleId == item.ModuleId);
+        <tr>
+            <td class="branch" style="@style">
+                <div class="branch-text">@item.DisplayName</div>
+                <input type="hidden" value="@item.ModuleId" name="ModuleId" />
+            </td>
+            <td>
+                <ul class="ul-chk-list">
+                    @if (!actionModules.Any())
+                    {
+                        <li class="gray-bg">
+                            <label>
+                                <span>You do not have set actions for the menu.</span>
+                            </label>
+                        </li>
+                    }
+                    else
+                    {
+                        foreach (var actionModule in actionModules)
+                        {
+                            string checkId = "ActionModule_" + actionModule.ActionModuleId;
+                            string checkName = checkId;
+                            string rightName = "RightId_" + actionModule.ActionModuleId;
+
+                            var info = roleRights.FirstOrDefault(x => x.ActionModuleId == actionModule.ActionModuleId);
+                            string strChecked = string.Empty;
+                            int rightId = 0;
+                            if (info != null)
+                            {
+                                if (info.Status)
+                                {
+                                    strChecked = "checked";
+                                }
+                                rightId = info.RightId;
+                            }
+                            
+                            var actionInfo = actions.FirstOrDefault(x => x.ActionId == actionModule.ActionId);
+                            <li class="gray-bg">
+                                <label for="@checkId">
+                                    <input type="hidden" value="@rightId" name="@rightName" />
+                                    <input type="checkbox" id="@checkId" name="@checkName" @strChecked />
+                                    <span>@actionInfo.DisplayName</span>
+                                </label>
+                            </li>
+                        }
+                    }
+                </ul>
+            </td>
+        </tr>
+
+        @SubItem(source, roleRights, item.ModuleId, left)
+    }
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@Html.Lang("Setup")</a>
+        <a href="~/Admin/RoleRights/Index" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <div class="col-xs-12 col-reset-padding">
+        <div class="cascade-box col-xs-3 col-reset-padding">
+            <p class="title gray-bg-1">
+                <a href="~/Admin/RoleRights/Index?RoleId=@ViewBag.RoleId">@Html.Lang("Module List")</a>
+            </p>
+            <ul>
+                @foreach (var item in module.Children)
+                {
+                    string clsName = string.Empty;
+                    if (item.ModuleId == currentId && item.IsActived)
+                    {
+                        clsName = "current";
+                    }
+                    else if (item.IsActived)
+                    {
+                        clsName = "active";
+                    }
+                    <li class="@clsName">
+                        <div class="cascade-item-box">
+                            <a href="~/Admin/RoleRights/Index/@item.ModuleId?RoleId=@ViewBag.RoleId">
+                                @item.DisplayName
+                                @if (item.Children.Count > 0)
+                                {
+                                    string spread = string.Empty;
+                                    if (!string.IsNullOrEmpty(clsName))
+                                    {
+                                        spread = "icon-spread";
+                                    }
+                                    <i class="icon-play icon-has-ul @spread"></i>
+                                }
+                            </a>
+                        </div>
+                        @SubMenuItem(item)
+                    </li>
+                }
+            </ul>
+        </div>
+        <form action="@Url.Content("~/Admin/RoleRights/Handle")" method="post" class="formbox" id="FrmHandle">
+            @Html.AntiForgeryToken()
+            <input type="hidden" value="@currentId" name="SelectedModuleId" />
+            <div class="col-xs-9 col-reset-padding">
+                <div class="grp-ctrls gray-bg">
+                    <ul>
+                        <li><label>@Html.Lang("Role Name")</label></li>
+                        <li>
+                            @Html.DropDownList("RoleId", ViewBag.Roles as IEnumerable<SelectListItem>)
+                        </li>
+                        @if (hasAdd || hasEdit)
+                        {
+                            <li>
+                                <a id="btnSave" href="#">
+                                    <i class="fa fa-save"></i>
+                                    <span>@Html.Lang("Save")</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="btnChkAll" href="#">
+                                    <i class="fa fa-check-square-o"></i>
+                                    <span>@Html.Lang("Check All")</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id="btnUnChkAll" href="#">
+                                    <i class="fa fa-square-o"></i>
+                                    <span>@Html.Lang("Uncheck All")</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <table class="table">
+                    <thead class="cust-thead">
+                        <tr>
+                            <td>@Html.Lang("Module Name")</td>
+                            <td style="padding-left:20px;">@Html.Lang("Right List")</td>
+                        </tr>
+                    </thead>
+                    <tbody class="cust-tbody">
+                        @foreach (var item in list)
+                        {
+                            if (!item.DisplayAsMenu)
+                            {
+                                continue;
+                            }
+                            var actionModules = Model.Where(x => x.ModuleId == item.ModuleId && x.Status);
+                            <tr>
+                                <td>
+                                    @item.DisplayName
+                                    <input type="hidden" value="@item.ModuleId" name="ModuleId" />
+                                </td>
+                                <td>
+                                    <ul class="ul-chk-list">
+                                        @if (!actionModules.Any())
+                                        {
+                                            <li class="gray-bg">
+                                                <label>
+                                                    <span>@Html.Lang("You do not have set actions for the module.")</span>
+                                                </label>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            foreach (var actionModule in actionModules)
+                                            {
+                                                string checkId = "ActionModule_" + actionModule.ActionModuleId;
+                                                string checkName = checkId;
+                                                string rightName = "RightId_" + actionModule.ActionModuleId;
+
+                                                var info = roleRights.FirstOrDefault(x => x.ActionModuleId == actionModule.ActionModuleId);
+                                                string strChecked = string.Empty;
+                                                int rightId = 0;
+                                                if (info != null)
+                                                {
+                                                    if (info.Status)
+                                                    {
+                                                        strChecked = "checked";
+                                                    }
+                                                    rightId = info.RightId;
+                                                }
+                                                
+                                                var actionInfo = actions.FirstOrDefault(x => x.ActionId == actionModule.ActionId);
+                                                <li class="gray-bg">
+                                                    <label for="@checkId">
+                                                        <input type="hidden" value="@rightId" name="@rightName" />
+                                                        <input type="checkbox" id="@checkId" name="@checkName" @strChecked />
+                                                        <span>@actionInfo.DisplayName</span>
+                                                    </label>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </td>
+                            </tr>
+                            @SubItem(modules, roleRights, item.ModuleId, 15)
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</section>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnChkAll").on("click", function () {
+            $(".ul-chk-list input:checkbox").prop("checked", true);
+            return false;
+        });
+
+        $("#btnUnChkAll").on("click", function () {
+            $(".ul-chk-list input:checkbox").prop("checked", false);
+            return false;
+        });
+
+        $("#RoleId").on("change", function () {
+            var roleId = $(this).val();
+            window.location = "@Url.Content("~/Admin/RoleRights/Index/" + currentId)?roleId=" + roleId;
+        });
+
+        $("#btnSave").on("click", function () {
+            $("#FrmHandle").submit();
+        });
+    });
+</script>

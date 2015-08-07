@@ -1,0 +1,123 @@
+﻿@using Framework.Core
+@using Framework.Web.Admission
+@model ModuleEntry
+
+@{
+    ViewBag.Title = @Html.Lang("Module List");
+    var hasAdd = Authority.CheckRight("Modules", "Add");
+}
+
+@helper SubTree(ModuleEntry node)
+{
+    var hasAdd = Authority.CheckRight("Modules", "Add");
+    var hasEdit = Authority.CheckRight("Modules", "Edit");
+    var hasDelete = Authority.CheckRight("Modules", "Delete");
+
+    var clsNames = "";
+    if (node.Children.Any() && node.ModuleId != 0)
+    {
+        clsNames = "class=\"dyh-sub-tree\"";
+    }
+
+    int currentId = DataCast.Get<int>(ViewBag.CurrentId);
+    <ul @Html.Raw(clsNames)>
+        @foreach (var item in node.Children)
+        {
+            string clsName = string.Empty;
+            if (item.ModuleId == currentId && item.IsActived)
+            {
+                clsName = "current";
+            }
+            else if (item.IsActived)
+            {
+                clsName = "active";
+            }
+
+            var hasChild = item.Children.Any();
+            <li class="@clsName">
+                <a href="~/Admin/Modules/Edit/@item.ModuleId">
+                    @if (hasChild)
+                    {
+                        string clsIcon = "fa fa-plus-circle";
+                        if (!string.IsNullOrEmpty(clsName))
+                        {
+                            clsIcon = "fa fa-minus-circle";
+                        }
+                        <span class="shrink">
+                            <i class="@clsIcon"></i>
+                        </span>
+                    }
+                    <span class="title">
+                        @item.DisplayName
+                    </span>
+                </a>
+                <div class="btn-group btn-group-sm tool-bar">
+                    @if (hasAdd)
+                    {
+                        <a href="~/Admin/Modules/Create/@item.ModuleId" class="btn btn-default btn-bgcolor powertip" title="Add"><i class="fa fa-plus"></i></a>
+                    }
+                    @if (hasEdit)
+                    {
+                        <a href="~/Admin/Modules/Edit/@item.ModuleId" class="btn btn-default btn-bgcolor powertip" title="Edit"><i class="fa fa-edit"></i></a>
+                    }
+                    @if (hasDelete)
+                    {
+                        <a href="~/Admin/Modules/Delete/@item.ModuleId?ParentId=@item.ParentId" class="btn btn-default btn-bgcolor powertip" title="Delete"><i class="fa fa-remove"></i></a>
+                    }
+                </div>
+                @if (hasChild)
+                {
+                    @Html.Raw(SubTree(item))
+                }
+            </li>
+        }
+    </ul>
+}
+
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@Html.Lang("Setup")</a>
+        <a href="~/Admin/Modules/Index" class="active">@Html.Lang("Module List")</a>
+    </div>
+</div>
+
+<section id="container">
+    <div class="panel panel-default border-b radius-none">
+        <div class="panel-heading" style="position:relative;">
+            <h4 class="panel-title">@Model.DisplayName</h4>
+            @if (hasAdd)
+            {
+                <div class="btn-group tool-bar">
+                    <a href="~/Admin/Modules/Create/0" class="btn btn-default btn-bgcolor" title="Add"><i class="fa fa-plus"></i></a>
+                </div>
+            }
+        </div>
+        @if (Model.Children.Count > 0)
+        {
+            <div class="dyh-tree">
+                @SubTree(Model)
+            </div>
+        }
+    </div>
+</section>
+
+<script type="text/javascript">
+    $(function () {
+        $(".dyh-tree span.shrink").on("click", function () {
+            var icon = $(this).children("i");
+            var hasClass = icon.hasClass("fa fa-plus-circle");
+            var target = $(this).parent("a").parent("li").children(".dyh-sub-tree");
+            if (hasClass) {
+                target.slideDown(300, "linear", function () {
+                    icon.removeClass("fa fa-plus-circle").addClass("fa fa-minus-circle");
+                });
+            } else {
+                target.slideUp(300, "linear", function () {
+                    icon.removeClass("fa fa-minus-circle").addClass("fa fa-plus-circle");
+                });
+            }
+            return false;
+        });
+    });
+</script>

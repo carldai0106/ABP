@@ -35,7 +35,7 @@ namespace CMS.UnitTest
             base.AddModules(modules);
 
             //Adding testing modules. Depended modules of these modules are automatically added.
-            modules.Add<AppModule>();
+            modules.Add<CmsAppModule>();
             //modules.Add<DomainModule>();
             //modules.Add<CmsDataModule>();
         }

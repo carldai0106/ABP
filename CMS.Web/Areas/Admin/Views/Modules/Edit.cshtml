@@ -1,0 +1,159 @@
+﻿@model ModuleEntry
+@{
+    ViewBag.Title = Html.Lang("Edit Module");
+    var actions = ViewBag.Actions as IEnumerable<ActionEntry>;
+    var actionModules = (ViewBag.ActionModules as IEnumerable<ActionModuleEntry> ?? new List<ActionModuleEntry>());
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@Html.Lang("Setup")</a>
+        <a href="~/Admin/Modules/Index/@Model.ModuleId">@Html.Lang("Module List")</a>
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <div class="all-margin">
+        <div class="row cust-row">
+            <div class="col-lg-9">
+                <form action="~/Admin/Modules/Edit" method="post" class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.NonParent, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            <input type="text" name="NonParent" class="form-control" value="@Model.NonParent" disabled />
+                            @Html.HiddenFor(x => x.ParentId)
+                            @Html.HiddenFor(x => x.ModuleId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.ModuleCode, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            <input type="text" name="ModuleCode" class="form-control" value="@Model.ModuleCode" disabled />
+                            @Html.HiddenFor(x => x.ModuleCode)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.DisplayName, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextBoxFor(x => x.DisplayName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.DisplayName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label"></label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12 chk-list">
+                            <ul class="ul-list">
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            @Html.CheckBoxFor(x => x.DisplayAsMenu)
+                                            <span>@Html.Lang("Display As Module/Menu")</span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            @Html.CheckBoxFor(x => x.WebsiteFrontMenu)
+                                            <span>@Html.Lang("Display As Website Front Menu")</span>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="checkbox">
+                                        <label>
+                                            @Html.CheckBoxFor(x => x.Article)
+                                            <span>@Html.Lang("Make it as a article type?")</span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.SeqNo, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextBoxFor(x => x.SeqNo, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.SeqNo)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.ClassName, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextBoxFor(x => x.ClassName, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Url, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextBoxFor(x => x.Url, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.FrontUrl, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextBoxFor(x => x.FrontUrl, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Description, new { @class = "col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextAreaFor(x => x.Description, new { @class = "form-control", style = "height:80px;" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Relating Actions to Module")</label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+                            <ul class="ul-list">
+                                @foreach (var item in (actions ?? new List<ActionEntry>()))
+                                {
+                                    var info = actionModules.FirstOrDefault(x => x.ActionId == item.ActionId);
+                                    string strChecked = string.Empty;
+                                    int actionModuleId = 0;
+                                    if (info != null)
+                                    {
+                                        if (info.Status)
+                                        {
+                                            strChecked = "checked";
+                                        }
+                                        actionModuleId = info.ActionModuleId;
+                                    }
+
+                                    <li>
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="ActionModule" value="@item.ActionId" @strChecked />
+                                                <input type="hidden" name="ActionModuleId" value="@actionModuleId" />
+                                                <span>@item.DisplayName</span>
+                                            </label>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 col-md-2 col-sm-3 col-xs-12 control-label"></label>
+                        <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12 text-center">
+                            <a href="~/Admin/Modules/Index/@Model.ModuleId" class="btn btn-info btn-sm">@Html.Lang("Cancel")</a>
+                            <span class="btn-space"></span>
+                            <button type="submit" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>

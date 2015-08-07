@@ -1,0 +1,72 @@
+﻿@model NewsEntry
+@{
+    ViewBag.Title = Html.Lang("New Case");
+    var modules = ViewBag.Types as IEnumerable<ModuleEntry>;
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="~/Admin/Cases/Index?MenuID=@ViewBag.ParentId">@Html.Lang("Case List")</a>
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <div class="all-margin">
+        <div class="row cust-row">
+            <div class="col-lg-9">
+                <form action="~/Admin/Cases/Create" method="post" class="form-horizontal">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.ModuleId, new { @class = "col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+                            <select id="ModuleId" name="ModuleId" class="form-control" class="form-control valid" data-val="true" data-val-required="文章类型字段是必须的。">
+                                <option value="">@Html.Lang("Please select one")</option>
+                                @foreach (var item in modules)
+                                {
+                                    <option value="@item.ModuleId">@item.DisplayName</option>
+                                }
+                            </select>
+                            @Html.ValidationMessageFor(x => x.ModuleId)
+                            <input type="hidden" id="ParentId" name="ParentId" value="@ViewBag.ParentId" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Title, new { @class = "col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-md-4 col-sm-5 col-xs-12">
+                            @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Title)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Content, new { @class = "col-md-2 col-sm-3 col-xs-12 control-label" })
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                            @Html.TextAreaFor(x => x.Content)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-3 col-xs-12 control-label"></label>
+                        <div class="col-md-6 col-sm-6 col-xs-12 text-center">
+                            <a href="~/Admin/Cases/Index?MenuID=@ViewBag.ParentId" class="btn btn-info btn-sm">@Html.Lang("Cancel")</a>
+                            <span class="btn-space"></span>
+                            <button type="submit" class="btn btn-primary btn-sm">@Html.Lang("Next")</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var editor = UE.ui.Editor({
+        UEDITOR_HOME_URL: '/Content/plugins/ueditor/', //配置编辑器路径
+        autoHeightEnabled: false, //高度自动增长
+        initialFrameHeight: 300 //最小高度
+    });
+    editor.render('Content');
+</script>

@@ -43,6 +43,8 @@ namespace Abp.Web.Mvc.Authorization
                 var handlers = container.Kernel.GetAssignableHandlers(typeof(object));
                 var handler = handlers.FirstOrDefault(
                     x => x.ComponentModel.Implementation.IsGenericType && x.ComponentModel.Implementation.GetGenericTypeDefinition() == typeof(AuthorizationInterceptor<,>));
+                
+                //TODO : Use cache?
 
                 if (handler != null)
                 {

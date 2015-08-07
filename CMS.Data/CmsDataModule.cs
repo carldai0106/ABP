@@ -5,7 +5,7 @@ using CMS.Domain;
 
 namespace CMS.Data
 {
-    [DependsOn(typeof(AbpEntityFrameworkModule), typeof(DomainModule))]
+    [DependsOn(typeof(AbpEntityFrameworkModule), typeof(CmsDomainModule))]
     public class CmsDataModule : AbpModule
     {
         public override void PreInitialize<TTenantId, TUserId>()

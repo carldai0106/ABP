@@ -1,0 +1,60 @@
+﻿@model PhotoEntry
+@{
+    Layout = null;
+    ViewBag.Title = Html.Lang("Edit Description");
+}
+<h3 class="fb-title">@ViewBag.Title</h3>
+<form action="#" method="post" class="formbox form-horizontal" id="FrmEdit">
+    <div class="fb-wrapper-box">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.NewsId)
+        @Html.HiddenFor(x => x.Original)
+        @Html.HiddenFor(x => x.PhotoId)
+        @Html.HiddenFor(x => x.Thumbnail)
+        
+        <div class="form-group">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8 chk-list">
+                <ul class="ul-list">
+                    <li>
+                        <div class="checkbox" style="border-radius:4px;">
+                            <label>
+                                @Html.CheckBoxFor(x => x.PublishHome)
+                                <span>@Html.Lang("Publish to home page")</span>
+                            </label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.Description, new { @class = "col-sm-3 control-label" })
+            <div class="col-sm-8">
+                @Html.TextAreaFor(x => x.Description, new { @class = "form-control", style = "height:80px;" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-8 text-center">
+                <a href="#" class="btn cancel btn-info btn-sm">@Html.Lang("Cancel")</a>
+                <span class="btn-space"></span>
+                <button type="submit" id="btnSave" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+            </div>
+        </div>
+    </div>
+
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSave").on("click", function () {
+            var id = $("#PhotoId").val();
+            $.post("@Url.Content("~/Admin/Cases/EditPhoto")", $("#FrmEdit").serialize(), function (json) {
+                $("#photo_desc_" + id).html(json.Description);
+                $.fancybox.close();
+            });
+            return false;
+        });
+    });
+</script>

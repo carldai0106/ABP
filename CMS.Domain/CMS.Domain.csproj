@@ -47,7 +47,7 @@
   <ItemGroup>
     <Compile Include="ActionModule\ActionModuleEntity.cs" />
     <Compile Include="Action\ActionEntity.cs" />
-    <Compile Include="DomainModule.cs" />
+    <Compile Include="CmsDomainModule.cs" />
     <Compile Include="ICmsRepository.cs" />
     <Compile Include="Module\ModuleEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -56,7 +56,6 @@
     <Compile Include="Tenant\TenantEntity.cs" />
     <Compile Include="UserRole\UserRoleEntity.cs" />
     <Compile Include="User\UserEntity.cs" />
-    <Compile Include="User\UserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AbpMaster\Abp\Abp.csproj">

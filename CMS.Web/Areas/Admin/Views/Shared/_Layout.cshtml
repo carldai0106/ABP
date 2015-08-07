@@ -1,0 +1,119 @@
+﻿@using System.Collections
+@using System.Text
+@using System.Web.Optimization
+@{
+    
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>@ViewBag.Title</title>
+
+    @Styles.Render("~/Content/styles/css")
+    @Styles.Render("~/Content/jqui")
+    @Styles.Render("~/Content/ueditor")
+    @Styles.Render("~/Content/styles/st")
+    @RenderSection("styles", false)
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bs")
+    @Scripts.Render("~/bundles/jqui")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/ueditor")
+    @Scripts.Render("~/bundles/jqplugins")
+    @RenderSection("scripts", required: false)
+</head>
+    <body>
+        
+        <div class="wrapper">
+            <header class="header">
+                <div class="logo navbar-header pull-left">
+                    <a href="#" class="switcher"><i class="fa fa-th-list"></i></a>
+                    <a href="#"><i class="fa fa-users"></i><span>CMS</span></a>
+                </div>
+                <div class="navbr-buttons navbar-header pull-right">
+                    <ul class="ace-nav">
+                        <li class="bg-info ui top right pointing dropdown welcome">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-user"></i>
+                                <span class="user-info">
+                                    <small>Welcome</small>Admin
+                                </span>
+                                <i class="icon-caret-down"></i>
+                            </a>
+                            <ul class="ddl dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" role="menu">
+                                <li>
+                                    <a href="#">
+                                        <i class="icon-cog"></i>
+                                        <span>Settings</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="~/Admin/Users/Profile">
+                                        <i class="icon-user"></i>
+                                        <span>Profile</span>
+                                    </a>
+                                </li>
+
+                                <li class="divider"></li>
+
+                                <li>
+                                    <a href="~/Users/Logout">
+                                        <i class="icon-power-off"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+
+            <div class="primary-content">
+                @@Html.Action("Carte", "Modules")
+                <section id="main-container">
+                    @RenderBody()
+                </section>
+                <footer class="footer">
+                    <p>版权所有 © 2006-@DateTime.Now.Year  备案号：</p>
+                </footer>
+            </div>
+        
+        </div>
+
+        @if (ViewBag.HasMessage != null && Convert.ToBoolean(ViewBag.HasMessage))
+        {
+            <div class="message-box">
+                <div class="success @TempData["MessageType"]">
+                    @Html.ValidationSummary("", new { @class = "summary" })
+                </div>
+            </div>
+        }
+    
+        <div id="dlgload" title="Loading" style="display:none;">
+            <div class="ui-dialog-loading">
+                <p style="font-size:40px;">
+                    <i class="fa fa-spinner fa-spin"></i>
+                </p>
+                <p style="margin-top:10px;">
+                    <strong>Loading...</strong>
+                </p>
+            </div>
+        </div>
+
+        <div id="dlgmsg" title="Information" style="display:none;">
+            <div class="ul-table" style="margin:15px 0 10px 0;">
+                <ul class="ul-table-row">
+                    <li style="border:none;width:20%;padding-left:20px;"><i class="fa fa-info-circle" style="font-size: 30px;"></i></li>
+                    <li style="border:none;width:80%;padding:0 10px 0 10px;">
+                        <p id="dlgmsg-text"> </p>
+                    </li>
+                </ul>
+            </div>        
+        </div>
+    </body>
+</html>

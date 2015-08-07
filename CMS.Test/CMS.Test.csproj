@@ -92,7 +92,6 @@
   <ItemGroup>
     <Compile Include="ActionAppService_Tests.cs" />
     <Compile Include="ModuleAppService_Tests.cs" />
-    <Compile Include="PriorityOrderExamples.cs" />
     <Compile Include="RoleAppService_Tests.cs" />
     <Compile Include="TenantAppService_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

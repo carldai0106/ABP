@@ -1,0 +1,105 @@
+﻿@using EPS.Models
+@model EPS.Models.UserEntry
+@{
+    ViewBag.Title = Html.Lang("New User");
+    var roles = ViewBag.Roles as IEnumerable<RoleEntry> ?? new List<RoleEntry>();
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@Html.Lang("Setup")</a>
+        <a href="~/Admin/Users/Index">@Html.Lang("User List")</a>
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <div class="all-margin">
+        <div class="row cust-row">
+            <div class="col-lg-9">
+                <form action="~/Admin/Users/Create" method="post" class="form-horizontal" role="form">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.UserName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.UserName)
+                        </div>
+
+                        @Html.LabelFor(x => x.Email, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Email)
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Password, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.Password)
+                        </div>
+
+                        @Html.LabelFor(x => x.NonPassword, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.PasswordFor(x => x.NonPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.NonPassword)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.FirstName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.FirstName)
+                        </div>
+
+                        @Html.LabelFor(x => x.LastName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.LastName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
+                        <div class="col-md-8 col-sm-10 col-xs-12">
+                            <ul class="ul-list">
+                                <li class="title" style="border-bottom:1px solid #ccc;">@Html.Lang("Assigned Roles to User")</li>
+                                <li>
+                                    <ul class="ul-chk-list">
+                                        @foreach (var role in roles)
+                                        {
+                                            var chkNameOrId = "Role_" + role.RoleId;
+                                            var userRoleName = "UserRole_" + role.RoleId;
+                                            <li class="gray-bg">
+                                                <label for="@chkNameOrId">
+                                                    <input type="hidden" name="@userRoleName" value="0" />
+                                                    <input type="checkbox" id="@chkNameOrId" name="@chkNameOrId" />
+                                                    <span>@role.DisplayName</span>
+                                                </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
+                        <div class="col-md-8 col-sm-10 col-xs-12 text-center">
+                            <a href="~/Admin/Users/Index" class="btn btn-info btn-sm">@Html.Lang("Cancel")</a>
+                            <span class="btn-space"></span>
+                            <button type="submit" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+
+</section>

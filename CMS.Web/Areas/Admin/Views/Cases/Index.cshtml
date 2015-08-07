@@ -1,0 +1,128 @@
+﻿@using Framework.Web.Admission
+@model IEnumerable<NewsEntry>
+@{
+    ViewBag.Title = Html.Lang("Case List");
+    var types = ViewBag.ModuleTypes as List<ModuleEntry>;
+
+    var moduleId = ViewBag.ModuleId ?? 0;
+    var content = ViewBag.Content ?? "";
+    string url = Url.Content("~/Admin/Cases/Index?MenuID=" + ViewBag.MenuID + "&ModuleId=" + moduleId + "&Content=" + content + "&page=");
+
+    var hasAdd = Authority.CheckRight("Cases", "Add");
+    var hasEdit = Authority.CheckRight("Cases", "Edit");
+    var hasDelete = Authority.CheckRight("Cases", "Edit");
+    var hasSearch = Authority.CheckRight("Cases", "Search");
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <nav class="navbar navbar-default navbar-custom">
+        <div class="row clear-lr-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-type">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav-tools">
+                        @if (hasAdd)
+                        {
+                            <li><a href="~/Admin/Cases/Create/@ViewBag.MenuID" class="nav-btn"><i class="fa fa-plus"></i><span>@Html.Lang("Add")</span></a></li>
+                        }
+                        @if (hasEdit)
+                        {
+                            <li><a href="#" rel="~/Admin/Cases/Edit/" class="nav-btn edit"><i class="fa fa-edit"></i><span>@Html.Lang("Edit")</span></a></li>
+                        }
+                        @if (hasDelete)
+                        {
+                            <li><a href="#" rel="~/Admin/Cases/Delete/" class="nav-btn delete"><i class="fa fa-remove"></i><span>@Html.Lang("Delete")</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-type">
+                    @if (hasSearch)
+                    {
+                        <form class="navbar-form navbar-left clear-border" role="search">
+                            <div class="form-group">
+                                <input type="hidden" value="@ViewBag.MenuID" id="MenuID" name="MenuID" />
+                                <select class="form-control" id="ModuleId" name="ModuleId">
+                                    <option value="">@Html.Lang("All Types")</option>
+                                    @foreach (var item in types)
+                                    {
+                                        <option value="@item.ModuleId">@item.DisplayName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input name="Content" id="Content" type="text" class="form-control" placeholder="@Html.Lang("Please enter title")">
+                            </div>
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </form>
+                    }
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+        </div><!-- /.row -->
+    </nav>
+
+
+    <div class="row cust-row">
+        <div class="col-xs-12">
+            <table class="table table-celled table-striped  table-hover">
+                <thead>
+                    <tr>
+                        <th class="center">
+                            <input type="checkbox">
+                        </th>
+                        <th>@Html.Lang("Title")</th>
+                        <th>@Html.Lang("Category")</th>
+                        <th>@Html.Lang("Created By")</th>
+                        <th>@Html.Lang("Created Time")</th>
+                        <th class="btn-item2"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="center">
+                                <input type="checkbox" value="@item.NewsId">
+                            </td>
+                            <td>@item.Title</td>
+                            <td>@item.Category</td>
+                            <td>@item.CreatedBy</td>
+                            <td>@item.CreatedTime</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    @if (hasEdit)
+                                    {
+                                        <a href="/Admin/Cases/Edit/@item.NewsId" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i></a>
+                                    }
+                                    @if (hasDelete)
+                                    {
+                                        <a name="btnDelete" href="/Admin/Cases/Delete/@item.NewsId" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            @Html.Pager(ViewBag.PageModel as PageEntry, url)
+        </div>
+    </div>
+</section>
+
+

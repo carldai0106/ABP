@@ -1,0 +1,117 @@
+﻿@using Framework.Core
+@model UserEntry
+@{
+    ViewBag.Title = Html.Lang("Profile");
+    var roles = ViewBag.Roles as IEnumerable<RoleEntry> ?? new List<RoleEntry>();
+    var userRoles = ViewBag.UserRoles as IEnumerable<UserRoleEntry> ?? new List<UserRoleEntry>();
+}
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="~/Admin/Dashboard/Index">@Html.Lang("Dashboard")</a>
+        <a href="#" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <div class="all-margin">
+        <div class="row cust-row">
+            <div class="col-lg-9">
+                <form action="~/Admin/Users/Profile" method="post" class="form-horizontal" role="form">
+                    @Html.AntiForgeryToken()
+                    @Html.HiddenFor(x => x.UserId)
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.UserName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", disabled = "disabled" })
+                            @Html.ValidationMessageFor(x => x.UserName)
+                        </div>
+
+                        @Html.LabelFor(x => x.Email, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            <input class="form-control" data-val="true" value="@Model.Email" data-val-regex="@string.Format("Please enter a valid {0}.", "Email")" data-val-regex-pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" data-val-required="@string.Format("The {0} field is required.","Email")" id="Email" name="Email" type="text">
+                            <span class="field-validation-valid" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-left:-10px; margin-right:-10px;">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
+                        <div class="col-md-8 col-sm-10 col-xs-12 info text-center">
+                            @Html.Lang("If you would like to change the password, please enter it. Otherwise leave it blank.")
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Password, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            <input class="form-control" data-val="true" data-val-length="@string.Format("Please enter {0} between {1} and {2} characters long.", "Password", 6, 20)" data-val-length-max="20" data-val-length-min="6" id="Password" name="Password" type="password">
+                            <span class="field-validation-valid" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+                        </div>
+
+                        @Html.LabelFor(x => x.NonPassword, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            <input class="form-control" data-val="true" data-val-equalto="@string.Format("{0} and {1} do not match.", "Password","Re Password")" data-val-equalto-other="*.Password" id="NonPassword" name="NonPassword" type="password">
+                            <span class="field-validation-valid" data-valmsg-for="NonPassword" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.FirstName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.FirstName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.FirstName)
+                        </div>
+
+                        @Html.LabelFor(x => x.LastName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.TextBoxFor(x => x.LastName, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.LastName)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(x => x.Language, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        <div class="col-md-3 col-sm-4 col-xs-12">
+                            @Html.DropDownListFor(m => m.Language, Utility.GetLanguages(), new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
+                        <div class="col-md-8 col-sm-10 col-xs-12">
+                            <ul class="ul-list">
+                                <li class="title" style="border-bottom:1px solid #ccc; ">@Html.Lang("Assigned Roles to User")</li>
+                                <li>
+                                    <ul class="ul-chk-list">
+                                        @foreach (var role in roles)
+                                        {
+                                            var info = userRoles.FirstOrDefault(x => x.RoleId == role.RoleId && x.UserId == Model.UserId);
+                                            if (info != null && info.Status)
+                                            {
+                                                <li class="gray-bg">
+                                                    <label>
+                                                        <span>@role.DisplayName</span>
+                                                    </label>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
+                        <div class="col-md-8 col-sm-10 col-xs-12 text-center">
+                            <a href="~/Admin/Dashboard/Index" class="btn btn-info btn-sm">@Html.Lang("Cancel")</a>
+                            <span class="btn-space"></span>
+                            <button type="submit" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>

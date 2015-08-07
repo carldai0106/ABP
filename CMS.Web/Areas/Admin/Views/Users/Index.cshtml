@@ -1,0 +1,139 @@
+﻿@using Framework.Web.Admission
+@model List<UserEntry>
+@{
+    ViewBag.Title = @Html.Lang("User List");
+    string searchBy = ViewBag.SearchBy;
+    string searchContent = ViewBag.SearchContext;
+
+    var hasAdd = Authority.CheckRight("Users", "Add");
+    var hasEdit = Authority.CheckRight("Users", "Edit");
+    var hasDelete = Authority.CheckRight("Users", "Delete");
+    var hasSearch = Authority.CheckRight("Users", "Search");
+    
+    string url = Url.Content("~/Admin/Users/Index?SearchBy=" + searchBy + "&SearchContent=" + searchContent + "&page=");
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@Html.Lang("Setup")</a>
+        <a href="~/Admin/Users/Index" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <nav class="navbar navbar-default navbar-custom">
+        <div class="row clear-lr-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-type">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <ul class="nav-tools">
+                        @if (hasAdd)
+                        {
+                            <li><a href="~/Admin/Users/Create/" class="nav-btn"><i class="fa fa-plus"></i><span>@Html.Lang("Add")</span></a></li>
+                        }
+                        @if (hasEdit)
+                        {
+                            <li><a href="#" rel="~/Admin/Users/Edit/" class="nav-btn edit"><i class="fa fa-edit"></i><span>@Html.Lang("Edit")</span></a></li>                            
+                        }
+                        @if (hasDelete)
+                        {
+                            <li><a href="#" rel="~/Admin/Users/Delete/" class="nav-btn delete"><i class="fa fa-remove"></i><span>@Html.Lang("Delete")</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navbar-collapse-type">
+                    @if (hasSearch)
+                    {
+                        <form class="navbar-form navbar-left clear-border" action="@Url.Content("~/Admin/Users/Index")" method="get" id="searchform">
+                            <div class="form-group">
+                                <select class="form-control" id="SearchBy" name="SearchBy">
+                                    <option value="">@Html.Lang("All Options")</option>
+                                    <option value="UserName" @(searchBy == "UserName" ? "selected" : "")>@Html.Lang("User Name")</option>
+                                    <option value="FirstName" @(searchBy == "FirstName" ? "selected" : "")>@Html.Lang("First Name")</option>
+                                    <option value="LastName" @(searchBy == "LastName" ? "selected" : "")>@Html.Lang("Last Name")</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input name="SearchContent" id="SearchContent" type="text" class="form-control" placeholder="@Html.Lang("Search...")">
+                            </div>
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </form>
+                    }
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+        </div><!-- /.row -->
+    </nav>
+
+
+    <div class="row cust-row">
+        <div class="col-xs-12">
+            <!-- table -->
+            <table class="table table-celled table-striped  table-hover">
+                <thead>
+                    <tr>
+                        <th class="center">
+                            <input type="checkbox" />
+                        </th>
+                        <th>@Html.Lang("User Name")</th>
+                        <th>@Html.Lang("First Name")</th>
+                        <th>@Html.Lang("Last Name")</th>
+                        <th>@Html.Lang("Email")</th>
+                        <th>@Html.Lang("Created By")</th>
+                        <th>@Html.Lang("Created Time")</th>
+                        <th class="btn-item2"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="center">
+                                <input type="checkbox" value="@item.UserId" />
+                            </td>
+                            <td>@item.UserName</td>
+                            <td>@item.FirstName</td>
+                            <td>@item.LastName</td>
+                            <td>@item.Email</td>
+                            <td>@item.CreatedBy</td>
+                            <td>@item.CreatedTime</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    @if (hasEdit)
+                                    {
+                                        <a href="~/Admin/Users/Edit/@item.UserId" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i></a>
+                                    }
+                                    @if (hasDelete)
+                                    {
+                                        <a name="btnDelete" href="~/Admin/Users/Delete/@item.UserId" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- end table -->
+            @Html.Pager(ViewBag.PageModel as PageEntry, url)
+
+        </div>
+    </div>
+
+</section>
+<script type="text/javascript">
+    $(function () {
+        $("#Search").on("click", function () {
+            $("form").submit();
+        });
+    });
+</script>

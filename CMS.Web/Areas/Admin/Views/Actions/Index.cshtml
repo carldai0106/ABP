@@ -1,0 +1,95 @@
+﻿@using Framework.Web.Admission
+@model IEnumerable<ActionEntry>
+
+@{
+    ViewBag.Title = @Html.Lang("Action List");
+    var hasAdd = Authority.CheckRight("Actions", "Add");
+    var hasEdit = Authority.CheckRight("Actions", "Edit");
+    var hasDelete = Authority.CheckRight("Actions", "Delete");
+}
+<div class="breadcrumbs" id="breadcrumbs">
+    <div class="breadcrumb">
+        <a href="#">@Html.Lang("Setup")</a>
+        <a href="~/Admin/Actions/Index" class="active">@ViewBag.Title</a>
+    </div>
+</div>
+
+<section id="container">
+    <nav class="navbar navbar-default navbar-custom">
+        <div class="row clear-lr-margin">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
+                <div class="navbar-header">
+                    <ul class="nav-tools">
+                        @if (hasAdd)
+                        {
+                            <li><a href="~/Admin/Actions/Create/" class="nav-btn fancybox fancybox.ajax"><i class="fa fa-plus"></i><span>@Html.Lang("Add")</span></a></li>
+                        }
+                        @if (hasEdit)
+                        {
+                            <li><a href="#" rel="~/Admin/Actions/Edit/" class="nav-btn edit fancybox fancybox.ajax"><i class="fa fa-edit"></i><span>@Html.Lang("Edit")</span></a></li>
+                        }
+                        @if (hasDelete)
+                        {
+                            <li><a href="#" rel="~/Admin/Actions/Delete/" class="nav-btn delete"><i class="fa fa-remove"></i><span>@Html.Lang("Delete")</span></a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div><!-- /.row -->
+    </nav>
+
+
+    <div class="row cust-row">
+        <div class="col-xs-12">
+            <!-- table -->
+            <table class="table table-celled table-striped  table-hover">
+                <thead>
+                    <tr>
+                        <th class="center">
+                            <input type="checkbox" />
+                        </th>
+                        <th>@Html.Lang("Action Code")</th>
+                        <th>@Html.Lang("Display Name")</th>
+                        <th>@Html.Lang("Sequence")</th>
+                        <th>@Html.Lang("Description")</th>
+                        <th>@Html.Lang("Created By")</th>
+                        <th>@Html.Lang("Created Time")</th>
+                        <th class="btn-item2"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="center">
+                                <input type="checkbox" value="@item.ActionId" />
+                            </td>
+                            <td>@item.ActionCode</td>
+                            <td>@item.DisplayName</td>
+                            <td>@item.SeqNo</td>
+                            <td>@item.Description</td>
+                            <td>@item.CreatedBy</td>
+                            <td>@TimeUtils.UtcToClient(item.CreatedTime)</td>
+                            <td class="text-center">
+                                <div class="btn-group">
+                                    @if (hasEdit)
+                                    {
+                                        <a href="~/Admin/Actions/Edit/@item.ActionId" class="btn fancybox fancybox.ajax btn-info btn-sm"><i class="fa fa-pencil"></i></a>
+                                    }
+                                    @if (hasDelete)
+                                    {
+                                        <a href="~/Admin/Actions/Delete/@item.ActionId" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- end table -->
+        </div>
+    </div>
+
+</section>
