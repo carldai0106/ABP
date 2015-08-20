@@ -1,5 +1,9 @@
-﻿@{
+﻿@using CMS.Web.Models.User
+@using Abp.Extensions;
+@model LoginFormViewModel
+@{
     Layout = null;
+    
 }
 
 <!doctype html>
@@ -21,11 +25,26 @@
 <body>
     <div class="content">
         <!-- BEGIN LOGIN FORM -->
-        <form class="login-form"  method="post">
+        <form class="login-form" method="post" action="@Url.Action("Login")?returnUrl=@ViewBag.ReturnUrl">
             <h3 class="form-title">Sign In</h3>
+            @if (ViewBag.IsMultiTenancyEnabled)
+            {
+                if (Model.TenancyName.IsNullOrEmpty())
+                {
+                    <div class="form-group">
+                        <label class="control-label">Tenancy name</label>
+                        <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Tenancy name" name="tenancyName" />
+                    </div>
+                }
+                else
+                {
+                    <input type="hidden" name="tenancyName" value="@Model.TenancyName" />
+                }
+            }
+
             <div class="form-group">
-                <label class="control-label">Username</label>
-                <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="username" />
+                <label class="control-label">User name</label>
+                <input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="User name" name="usernameOrEmailAddress" value="@(Model.UserNameOrEmailAddress ?? "")" required />
             </div>
             <div class="form-group">
                 <label class="control-label">Password</label>
@@ -38,7 +57,7 @@
                 </label>
                 <a href="javascript:;" id="forget-password" class="forget-password">Forgot Password?</a>
             </div>
-            
+
         </form>
         <!-- END LOGIN FORM -->
         <!-- BEGIN FORGOT PASSWORD FORM -->
@@ -56,63 +75,6 @@
             </div>
         </form>
     </div>
-
-
-    @*<div class="wrapper">
-            <section id="content">
-                <div class="signin-block">
-
-                    <div class="sigin-body">
-                        <div class="container">
-                            <div class="form-container">
-                                <header>
-                                    @Html.Lang("System Management")
-                                </header>
-                                <form action="~/Users/Login" method="post" class="form-horizontal">
-                                    @Html.HiddenFor(x => x.ReturnUrl)
-                                    <fieldset>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <span class="fa fa-user"></span>
-                                                </span>
-                                                @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = Html.Lang("User Name") })
-
-                                            </div>
-                                            @Html.ValidationMessageFor(x => x.UserName)
-                                        </div>
-                                        <div class="form-group" style="margin-bottom:0;">
-                                            <div class="input-group">
-                                                <span class="input-group-addon">
-                                                    <span class="fa fa-lock"></span>
-                                                </span>
-                                                @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder =  Html.Lang("Password") })
-                                            </div>
-                                            @Html.ValidationMessageFor(x => x.Password)
-                                        </div>
-                                        <div class="form-group" style="float:right;">
-                                            <div class="input-group">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" name="Remember" @(Model.Remember == "on" ? "checked" : "")>@Html.Lang("Remember me 7 days")
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <input type="hidden" name="TimezoneOffset" id="TimezoneOffset" />
-                                            <button type="submit" name="btnLogin" class="btn btn-primary btn-block">@Html.Lang("Log in")</button>
-
-                                        </div>
-                                    </fieldset>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </div>*@
 
     @if (ViewBag.HasMessage != null && Convert.ToBoolean(ViewBag.HasMessage))
     {

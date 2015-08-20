@@ -5,6 +5,12 @@
     /// </summary>
     public interface IAbpAuthorizeAttribute
     {
+        //modify by carl
+        /// <summary>
+        /// The code of module or menu
+        /// </summary>
+        string ModuleCode { get; }
+
         /// <summary>
         /// A list of permissions to authorize.
         /// </summary>
@@ -17,4 +23,5 @@
         /// </summary>
         bool RequireAllPermissions { get; set; }
     }
+  
 }

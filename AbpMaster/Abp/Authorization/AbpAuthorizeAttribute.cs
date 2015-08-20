@@ -9,6 +9,9 @@ namespace Abp.Authorization
     /// </summary>
     public class AbpAuthorizeAttribute : Attribute, IAbpAuthorizeAttribute
     {
+        /// <inheritdoc/>
+        public string ModuleCode { get; set; }
+
         /// <summary>
         /// A list of permissions to authorize.
         /// </summary>

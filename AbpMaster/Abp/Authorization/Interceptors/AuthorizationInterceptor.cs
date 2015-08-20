@@ -16,6 +16,10 @@ namespace Abp.Authorization.Interceptors
     {
         private readonly IIocResolver _iocResolver;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iocResolver"></param>
         public AuthorizationInterceptor(IIocResolver iocResolver)
         {
             _iocResolver = iocResolver;

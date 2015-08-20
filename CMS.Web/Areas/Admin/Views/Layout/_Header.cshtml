@@ -1,0 +1,66 @@
+﻿@model CMS.Web.Areas.Admin.Models.HeaderViewModel
+<header class="header">
+    <div class="logo navbar-header pull-left">
+        <a href="#" class="switcher"><i class="fa fa-th-list"></i></a>
+        <a href="#"><i class="fa fa-users"></i><span>CMS</span></a>
+    </div>
+    <div class="navbr-buttons navbar-header pull-right">
+        <ul class="ace-nav">
+            <li class="bg-info ui top right pointing dropdown welcome">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-user"></i>
+                    <span class="user-info">
+                        <small>Welcome</small> <span>@Model.GetShownLoginName()</span>
+                    </span>
+                    <i class="icon-caret-down"></i>
+                </a>
+                <ul class="ddl dropdown-menu-left dropdown-navbar dropdown-menu dropdown-caret dropdown-close" role="menu">
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="~/Admin/Users/Profile">
+                            <i class="fa fa-user"></i>
+                            <span>Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="divider"></li>
+
+                    <li>
+                        <a href="~/Users/Logout">
+                            <i class="fa fa-power-off"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="bg-success ui top right pointing dropdown welcome">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-language"></i>
+                    <span class="user-info">
+                        Language
+                    </span>
+                    <i class="icon-caret-down"></i>
+                </a>
+                <ul class="ddl dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" role="menu">
+                    @if (Model.Languages.Count > 1)
+                    {
+                        foreach (var language in Model.Languages)
+                        {
+                            <li class="@(language.Name == Model.CurrentLanguage.Name ? "selected-language" : "")">
+                                <a href="@Url.Action("ChangeCulture", "AbpLocalization")?cultureName=@(language.Name)&returnUrl=@Request.Url">
+                                    <i class="@language.Icon"></i>
+                                    <span>@language.DisplayName</span>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>

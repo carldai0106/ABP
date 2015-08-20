@@ -13,7 +13,7 @@ namespace Abp.Authorization
     /// <summary>
     /// Permission manager.
     /// </summary>
-    internal class PermissionManager<TTenantId, TUserId> : PermissionDefinitionContextBase, IPermissionManager, ISingletonDependency
+    internal class PermissionManager<TTenantId, TUserId> : PermissionDefinitionContextBase, IPermissionManager<TTenantId, TUserId>, ISingletonDependency
         where TTenantId : struct
         where TUserId : struct
     {

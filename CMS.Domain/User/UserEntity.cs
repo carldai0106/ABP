@@ -10,7 +10,7 @@ using Abp.Domain.Entities.Auditing;
 using Abp.Extensions;
 using CMS.Domain.Tenant;
 using CMS.Domain.UserRole;
-using CMS.FW;
+using CMS.FW.Domain;
 
 namespace CMS.Domain.User
 {

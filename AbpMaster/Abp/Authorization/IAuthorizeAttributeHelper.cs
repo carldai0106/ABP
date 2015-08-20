@@ -8,11 +8,11 @@ namespace Abp.Authorization
         where TUserId : struct
     {
         Task AuthorizeAsync(IEnumerable<IAbpAuthorizeAttribute> authorizeAttributes);
-        
+
         Task AuthorizeAsync(IAbpAuthorizeAttribute authorizeAttribute);
-        
+
         void Authorize(IEnumerable<IAbpAuthorizeAttribute> authorizeAttributes);
-        
+
         void Authorize(IAbpAuthorizeAttribute authorizeAttribute);
     }
 }

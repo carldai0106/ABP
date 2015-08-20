@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Abp.Domain.Entities;
 using CMS.Domain.ActionModule;
 using CMS.Domain.Tenant;
-using CMS.FW;
+using CMS.FW.Domain;
 
 namespace CMS.Domain.Module
 {

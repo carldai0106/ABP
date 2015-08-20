@@ -18,18 +18,18 @@ namespace Abp.Web.Authorization
         /// <inheritdoc/>
         public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
 
-        private readonly IPermissionManager _permissionManager;
+        private readonly IPermissionManager<TTenantId, TUserId> _permissionManager;
 
         /// <summary>
         /// 
         /// </summary>
-        public IPermissionChecker<TUserId> PermissionChecker { get; set; }
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
 
         /// <inheritdoc/>
-        public AuthorizationScriptManager(IPermissionManager permissionManager)
+        public AuthorizationScriptManager(IPermissionManager<TTenantId, TUserId> permissionManager)
         {
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
-            PermissionChecker = NullPermissionChecker<TUserId>.Instance;
+            PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
 
             _permissionManager = permissionManager;
         }

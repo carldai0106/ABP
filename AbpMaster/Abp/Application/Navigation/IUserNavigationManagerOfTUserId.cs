@@ -6,7 +6,9 @@ namespace Abp.Application.Navigation
     /// <summary>
     /// Used to manage navigation for users.
     /// </summary>
-    public interface IUserNavigationManager<TUserId> where TUserId : struct
+    public interface IUserNavigationManager<TTenantId, TUserId> 
+        where TTenantId : struct
+        where TUserId : struct
     {
         /// <summary>
         /// Gets a menu specialized for given user.

@@ -9,7 +9,7 @@ using Abp.Domain.Entities;
 using CMS.Domain.RoleRight;
 using CMS.Domain.Tenant;
 using CMS.Domain.UserRole;
-using CMS.FW;
+using CMS.FW.Domain;
 
 namespace CMS.Domain.Role
 {

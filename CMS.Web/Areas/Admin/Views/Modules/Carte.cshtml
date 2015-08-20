@@ -1,10 +1,10 @@
-﻿@using Framework.Core
-@using Framework.Web.Admission
-@model ModuleEntry
+﻿@using CMS.Application.Module.Dto
+@using Abp.Extensions;
+@model ModuleTreeNode
 @{
     Layout = null;
-    int currentId = DataCast.Get<int>(ViewBag.CurrentMenuID);
-
+    //int currentId = DataCast.Get<int>(ViewBag.CurrentMenuID);
+    Guid? currentId = ViewBag.CurrentMenuID;
     var colors = new List<string>
     {
         "bg-danger",
@@ -19,17 +19,17 @@
     int colorIndex = 0;
 }
 
-@helper SubItem(ModuleEntry model)
+@helper SubItem(ModuleTreeNode model)
 {
     if (model.Children.Count > 0)
     {
-        int currentId = DataCast.Get<int>(ViewBag.CurrentMenuID);
+        Guid? currentId = ViewBag.CurrentMenuID;
 
         <ul class="carte-children">
             @foreach (var item in model.Children)
             {
                 var clsName = string.Empty;
-                if (item.ModuleId == currentId && item.IsActived)
+                if (item.Id == currentId && item.IsActived)
                 {
                     clsName = "current";
                 }
@@ -39,15 +39,15 @@
                 }
 
                 string url;
-                if (string.IsNullOrEmpty(item.Url) || item.Url == "#")
+                if (string.IsNullOrEmpty(item.AppUrl) || item.AppUrl == "#")
                 {
                     url = "#";
                 }
                 else
                 {
-                    url = Url.Content(item.Url + "?MenuID=" + item.ModuleId);
+                    url = Url.Content(item.AppUrl + "?MenuID=" + item.Id);
                 }
-                if (Authority.CheckRight(item.ModuleCode, "Display"))
+                if (IsGranted<Guid, Guid>(item.ModuleCode, "CMS.Display"))
                 {
                     <li class="@clsName">
                         <a href="@url">
@@ -81,7 +81,7 @@
                 }
                 
                 var clsName = string.Empty;
-                if (item.ModuleId == currentId && item.IsActived)
+                if (item.Id == currentId && item.IsActived)
                 {
                     clsName = "current";
                 }
@@ -91,18 +91,18 @@
                 }
 
                 string url;
-                if (string.IsNullOrEmpty(item.Url) || item.Url == "#")
+                if (string.IsNullOrEmpty(item.AppUrl) || item.AppUrl == "#")
                 {
                     url = "#";
                 }
                 else
                 {
-                    url = Url.Content(item.Url + "?MenuID=" + item.ModuleId);
+                    url = Url.Content(item.AppUrl + "?MenuID=" + item.Id);
                 }
                 
-                if (Authority.CheckRight(item.ModuleCode, "Display"))
+                if (IsGranted<Guid, Guid>(item.ModuleCode, "CMS.Display"))
                 {
-                    <li class="@clsName" data-id="@item.ModuleId">
+                    <li class="@clsName" data-id="@item.Id">
                         <a href="@url">
                             <i class="@item.ClassName">
                                 <span class="icon-bg @colors[colorIndex]"></span>

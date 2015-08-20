@@ -25,7 +25,7 @@ namespace Abp.TestBase
         /// </summary>
         protected TestAbpSession<TTenantId, TUserId> AbpSession { get; private set; }
 
-        private readonly AbpBootstrapper _bootstrapper;
+        private readonly AbpBootstrapper<TTenantId, TUserId> _bootstrapper;
 
         protected AbpIntegratedTestBase()
         {
@@ -38,8 +38,8 @@ namespace Abp.TestBase
 
             PreInitialize();
 
-            _bootstrapper = new AbpBootstrapper(LocalIocManager);
-            _bootstrapper.Initialize<TTenantId, TUserId>();
+            _bootstrapper = new AbpBootstrapper<TTenantId, TUserId>(LocalIocManager);
+            _bootstrapper.Initialize();
 
             AbpSession = LocalIocManager.Resolve<TestAbpSession<TTenantId, TUserId>>();
         }

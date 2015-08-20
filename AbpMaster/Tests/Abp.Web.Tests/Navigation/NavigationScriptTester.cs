@@ -12,7 +12,7 @@ namespace Abp.Web.Tests.Navigation
         [Fact]
         public async Task Should_Get_Script()
         {
-            var testCase = new NavigationTestCase<long>(1);
+            var testCase = new NavigationTestCase<int, long>(1);
             var scriptManager = new NavigationScriptManager<int, long>(testCase.UserNavigationManager)
             {
                 AbpSession = new MyChangableSession<int, long> { UserId = 1 }

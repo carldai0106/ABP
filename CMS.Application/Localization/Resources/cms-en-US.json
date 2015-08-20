@@ -31,6 +31,7 @@
         "CanNotRenameAdminUser": "Can not rename user name of the {0} since this is the default admin user!",
         "CanNotDeleteAdminUser": "Can not delete user {0} since this is the default admin user!",
         "DuplicateModuleCode": "Module Code/Menu Code '{0}' is already taken.",
-        "DuplicateRoleCode": "Role Code '{0}' is already taken."
+        "DuplicateRoleCode": "Role Code '{0}' is already taken.",
+        "UserName" :  "User Name"
     }
 }

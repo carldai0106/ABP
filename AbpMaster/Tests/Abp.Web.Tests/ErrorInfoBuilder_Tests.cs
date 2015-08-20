@@ -15,7 +15,7 @@ namespace Abp.Web.Tests
 
         public ErrorInfoBuilder_Tests()
         {
-            LocalIocManager.IocContainer.Install(new AbpCoreInstaller<int, long>());
+            LocalIocManager.IocContainer.Install(new AbpCoreInstaller());
 
             var configuration = LocalIocManager.Resolve<AbpStartupConfiguration>();
             configuration.Initialize();

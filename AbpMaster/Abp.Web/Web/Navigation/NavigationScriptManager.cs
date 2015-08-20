@@ -13,15 +13,15 @@ namespace Abp.Web.Navigation
     {
         public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
 
-        private readonly IUserNavigationManager<TUserId> _userNavigationManager;
+        private readonly IUserNavigationManager<TTenantId, TUserId> _userNavigationManager;
 
-        public NavigationScriptManager(IUserNavigationManager<TUserId> userNavigationManager)
+        public NavigationScriptManager(IUserNavigationManager<TTenantId, TUserId> userNavigationManager)
         {
             _userNavigationManager = userNavigationManager;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
         }
 
-        public async Task<string> GetScriptAsync()
+           public async Task<string> GetScriptAsync()
         {
             var userMenus = await _userNavigationManager.GetMenusAsync(AbpSession.UserId);
 
@@ -91,6 +91,7 @@ namespace Abp.Web.Navigation
             sb.AppendLine("{");
 
             sb.AppendLine(new string(' ', indentLength + 4) + "name: '" + menuItem.Name + "',");
+            sb.AppendLine(new string(' ', indentLength + 4) + "order: '" + menuItem.Order + "',");
 
             if (!string.IsNullOrEmpty(menuItem.Icon))
             {
@@ -128,4 +129,5 @@ namespace Abp.Web.Navigation
             sb.Append(new string(' ', indentLength) + "}");
         }
     }
+    
 }

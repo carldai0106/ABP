@@ -147,7 +147,7 @@ body {
 }
 
 .user-info {
-    max-width: 100px;
+    /*max-width: 100px;*/
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -157,6 +157,10 @@ body {
     line-height: 50px;
     position: relative;
 }
+
+    .user-info span {
+        letter-spacing: 1px;
+    }
 
 .badge {
     display: inline-block;
@@ -194,6 +198,14 @@ body {
         color: #fff;
     }
 
+.selected-language {
+    margin: 0 2px 0 2px;
+    background: #428bca;
+}
+.selected-language span {
+    color: #fff;
+}
+
 .nav-aside {
     z-index: 11;
     position: absolute;
@@ -202,12 +214,10 @@ body {
     width: 220px;
     padding: 0;
     /*background-color: #fefefe;*/
-
     background: -webkit-gradient(linear, 214 0%,220 0%, from(#ffffff), to(#D7D7D7));
     background: -o-linear-gradient(90deg, #fff 0, #fff 214px, #D7D7D7 220px); /* Opera 11.10+ */
     background: -ms-linear-gradient(90deg, #fff 0, #fff 214px, #D7D7D7 220px); /* IE10+ */
     background: linear-gradient(90deg, #fff 0, #fff 214px, #D7D7D7 220px);
-
     -webkit-overflow-scrolling: touch;
     -webkit-overflow-scrolling: -blackberry-touch;
 }
@@ -616,7 +626,7 @@ ul.carte-children ul.carte-children {
 
             .breadcrumb a.active:after, .breadcrumb a:hover:after {
                 background: #333;
-                background:-webkit-linear-gradient(top,#ffffff,#ffffff);
+                background: -webkit-linear-gradient(top,#ffffff,#ffffff);
                 background: linear-gradient(135deg, #ffffff, #ffffff);
             }
 
@@ -638,7 +648,7 @@ ul.carte-children ul.carte-children {
             z-index: 1;
             /*background same as links but the gradient will be rotated to compensate with the transform applied*/
             background: #ddd;
-            background:-webkit-linear-gradient(top,#f8f8f8,#ececec);
+            background: -webkit-linear-gradient(top,#f8f8f8,#ececec);
             background: linear-gradient(135deg, #f8f8f8, #ececec);
             /*stylish arrow design using box shadow*/
             box-shadow: 2px -2px 0 0 #dedede;
@@ -816,7 +826,7 @@ th.btn-item2 {
 }
 
 .btn-bgcolor {
-    background: -moz-linear-gradient(180deg, #fefefe 0%,  #e8ebec 100%); /* FF3.6+ */
+    background: -moz-linear-gradient(180deg, #fefefe 0%, #e8ebec 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, center top, center bottom, color-stop(0%,#fefefe), color-stop(100%,#e8ebec)); /* Chrome,Safari4+ */
     background: -o-linear-gradient(180deg, #fefefe 0%,#e8ebec 100%); /* Opera 11.10+ */
     background: -ms-linear-gradient(180deg, #fefefe 0%,#e8ebec 100%); /* IE10+ */
@@ -1239,7 +1249,6 @@ a:focus, button:focus {
     overflow: hidden;
     margin: 0 0 10px 0;
     padding-right: 10px;
-    
 }
 
     .ul-chk-list li {
@@ -1290,12 +1299,11 @@ a:focus, button:focus {
         }*/
 
     .cascade-box ul > li {
-       
         text-align: left;
         border-bottom: 1px solid #DEDEDE;
     }
 
-.cascade-item-box > a { 
+.cascade-item-box > a {
     position: relative;
     display: block;
     padding: 8px 10px;
@@ -1364,7 +1372,6 @@ a:focus, button:focus {
 ul.cascade-children ul.cascade-children {
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
-    
 }
 
 
@@ -1431,11 +1438,14 @@ ul.cascade-children ul.cascade-children {
     border-bottom: 1px solid #ddd;
     text-align: center;
     margin-bottom: 0;
-     overflow: hidden;
+    overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
-.cascade-box p.title a{ display: block; }
+
+    .cascade-box p.title a {
+        display: block;
+    }
 
 .cascade-item-box > a > .icon-has-ul {
     position: absolute;
@@ -1453,68 +1463,69 @@ ul.cascade-children ul.cascade-children {
     border-bottom: 1px solid #ddd;
 }
 
-.grp-ctrls ul li {
-    float: left;
-    border-right: 1px solid #ddd;
-    line-height: 36px;
-    margin: 0;
-    padding: 0;
-}
+    .grp-ctrls ul li {
+        float: left;
+        border-right: 1px solid #ddd;
+        line-height: 36px;
+        margin: 0;
+        padding: 0;
+    }
 
-.grp-ctrls ul li label {
-    margin: 0;
-    padding: 0 6px 0 10px;
-}
+        .grp-ctrls ul li label {
+            margin: 0;
+            padding: 0 6px 0 10px;
+        }
 
-.grp-ctrls ul li select {
-    margin: 0;
-    padding: 8px 10px;
-    color: #999;
-    border: 0;
-    border: none;
-    outline: none;
-}
+        .grp-ctrls ul li select {
+            margin: 0;
+            padding: 8px 10px;
+            color: #999;
+            border: 0;
+            border: none;
+            outline: none;
+        }
 
-.grp-ctrls ul li a {
-    display: block;
-    text-decoration: none;
-    padding: 0 8px;
-    line-height: 36px;
-    margin: 0;
-    color: #777;
-}
+        .grp-ctrls ul li a {
+            display: block;
+            text-decoration: none;
+            padding: 0 8px;
+            line-height: 36px;
+            margin: 0;
+            color: #777;
+        }
 
-.grp-ctrls ul li a:hover {
-    background: -moz-linear-gradient(180deg, #fefefe 0%, #e8ebec 100%);
-    background: -webkit-gradient(linear, center top, center bottom, color-stop(0%,#fefefe), color-stop(100%,#e8ebec));
-    background: -o-linear-gradient(180deg, #fefefe 0%,#e8ebec 100%);
-    background: -ms-linear-gradient(180deg, #fefefe 0%,#e8ebec 100%);
-    background: linear-gradient(180deg, #fefefe 0, #e8ebec 100%);
-}
+            .grp-ctrls ul li a:hover {
+                background: -moz-linear-gradient(180deg, #fefefe 0%, #e8ebec 100%);
+                background: -webkit-gradient(linear, center top, center bottom, color-stop(0%,#fefefe), color-stop(100%,#e8ebec));
+                background: -o-linear-gradient(180deg, #fefefe 0%,#e8ebec 100%);
+                background: -ms-linear-gradient(180deg, #fefefe 0%,#e8ebec 100%);
+                background: linear-gradient(180deg, #fefefe 0, #e8ebec 100%);
+            }
 
-.grp-ctrls ul li a i {
-    font-size: 1.6em;
-    position: relative;
-    top: 3px;
-}
-.grp-ctrls ul li a span {
-    margin-left: 6px;
-}
+            .grp-ctrls ul li a i {
+                font-size: 1.6em;
+                position: relative;
+                top: 3px;
+            }
 
-.list>ul {
+            .grp-ctrls ul li a span {
+                margin-left: 6px;
+            }
+
+.list > ul {
     border-bottom: 1px solid #ccc;
     color: #767676;
 }
 
 
-.list ul.tb-haader>li{
+.list ul.tb-haader > li {
     line-height: 50px;
     height: 50px;
     font-size: 2em;
     font-weight: bold;
 }
 
-.list>ul>li {
+.list > ul > li {
     vertical-align: middle;
 }
 
@@ -1522,9 +1533,11 @@ ul.cascade-children ul.cascade-children {
     font-size: 1.4em;
     font-weight: bold;
 }
-.cust-tbody tr td{
+
+.cust-tbody tr td {
     vertical-align: middle !important;
 }
+
 .cust-tbody tr:last-child td {
     border-bottom: 1px solid #ddd;
 }
@@ -1533,6 +1546,7 @@ ul.cascade-children ul.cascade-children {
     border: none;
     border-bottom: 1px solid #ddd;
 }
+
 .radius-none {
     border-radius: 0;
 }
@@ -1543,20 +1557,21 @@ ul.cascade-children ul.cascade-children {
     margin-bottom: 10px;
 }
 
-.mini-box .box-icon {
-    float: left;
-    margin: 0 10px 10px 0;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    line-height: 80px;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 35px;
-}
-.mini-box .box-info {
-    display: inline-block;
-}
+    .mini-box .box-icon {
+        float: left;
+        margin: 0 10px 10px 0;
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        line-height: 80px;
+        vertical-align: middle;
+        text-align: center;
+        font-size: 35px;
+    }
+
+    .mini-box .box-info {
+        display: inline-block;
+    }
 
 .size-h2 {
     font-size: 30px;
@@ -1579,5 +1594,5 @@ ul.cascade-children ul.cascade-children {
 }
 
 .panel-row-bg {
-    background-color :#f5f5f5;
+    background-color: #f5f5f5;
 }

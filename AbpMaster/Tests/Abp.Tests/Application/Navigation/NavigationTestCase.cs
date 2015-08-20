@@ -8,12 +8,13 @@ using NSubstitute;
 
 namespace Abp.Tests.Application.Navigation
 {
-    internal class NavigationTestCase<TUserId>
+    internal class NavigationTestCase<TTenantId, TUserId>
+        where TTenantId : struct
         where TUserId : struct
     {
         public NavigationManager NavigationManager { get; private set; }
 
-        public IUserNavigationManager<TUserId> UserNavigationManager { get; private set; }
+        public IUserNavigationManager<TTenantId, TUserId> UserNavigationManager { get; private set; }
 
         private readonly IIocManager _iocManager;
 
@@ -48,15 +49,15 @@ namespace Abp.Tests.Application.Navigation
             NavigationManager.Initialize();
             
             //Create user navigation manager to test
-            UserNavigationManager = new UserNavigationManager<TUserId>(NavigationManager)
+            UserNavigationManager = new UserNavigationManager<TTenantId, TUserId>(NavigationManager)
             {
                 PermissionChecker = CreateMockPermissionChecker(UserId)
             };
         }
 
-        private static IPermissionChecker<TUserId> CreateMockPermissionChecker(TUserId userId)
+        private static IPermissionChecker<TTenantId, TUserId> CreateMockPermissionChecker(TUserId userId)
         {
-            var permissionChecker = Substitute.For<IPermissionChecker<TUserId>>();
+            var permissionChecker = Substitute.For<IPermissionChecker<TTenantId, TUserId>>();
             permissionChecker.IsGrantedAsync(userId, "Abp.Zero.UserManagement").Returns(Task.FromResult(true));
             permissionChecker.IsGrantedAsync(userId, "Abp.Zero.RoleManagement").Returns(Task.FromResult(false));
             return permissionChecker;

@@ -42,8 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FullAuditedAndTenantEntityOfType.cs" />
-    <Compile Include="FullAuditedAndTenantEntity.cs" />
+    <Compile Include="Domain\FullAuditedAndTenantEntityOfType.cs" />
+    <Compile Include="Domain\FullAuditedAndTenantEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

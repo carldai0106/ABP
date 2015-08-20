@@ -3,19 +3,27 @@ using Abp.Dependency;
 
 namespace Abp.Authorization
 {
-    internal static class StaticPermissionChecker<TUserId>
+    internal static class StaticPermissionChecker<TTenantId, TUserId>
+        where TTenantId : struct
         where TUserId : struct
     {
-        public static IPermissionChecker<TUserId> Instance { get { return LazyInstance.Value; } }
-        private static readonly Lazy<IPermissionChecker<TUserId>> LazyInstance;
+        public static IPermissionChecker<TTenantId, TUserId> Instance { get { return LazyInstance.Value; } }
+        private static readonly Lazy<IPermissionChecker<TTenantId, TUserId>> LazyInstance;
 
         static StaticPermissionChecker()
         {
-            LazyInstance = new Lazy<IPermissionChecker<TUserId>>(
-                () => IocManager.Instance.IsRegistered<IPermissionChecker<TUserId>>()
-                    ? IocManager.Instance.Resolve<IPermissionChecker<TUserId>>()
-                    : NullPermissionChecker<TUserId>.Instance
-                );
+            if (IocManager.Instance.IsRegistered<IPermissionChecker<TTenantId, TUserId>>())
+            {
+                LazyInstance = new Lazy<IPermissionChecker<TTenantId, TUserId>>(
+                    () => IocManager.Instance.Resolve<IPermissionChecker<TTenantId, TUserId>>()
+                    );
+            }
+            else
+            {
+                LazyInstance = new Lazy<IPermissionChecker<TTenantId, TUserId>>(
+                                   () => NullPermissionChecker<TTenantId, TUserId>.Instance
+                                   );
+            }
         }
     }
 }

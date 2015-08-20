@@ -56,11 +56,11 @@ namespace Abp.Tests.Authorization
             LocalIocManager.IocContainer.Register(Component.For<IAbpSession<int, long>>().UsingFactoryMethod(() => session));
 
             //Mock permission checker
-            var permissionChecker = Substitute.For<IPermissionChecker<long>>();
+            var permissionChecker = Substitute.For<IPermissionChecker<int, long>>();
             permissionChecker.IsGrantedAsync("Permission1").Returns(Task.FromResult(true));
             permissionChecker.IsGrantedAsync("Permission2").Returns(Task.FromResult(true));
             permissionChecker.IsGrantedAsync("Permission3").Returns(Task.FromResult(false)); //Permission3 is not granted
-            LocalIocManager.IocContainer.Register(Component.For<IPermissionChecker<long>>().UsingFactoryMethod(() => permissionChecker));
+            LocalIocManager.IocContainer.Register(Component.For<IPermissionChecker<int, long>>().UsingFactoryMethod(() => permissionChecker));
 
             _syncObj = LocalIocManager.Resolve<MyTestClassToBeAuthorized_Sync>();
             _asyncObj = LocalIocManager.Resolve<MyTestClassToBeAuthorized_Async>();

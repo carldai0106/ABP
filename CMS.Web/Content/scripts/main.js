@@ -1,6 +1,6 @@
 $(function () {
-    
-    var lang = $.parseJSON($("#LocalizationLang").html());
+
+    var lang = null;//$.parseJSON($("#LocalizationLang").html());
 
     $("a.switcher").on("click", function () {
         if ($(window).width() >= 534) {

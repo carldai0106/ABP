@@ -1,10 +1,4 @@
-﻿@using System.Collections
-@using System.Text
-@using System.Web.Optimization
-@{
-    
-}
-
+﻿@using System.Web.Optimization
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +10,7 @@
     @Styles.Render("~/Content/jqui")
     @Styles.Render("~/Content/ueditor")
     @Styles.Render("~/Content/styles/st")
+    @Styles.Render("~/Content/flags/banner")
     @RenderSection("styles", false)
 
     @Scripts.Render("~/bundles/jquery")
@@ -29,52 +24,11 @@
     <body>
         
         <div class="wrapper">
-            <header class="header">
-                <div class="logo navbar-header pull-left">
-                    <a href="#" class="switcher"><i class="fa fa-th-list"></i></a>
-                    <a href="#"><i class="fa fa-users"></i><span>CMS</span></a>
-                </div>
-                <div class="navbr-buttons navbar-header pull-right">
-                    <ul class="ace-nav">
-                        <li class="bg-info ui top right pointing dropdown welcome">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-user"></i>
-                                <span class="user-info">
-                                    <small>Welcome</small>Admin
-                                </span>
-                                <i class="icon-caret-down"></i>
-                            </a>
-                            <ul class="ddl dropdown-menu-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close" role="menu">
-                                <li>
-                                    <a href="#">
-                                        <i class="icon-cog"></i>
-                                        <span>Settings</span>
-                                    </a>
-                                </li>
-
-                                <li>
-                                    <a href="~/Admin/Users/Profile">
-                                        <i class="icon-user"></i>
-                                        <span>Profile</span>
-                                    </a>
-                                </li>
-
-                                <li class="divider"></li>
-
-                                <li>
-                                    <a href="~/Users/Logout">
-                                        <i class="icon-power-off"></i>
-                                        <span>Logout</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </header>
+            
+            @Html.Action("Header", "Layout", new { currentPageName = ViewBag.CurrentPageName })
 
             <div class="primary-content">
-                @@Html.Action("Carte", "Modules")
+                @Html.Action("Carte", "Modules")
                 <section id="main-container">
                     @RenderBody()
                 </section>

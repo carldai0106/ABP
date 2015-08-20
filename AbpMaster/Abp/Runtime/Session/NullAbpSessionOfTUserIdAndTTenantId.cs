@@ -16,7 +16,13 @@ namespace Abp.Runtime.Session
         private static readonly NullAbpSession<TTenantId, TUserId> SingletonInstance = new NullAbpSession<TTenantId, TUserId>();
 
         /// <inheritdoc/>
-        public TUserId? UserId { get { return null; } }
+        public TUserId? UserId
+        {
+            get
+            {
+                return null;
+            }
+        }
 
         /// <inheritdoc/>
         public TTenantId? TenantId { get { return null; } }

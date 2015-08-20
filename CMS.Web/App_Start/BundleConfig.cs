@@ -65,10 +65,13 @@ namespace CMS.Web
                             "~/Content/styles/media.css"
                         ));
 
-            if (System.Configuration.ConfigurationManager.AppSettings["EnableOptimizations"].ToString().Equals("1"))
-            {
-                BundleTable.EnableOptimizations = true;
-            }
+            bundles.Add(new StyleBundle("~/Content/flags/banner").Include("~/Content/flags/famfamfam-flags.css"));
+
+            //if (System.Configuration.ConfigurationManager.AppSettings["EnableOptimizations"].ToString().Equals("1"))
+            //{
+            //    BundleTable.EnableOptimizations = true;
+            //}
+
             BundleTable.EnableOptimizations = false;
         }
     }

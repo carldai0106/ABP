@@ -52,8 +52,8 @@
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="NSubstitute, Version=1.8.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionAppService_Tests.cs" />
+    <Compile Include="Convert_Test.cs" />
     <Compile Include="ModuleAppService_Tests.cs" />
     <Compile Include="RoleAppService_Tests.cs" />
     <Compile Include="TenantAppService_Tests.cs" />
@@ -103,6 +104,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ABP.Extension\Abp.Extensions.csproj">
+      <Project>{57438e73-edde-445a-a5fc-e8d22dc1f12a}</Project>
+      <Name>Abp.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp.AutoMapper\Abp.AutoMapper.csproj">
       <Project>{06EB5F7C-B974-4775-A305-F175D645F7C9}</Project>
       <Name>Abp.AutoMapper</Name>

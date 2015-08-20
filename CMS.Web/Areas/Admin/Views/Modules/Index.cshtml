@@ -1,30 +1,30 @@
-﻿@using Framework.Core
-@using Framework.Web.Admission
-@model ModuleEntry
+﻿@using CMS.Application.Module.Dto
+@model ModuleTreeNode
 
 @{
-    ViewBag.Title = @Html.Lang("Module List");
-    var hasAdd = Authority.CheckRight("Modules", "Add");
+    ViewBag.Title = "Module List";
+    //var hasAdd = Authority.CheckRight("Modules", "Add");
 }
 
-@helper SubTree(ModuleEntry node)
+@helper SubTree(ModuleTreeNode node)
 {
-    var hasAdd = Authority.CheckRight("Modules", "Add");
-    var hasEdit = Authority.CheckRight("Modules", "Edit");
-    var hasDelete = Authority.CheckRight("Modules", "Delete");
+    //var hasAdd = Authority.CheckRight("Modules", "Add");
+    //var hasEdit = Authority.CheckRight("Modules", "Edit");
+    //var hasDelete = Authority.CheckRight("Modules", "Delete");
 
     var clsNames = "";
-    if (node.Children.Any() && node.ModuleId != 0)
+    if (node.Children.Any() && node.Id.HasValue)
     {
         clsNames = "class=\"dyh-sub-tree\"";
     }
 
-    int currentId = DataCast.Get<int>(ViewBag.CurrentId);
+    //int currentId = DataCast.Get<int>(ViewBag.CurrentId);
+    Guid currentId = ViewBag.CurrentId;
     <ul @Html.Raw(clsNames)>
         @foreach (var item in node.Children)
         {
             string clsName = string.Empty;
-            if (item.ModuleId == currentId && item.IsActived)
+            if (item.Id == currentId && item.IsActived)
             {
                 clsName = "current";
             }
@@ -35,7 +35,7 @@
 
             var hasChild = item.Children.Any();
             <li class="@clsName">
-                <a href="~/Admin/Modules/Edit/@item.ModuleId">
+                <a href="~/Admin/Modules/Edit/@item.Id">
                     @if (hasChild)
                     {
                         string clsIcon = "fa fa-plus-circle";

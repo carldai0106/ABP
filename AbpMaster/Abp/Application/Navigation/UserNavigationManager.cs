@@ -6,17 +6,18 @@ using Abp.Dependency;
 
 namespace Abp.Application.Navigation
 {
-    internal class UserNavigationManager<TUserId> : IUserNavigationManager<TUserId>, ITransientDependency
+    internal class UserNavigationManager<TTenantId, TUserId> : IUserNavigationManager<TTenantId, TUserId>, ITransientDependency
+        where TTenantId : struct
         where TUserId : struct
     {
-        public IPermissionChecker<TUserId> PermissionChecker { get; set; }
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
 
         private readonly INavigationManager _navigationManager;
 
         public UserNavigationManager(INavigationManager navigationManager)
         {
             _navigationManager = navigationManager;
-            PermissionChecker = NullPermissionChecker<TUserId>.Instance;
+            PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
         }
 
         public async Task<UserMenu> GetMenuAsync(string menuName, TUserId? userId)
@@ -58,7 +59,9 @@ namespace Abp.Application.Navigation
                 var requiredPermissionName = menuItemDefinition.RequiredPermissionName;
                 //var rs = await PermissionChecker.IsGrantedAsync(userId.Value, requiredPermissionName);
 
-                if (!string.IsNullOrEmpty(requiredPermissionName) && (!userId.HasValue || !(await PermissionChecker.IsGrantedAsync(userId.Value, menuItemDefinition.RequiredPermissionName))))
+                if (!string.IsNullOrEmpty(requiredPermissionName) && 
+                    (!userId.HasValue || 
+                    !(await PermissionChecker.IsGrantedAsync(userId.Value, menuItemDefinition.RequiredPermissionName))))
                 {
                     continue;
                 }

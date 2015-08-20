@@ -20,13 +20,12 @@ using Microsoft.AspNet.Identity;
 
 namespace CMS.Application.MultiTenancy
 {
-    public class TenantAppService : ApplicationService<Guid, Guid>, ITenantAppService
+    public class TenantAppService : CmsAppServiceBase, ITenantAppService
     {
         private readonly ICmsRepository<TenantEntity, Guid> _repository;
         public TenantAppService(ICmsRepository<TenantEntity, Guid> repository)
         {
             _repository = repository;
-            LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
         public async Task CreateTenant(CreateTenantDto input)

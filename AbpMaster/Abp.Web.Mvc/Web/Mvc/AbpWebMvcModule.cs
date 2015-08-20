@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Abp.Modules;
 using Abp.Web.Mvc.Controllers;
+using Abp.Web.Mvc.Localized;
 
 namespace Abp.Web.Mvc
 {
@@ -15,7 +16,11 @@ namespace Abp.Web.Mvc
         public override void PreInitialize<TTenantId, TUserId>()
         {
             IocManager.AddConventionalRegistrar(new ControllerConventionalRegistrar());
-            
+
+            if (!IocManager.IsRegistered(typeof(Translation)))
+            {
+                IocManager.Register(typeof(Translation));
+            }
         }
 
         /// <inheritdoc/>

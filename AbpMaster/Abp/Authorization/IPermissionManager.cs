@@ -6,7 +6,9 @@ namespace Abp.Authorization
     /// <summary>
     /// Permission manager.
     /// </summary>
-    public interface IPermissionManager
+    public interface IPermissionManager<TTenantId, TUserId>
+        where TTenantId : struct
+        where TUserId : struct
     {
         /// <summary>
         /// Gets <see cref="Permission"/> object with given <paramref name="name"/> or throws exception

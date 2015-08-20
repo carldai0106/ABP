@@ -23,13 +23,12 @@ using Microsoft.AspNet.Identity;
 
 namespace CMS.Application.Action
 {
-    public class ActionAppService : ApplicationService<Guid, Guid>, IActionAppService
+    public class ActionAppService : CmsAppServiceBase, IActionAppService
     {
         private readonly ICmsRepository<ActionEntity, Guid> _repository;
         public ActionAppService(ICmsRepository<ActionEntity, Guid> repository)
         {
             _repository = repository;
-            LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
         public async Task<ActionEditDto> GetAction(IdInput<Guid> id)

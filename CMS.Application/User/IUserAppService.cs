@@ -19,5 +19,7 @@ namespace CMS.Application.User
         Task<PagedResultOutput<UserEditDto>> GetUsers(GetUsersInput input);
         Task CreateOrUpdate(IEnumerable<UserRoleDto> inputs);
         Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode, string actionCode);
+        Task<LoginResultDto> Login(string userNameOrEmailAddress, string plainPassword, string tenancyName = null);
+
     }
 }

@@ -2,18 +2,23 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Abp;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using Abp.Configuration.Startup;
 using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
+using Abp.Runtime.Security;
+using Abp.Timing;
 using Abp.UI;
 using CMS.Application.IdentityFramework;
 using CMS.Application.Localization;
@@ -23,13 +28,15 @@ using CMS.Domain.Action;
 using CMS.Domain.Module;
 using CMS.Domain.Role;
 using CMS.Domain.RoleRight;
+using CMS.Domain.Tenant;
 using CMS.Domain.User;
 using CMS.Domain.UserRole;
 using Microsoft.AspNet.Identity;
+using Abp.Collections.Extensions;
 
 namespace CMS.Application.User
 {
-    public class UserAppService : ApplicationService<Guid, Guid>, IUserAppService
+    public class UserAppService : CmsAppServiceBase, IUserAppService
     {
         private readonly ICmsRepository<UserEntity, Guid> _repository;
         private readonly ICmsRepository<UserRoleEntity, Guid> _userRoleRepository;
@@ -38,13 +45,18 @@ namespace CMS.Application.User
         private readonly ICmsRepository<ActionEntity, Guid> _actionRepository;
         private readonly ICmsRepository<RoleRightEntity, Guid> _roleRightRepository;
 
+        private readonly ICmsRepository<TenantEntity, Guid> _tenantRepository;
+
+        private readonly IMultiTenancyConfig _multiTenancyConfig;
 
         public UserAppService(
-            ICmsRepository<UserEntity, Guid> repository, 
+            ICmsRepository<UserEntity, Guid> repository,
             ICmsRepository<UserRoleEntity, Guid> userRoleRepository,
             ICmsRepository<ModuleEntity, Guid> moduleRepository,
             ICmsRepository<ActionEntity, Guid> actionRepository,
-            ICmsRepository<RoleRightEntity, Guid> roleRightRepository
+            ICmsRepository<RoleRightEntity, Guid> roleRightRepository,
+            ICmsRepository<TenantEntity, Guid> tenantRepository,
+            IMultiTenancyConfig multiTenancyConfig
             )
         {
             _repository = repository;
@@ -52,8 +64,9 @@ namespace CMS.Application.User
             _moduleRepository = moduleRepository;
             _actionRepository = actionRepository;
             _roleRightRepository = roleRightRepository;
+            _multiTenancyConfig = multiTenancyConfig;
+            _tenantRepository = tenantRepository;
 
-            LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
         public async Task CreateUser(CreateUserDto input)
@@ -242,11 +255,94 @@ namespace CMS.Application.User
                 RoleId = x.RoleId,
                 RoleCode = x.RoleCode,
                 Status = x.Status
-            }).WhereIf(!actionCode.IsNullOrWhiteSpace(), x=> x.ActionCode == actionCode);
+            }).WhereIf(!actionCode.IsNullOrWhiteSpace(), x => x.ActionCode == actionCode);
 
             var rs = await query.ToListAsync();
 
             return rs;
+        }
+
+        private async Task<TenantEntity> GetDefaultTenantAsync()
+        {
+            var tenant = await _tenantRepository.FirstOrDefaultAsync(t => t.TenancyName == "Default");
+            if (tenant == null)
+            {
+                throw new AbpException("There should be a 'Default' tenant if multi-tenancy is disabled!");
+            }
+
+            return tenant;
+        }
+
+        public async Task<LoginResultDto> Login(string userNameOrEmailAddress, string plainPassword, string tenancyName = null)
+        {
+            if (userNameOrEmailAddress.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException("userNameOrEmailAddress");
+            }
+
+            if (plainPassword.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException("plainPassword");
+            }
+
+            TenantEntity tenant = null;
+            if (!_multiTenancyConfig.IsEnabled)
+            {
+                tenant = await GetDefaultTenantAsync();
+            }
+            else if (!string.IsNullOrWhiteSpace(tenancyName))
+            {
+                tenant = await _tenantRepository.FirstOrDefaultAsync(t => t.TenancyName == tenancyName);
+                if (tenant == null)
+                {
+                    return new LoginResultDto(LoginResultType.InvalidTenancyName);
+                }
+
+                if (!tenant.IsActive)
+                {
+                    return new LoginResultDto(LoginResultType.TenantIsNotActive);
+                }
+            }
+
+            using (CurrentUnitOfWork.DisableFilter(AbpDataFilters.MustHaveTenant))
+            {
+
+                var user = await _repository.FirstOrDefaultAsync(x =>
+                        x.TenantId == tenant.Id &&
+                        (x.UserName == userNameOrEmailAddress || x.Email == userNameOrEmailAddress));
+
+                if (user == null)
+                {
+                    return new LoginResultDto(LoginResultType.InvalidUserNameOrEmailAddress);
+                }
+
+                var verificationResult = new PasswordHasher().VerifyHashedPassword(user.Password, plainPassword);
+
+                if (verificationResult != PasswordVerificationResult.Success)
+                {
+                    return new LoginResultDto(LoginResultType.InvalidPassword);
+                }
+
+                if (!user.IsActive)
+                {
+                    return new LoginResultDto(LoginResultType.UserIsNotActive);
+                }
+
+                return new LoginResultDto(user.MapTo<UserEditDto>(), CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie));
+            }
+        }
+
+        private ClaimsIdentity CreateIdentity(UserEntity user, string authenticationType)
+        {
+            var roleIds = user.UserRoles.Select(x => x.RoleId).JoinAsString(",");
+            var identity = new ClaimsIdentity(authenticationType, AbpClaimTypes.UserNameClaimType, AbpClaimTypes.RoleClaimType);
+
+            identity.AddClaim(new Claim(AbpClaimTypes.UserIdClaimType, user.Id.ToString(), "http://www.w3.org/2001/XMLSchema#string"));
+            identity.AddClaim(new Claim(AbpClaimTypes.UserNameClaimType, user.UserName, "http://www.w3.org/2001/XMLSchema#string"));
+            identity.AddClaim(new Claim(AbpClaimTypes.RoleClaimType, roleIds, "http://www.w3.org/2001/XMLSchema#string"));
+            identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString(), "http://www.w3.org/2001/XMLSchema#string"));
+
+            return identity;
         }
     }
 }

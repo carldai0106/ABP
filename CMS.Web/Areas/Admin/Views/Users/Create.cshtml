@@ -1,14 +1,13 @@
-﻿@using EPS.Models
-@model EPS.Models.UserEntry
+﻿@model CMS.Application.User.Dto.UserEditDto
 @{
-    ViewBag.Title = Html.Lang("New User");
-    var roles = ViewBag.Roles as IEnumerable<RoleEntry> ?? new List<RoleEntry>();
+    ViewBag.Title = "New User";
+    //var roles = ViewBag.Roles as IEnumerable<RoleEntry> ?? new List<RoleEntry>();
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
     <div class="breadcrumb">
-        <a href="#">@Html.Lang("Setup")</a>
-        <a href="~/Admin/Users/Index">@Html.Lang("User List")</a>
+        <a href="#">Setup</a>
+        <a href="~/Admin/Users/Index">User List</a>
         <a href="#" class="active">@ViewBag.Title</a>
     </div>
 </div>
@@ -31,11 +30,9 @@
                             @Html.TextBoxFor(x => x.Email, new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.Email)
                         </div>
-                        
-
                     </div>
 
-                    <div class="form-group">
+                    @*<div class="form-group">
                         @Html.LabelFor(x => x.Password, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
                         <div class="col-md-3 col-sm-4 col-xs-12">
                             @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
@@ -44,10 +41,11 @@
 
                         @Html.LabelFor(x => x.NonPassword, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
                         <div class="col-md-3 col-sm-4 col-xs-12">
-                            @Html.PasswordFor(x => x.NonPassword, new { @class = "form-control" })
+                            @Html.PasswordFor(x => x.NonPassword, new {@class = "form-control"})
                             @Html.ValidationMessageFor(x => x.NonPassword)
                         </div>
-                    </div>
+
+                    </div>*@
 
                     <div class="form-group">
                         @Html.LabelFor(x => x.FirstName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
@@ -63,7 +61,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    @*<div class="form-group">
                         <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
                         <div class="col-md-8 col-sm-10 col-xs-12">
                             <ul class="ul-list">
@@ -86,14 +84,14 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div>*@
 
                     <div class="form-group">
                         <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
                         <div class="col-md-8 col-sm-10 col-xs-12 text-center">
-                            <a href="~/Admin/Users/Index" class="btn btn-info btn-sm">@Html.Lang("Cancel")</a>
+                            <a href="~/Admin/Users/Index" class="btn btn-info btn-sm">Cancel</a>
                             <span class="btn-space"></span>
-                            <button type="submit" class="btn btn-primary btn-sm">@Html.Lang("Save")</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
                         </div>
                     </div>
                     

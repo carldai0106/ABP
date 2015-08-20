@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Abp.Application.Services.Dto;
 using CMS.Application.Module;
+using CMS.Application.Module.Dto;
+using Microsoft.AspNet.Identity;
 
 namespace CMS.Web.Areas.Admin.Controllers
 {
@@ -16,30 +20,21 @@ namespace CMS.Web.Areas.Admin.Controllers
             _moduleService = moduleService;
         }
 
-        
-        public ActionResult Index(int id = 0)
+
+        public async Task<ActionResult> Index(Guid id)
         {
-            //_cache.Remove(Constants.CACHE_KEY_MODULES);
-            //Utility.GetModelState(this);
             ViewBag.CurrentId = id;
-
-            var list = _cache.Get(Constants.CACHE_KEY_MODULES, () => _module.GetList());
-            var model = TreeUtils.GetTree(list, id);
-
-            return System.Web.UI.WebControls.View(model);
+            var model = await _moduleService.GetModuleTree(new NullableIdInput<Guid> { Id = id });
+            return View(model);
         }
 
         [ChildActionOnly]
         public ActionResult Carte()
         {
-            //var id = DataCast.Get<int>(ViewBag.CurrentMenuID);
-            //var list = _cache.Get(Constants.CACHE_KEY_MODULES, () => _module.GetList());
-            //var filters = list.Where(x => x.DisplayAsMenu);
-            //var model = TreeUtils.GetTree(filters, id);
+            var result = Task.Run(async () => await _moduleService.GetModuleTree(new NullableIdInput<Guid> { Id = null })).Result;
+            //var model = await _moduleService.GetModuleTree(new NullableIdInput<Guid> { Id = null });
 
-            //return View(model);
+            return View(result);
         }
-
-        
     }
 }

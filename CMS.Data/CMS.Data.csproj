@@ -72,6 +72,10 @@
     <Compile Include="CmsDataModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ABP.Extension\Abp.Extensions.csproj">
+      <Project>{57438e73-edde-445a-a5fc-e8d22dc1f12a}</Project>
+      <Name>Abp.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp.EntityFramework\Abp.EntityFramework.csproj">
       <Project>{948f0caf-3382-4e03-9a0f-0ddb206fe40d}</Project>
       <Name>Abp.EntityFramework</Name>

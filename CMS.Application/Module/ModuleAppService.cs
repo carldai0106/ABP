@@ -23,7 +23,7 @@ using CMS.Domain.ActionModule;
 
 namespace CMS.Application.Module
 {
-    public class ModuleAppService : ApplicationService<Guid, Guid>, IModuleAppService
+    public class ModuleAppService : CmsAppServiceBase, IModuleAppService
     {
         private readonly ICmsRepository<ModuleEntity, Guid> _repository;
         private readonly ICmsRepository<ActionModuleEntity, Guid> _actionModuleRepository;
@@ -31,8 +31,6 @@ namespace CMS.Application.Module
         {
             _repository = repository;
             _actionModuleRepository = actionModuleRepository;
-
-            LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
         public async Task<ModuleEditDto> GetModule(IdInput<Guid> input)
@@ -121,6 +119,46 @@ namespace CMS.Application.Module
                 else
                     await _actionModuleRepository.UpdateAsync(mapped);
             }
+        }
+
+        public async Task<ModuleTreeNode> GetModuleTree(NullableIdInput<Guid> input)
+        {
+            var query = _repository.GetAll();
+            var list = await query.ToListAsync();
+            var mappedList =  list.MapTo<List<ModuleTreeNode>>();
+            var root = new ModuleTreeNode
+            {
+                ModuleCode = "Root",
+                DisplayName = "Root",
+                ParentId = null,
+                Id = null
+            };
+
+            return GetSubItem(mappedList, root, input.Id);
+        }
+
+        private static ModuleTreeNode GetSubItem(IEnumerable<ModuleTreeNode> source, ModuleTreeNode parentNode, Guid? currentId)
+        {
+            if (source == null || parentNode == null)
+            {
+                return null;
+            }
+            var list = source.Where(x => x.ParentId == parentNode.Id).OrderBy(x => x.Order);
+
+            foreach (var item in list)
+            {
+                string json = Newtonsoft.Json.JsonConvert.SerializeObject(item);
+                var child = Newtonsoft.Json.JsonConvert.DeserializeObject<ModuleTreeNode>(json);
+                child.IsActived = child.Id == currentId;
+
+                parentNode.Children.Add(GetSubItem(source, child, currentId));
+                if (child.Children.Any(x => x.IsActived))
+                {
+                    child.IsActived = true;
+                }
+            }
+
+            return parentNode;
         }
     }
 }

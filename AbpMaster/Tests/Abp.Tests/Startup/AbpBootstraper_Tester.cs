@@ -8,17 +8,17 @@ namespace Abp.Tests.Startup
 {
     public class AbpBootstraper_Tester : TestBaseWithLocalIocManager
     {
-        private readonly AbpBootstrapper _bootstrapper;
+        private readonly AbpBootstrapper<int, long> _bootstrapper;
 
         public AbpBootstraper_Tester()
         {
-            _bootstrapper = new AbpBootstrapper(LocalIocManager);
+            _bootstrapper = new AbpBootstrapper<int, long>(LocalIocManager);
         }
 
         [Fact]
         public void Should_Initialize_Bootstrapper()
         {
-            _bootstrapper.Initialize<int, long>();
+            _bootstrapper.Initialize();
         }
 
         [Fact]
@@ -26,7 +26,7 @@ namespace Abp.Tests.Startup
         {
             LocalIocManager.Register<IModuleFinder, MyTestModuleFinder>();
 
-            _bootstrapper.Initialize<int, long>();
+            _bootstrapper.Initialize();
             _bootstrapper.Dispose();
 
             var testModule = LocalIocManager.Resolve<MyTestModule>();

@@ -1,11 +1,12 @@
 ﻿using System.Reflection;
+using Abp;
 using Abp.EntityFramework;
 using Abp.Modules;
 using CMS.Domain;
 
 namespace CMS.Data
 {
-    [DependsOn(typeof(AbpEntityFrameworkModule), typeof(CmsDomainModule))]
+    [DependsOn(typeof(AbpEntityFrameworkModule), typeof(CmsDomainModule), typeof(AbpExtensionsModule))]
     public class CmsDataModule : AbpModule
     {
         public override void PreInitialize<TTenantId, TUserId>()

@@ -1,8 +1,7 @@
 ﻿@model System.Collections.Hashtable
 @{
-    ViewBag.Title = Html.Lang("Dashboard");
+    ViewBag.Title = "Dashboard";
     var table = ViewBag.Table;
-    
 }
 <div class="breadcrumbs" id="breadcrumbs">
     <div class="breadcrumb">
@@ -23,15 +22,15 @@
                             <span class="icon-bar"></span>
                         </button>*@
                     <ul class="nav-tools">
-                        <li><a href="~/Admin/Dashboard/Index" class="nav-btn dashboard-active"><i class="fa fa-dashboard"></i><span>@Html.Lang("Dashboard")</span></a></li>
-                        <li><a href="~/Admin/Dashboard/Configuration" class="nav-btn"><i class="fa fa-gears"></i><span>@Html.Lang("Configuration")</span></a></li>
+                        <li><a href="~/Admin/Dashboard/Index" class="nav-btn dashboard-active"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+                        <li><a href="~/Admin/Dashboard/Configuration" class="nav-btn"><i class="fa fa-gears"></i><span>Configuration</span></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 clear-lr-padding">
 
             </div>
-        </div><!-- /.row -->
+        </div>
     </nav>
 
     <div id="dashboard">
@@ -43,9 +42,9 @@
                             <i class="fa fa-users"></i>
                         </span>
                         <div class="box-info">
-                            <p class="size-h2">@table["Users"]</p>
+                            <p class="size-h2">Admin</p>
                             <p class="text-muted">
-                                <span>@Html.Lang("Total Users")</span>
+                                <span>Total Users</span>
                             </p>
                         </div>
                     </div>
@@ -56,9 +55,9 @@
                             <i class="fa fa-newspaper-o"></i>
                         </span>
                         <div class="box-info">
-                            <p class="size-h2">@table["News"]</p>
+                            <p class="size-h2">News</p>
                             <p class="text-muted">
-                                <span>@Html.Lang("Total News")</span>
+                                <span>Total News</span>
                             </p>
                         </div>
                     </div>
@@ -69,9 +68,9 @@
                             <i class="fa fa-picture-o"></i>
                         </span>
                         <div class="box-info">
-                            <p class="size-h2">@table["Cases"]</p>
+                            <p class="size-h2">Cases</p>
                             <p class="text-muted">
-                                <span>@Html.Lang("Total Cases")</span>
+                                <span>Total Cases</span>
                             </p>
                         </div>
                     </div>
@@ -82,9 +81,9 @@
                             <i class="fa fa-reorder"></i>
                         </span>
                         <div class="box-info">
-                            <p class="size-h2">@table["Products"]</p>
+                            <p class="size-h2">Products</p>
                             <p class="text-muted">
-                                <span>@Html.Lang("Total Products")</span>
+                                <span>Total Products</span>
                             </p>
                         </div>
                     </div>
@@ -93,41 +92,41 @@
 
             <div class="wrapper-panel-box">
                 <div class="panel panel-default">
-                    <div class="panel-heading">@Html.Lang("System Information")</div>
+                    <div class="panel-heading">System Information</div>
                     <div class="panel-body">
                         <div class="form-group panel-row-bg panel-row">
-                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("System Version")</label>
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">System Version</label>
                             <div class="col-md-4 col-sm-5 col-xs-12">
                                 信息管理系统 V1.0
                             </div>
                         </div>
-                        
+
                         <div class="form-group  panel-row">
-                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Platform Version")</label>
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Platform Version</label>
                             <div class="col-md-4 col-sm-5 col-xs-12">
                                 @Environment.OSVersion
                             </div>
                         </div>
                         <div class="form-group panel-row-bg panel-row">
-                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Website/IP")</label>
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Website/IP</label>
                             <div class="col-md-4 col-sm-5 col-xs-12">
                                 @HttpContext.Current.Request.Url.Host
                             </div>
                         </div>
                         <div class="form-group   panel-row">
-                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Server Engine")</label>
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Server Engine</label>
                             <div class="col-md-4 col-sm-5 col-xs-12">
                                 @Request.ServerVariables["Server_SoftWare"]
                             </div>
                         </div>
                         <div class="form-group panel-row-bg panel-row">
-                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Runtime of the system")</label>
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Runtime of the system</label>
                             <div class="col-md-4 col-sm-5 col-xs-12">
                                 @((Environment.TickCount / 0x3e8) / 60)分钟
                             </div>
                         </div>
                         <div class="form-group panel-row">
-                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">@Html.Lang("Current Time")</label>
+                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Current Time</label>
                             <div class="col-md-4 col-sm-5 col-xs-12">
                                 @DateTime.Now.ToString("yyyy-MM-dd HH:mm")
                             </div>

@@ -17,7 +17,7 @@ using CMS.Domain.RoleRight;
 
 namespace CMS.Application.Role
 {
-    public class RoleAppService : ApplicationService<Guid, Guid>, IRoleAppService
+    public class RoleAppService : CmsAppServiceBase, IRoleAppService
     {
         private readonly ICmsRepository<RoleEntity, Guid> _repository;
         private readonly ICmsRepository<RoleRightEntity, Guid> _roleRightRepository;
@@ -25,7 +25,6 @@ namespace CMS.Application.Role
         {
             _repository = repository;
             _roleRightRepository = roleRightRepository;
-            LocalizationSourceName = CmsConsts.LocalizationSourceName;
         }
 
         public async Task Create(RoleCreateDto input)

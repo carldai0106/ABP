@@ -12,12 +12,12 @@ namespace Abp.Authorization
     {
         public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
 
-        public IPermissionChecker<TUserId> PermissionChecker { get; set; }
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
 
         public AuthorizeAttributeHelper()
         {
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
-            PermissionChecker = NullPermissionChecker<TUserId>.Instance;
+            PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
         }
 
         public async Task AuthorizeAsync(IEnumerable<IAbpAuthorizeAttribute> authorizeAttributes)
@@ -29,7 +29,9 @@ namespace Abp.Authorization
 
             foreach (var authorizeAttribute in authorizeAttributes)
             {
-                await PermissionChecker.AuthorizeAsync(authorizeAttribute.RequireAllPermissions, authorizeAttribute.Permissions);
+                //await PermissionChecker.AuthorizeAsync(authorizeAttribute.RequireAllPermissions, authorizeAttribute.Permissions);
+                //modify by carl
+                await PermissionChecker.AuthorizeAsync(authorizeAttribute);
             }
         }
 

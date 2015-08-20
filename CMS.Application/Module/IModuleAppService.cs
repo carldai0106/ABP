@@ -12,6 +12,7 @@ namespace CMS.Application.Module
     {
         Task<ModuleEditDto> GetModule(IdInput<Guid> input);
         Task<ModuleEditDto> GetModule(string moduleCode);
+        Task<ModuleTreeNode> GetModuleTree(NullableIdInput<Guid> input);
         Task<PagedResultOutput<ModuleEditDto>> GetModules(GetModulesInput input);
         Task Update(ModuleEditDto input);
         Task Delete(IdInput<Guid> inpput);

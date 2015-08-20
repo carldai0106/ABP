@@ -20,12 +20,12 @@ namespace Abp.Application.Services
         /// <summary>
         /// Reference to the permission manager.
         /// </summary>
-        public IPermissionManager PermissionManager { protected get; set; }
+        public IPermissionManager<TTenantId, TUserId> PermissionManager { protected get; set; }
 
         /// <summary>
         /// Reference to the permission checker.
         /// </summary>
-        public IPermissionChecker<TUserId> PermissionChecker { protected get; set; }
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { protected get; set; }
 
         /// <summary>
         /// Gets current session information.
@@ -39,7 +39,7 @@ namespace Abp.Application.Services
         protected ApplicationService()
         {
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
-            PermissionChecker = NullPermissionChecker<TUserId>.Instance;
+            PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Abp.Application.Services
         /// <param name="permissionName">Name of the permission</param>
         protected bool IsGranted(string permissionName)
         {
-            return PermissionChecker.IsGranted<TUserId>(permissionName);
+            return PermissionChecker.IsGranted(permissionName);
         }
     }
 }

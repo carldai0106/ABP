@@ -10,9 +10,10 @@ using Castle.Windsor;
 
 namespace Abp.Dependency.Installers
 {
-    internal class AbpCoreInstaller<TTenantId, TUserId> : IWindsorInstaller
-        where TTenantId : struct
-        where TUserId : struct
+    //internal class AbpCoreInstaller<TTenantId, TUserId> : IWindsorInstaller
+    //    where TTenantId : struct
+    //    where TUserId : struct
+    internal class AbpCoreInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {

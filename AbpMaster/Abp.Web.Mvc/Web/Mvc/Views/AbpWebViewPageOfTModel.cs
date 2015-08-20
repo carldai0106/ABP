@@ -101,9 +101,24 @@ namespace Abp.Web.Mvc.Views
         /// Checks if current user is granted for a permission.
         /// </summary>
         /// <param name="permissionName">Name of the permission</param>
-        protected bool IsGranted<TUserId>(string permissionName) where TUserId : struct
+        protected bool IsGranted<TTenantId, TUserId>(string permissionName) 
+            where TTenantId : struct
+            where TUserId : struct
         {
-            return StaticPermissionChecker<TUserId>.Instance.IsGranted<TUserId>(permissionName);
+            return StaticPermissionChecker<TTenantId, TUserId>.Instance.IsGranted(permissionName);
+        }
+
+        /// <summary>
+        /// Checks if current user is granted for a permission.
+        /// </summary>
+        /// <param name="modelCode">The code of the module or menu</param>
+        /// <param name="permissionName">Name of the permission</param>
+        protected virtual bool IsGranted<TTenantId, TUserId>(string modelCode, string permissionName)
+            where TTenantId : struct
+            where TUserId : struct
+        {
+            var flag = StaticPermissionChecker<TTenantId, TUserId>.Instance.IsGranted(modelCode, permissionName);
+            return flag;
         }
     }
 }

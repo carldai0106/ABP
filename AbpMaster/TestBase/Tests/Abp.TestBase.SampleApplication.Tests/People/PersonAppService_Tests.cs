@@ -106,7 +106,7 @@ namespace Abp.TestBase.SampleApplication.Tests.People
         {
             AbpSession.UserId = 1;
 
-            var permissionChecker = Substitute.For<IPermissionChecker<long>>();
+            var permissionChecker = Substitute.For<IPermissionChecker<int, long>>();
             permissionChecker.IsGrantedAsync("CanDeletePerson").Returns(async info =>
                                                                         {
                                                                             await Task.Delay(10);
@@ -114,7 +114,7 @@ namespace Abp.TestBase.SampleApplication.Tests.People
                                                                         });
 
             LocalIocManager.IocContainer.Register(
-                Component.For<IPermissionChecker<long>>().UsingFactoryMethod(() => permissionChecker).LifestyleSingleton()
+                Component.For<IPermissionChecker<int, long>>().UsingFactoryMethod(() => permissionChecker).LifestyleSingleton()
                 );
 
             var halil = await UsingDbContextAsync(async context => await context.People.SingleAsync(p => p.Name == "halil"));

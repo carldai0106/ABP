@@ -5,7 +5,7 @@ using System.Text;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 
-namespace CMS.FW
+namespace CMS.FW.Domain
 {
     public abstract class FullAuditedAndTenantEntity : FullAuditedEntity<Guid, Guid>, IMustHaveTenant<Guid>
     {

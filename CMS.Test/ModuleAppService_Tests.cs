@@ -186,10 +186,11 @@ namespace CMS.Test
             var items = rs.Items;
 
             var list = await _moduleAppService.GetModules(new GetModulesInput());
-            var modules = list.Items.Where(x => x.ParentId != null);
+            var modules = list.Items;//list.Items.Where(x => x.ParentId != null);
 
-            var actions = items.Where(
-                    x => x.ActionCode == "CMS.Create" || x.ActionCode == "CMS.Update" || x.ActionCode == "CMS.Delete");
+            //var actions = items.Where(
+            //        x => x.ActionCode == "CMS.Create" || x.ActionCode == "CMS.Update" || x.ActionCode == "CMS.Delete");
+            var actions = items;
 
             var am = (from m in modules
                 from a in actions

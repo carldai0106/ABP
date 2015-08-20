@@ -40,7 +40,7 @@ namespace Abp.Web.Mvc.Controllers
         /// <summary>
         /// Reference to the permission manager.
         /// </summary>
-        public IPermissionManager PermissionManager { get; set; }
+        public IPermissionManager<TTenantId, TUserId> PermissionManager { get; set; }
 
         /// <summary>
         /// Reference to the setting manager.
@@ -50,7 +50,7 @@ namespace Abp.Web.Mvc.Controllers
         /// <summary>
         /// Reference to the permission checker.
         /// </summary>
-        public IPermissionChecker<TUserId> PermissionChecker { protected get; set; }
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { protected get; set; }
 
         /// <summary>
         /// Reference to the localization manager.
@@ -116,7 +116,7 @@ namespace Abp.Web.Mvc.Controllers
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             Logger = NullLogger.Instance;
             LocalizationManager = NullLocalizationManager.Instance;
-            PermissionChecker = NullPermissionChecker<TUserId>.Instance;
+            PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
             AuditingStore = SimpleLogAuditingStore<TTenantId, TUserId>.Instance;
         }
 
@@ -179,7 +179,7 @@ namespace Abp.Web.Mvc.Controllers
         /// <param name="permissionName">Name of the permission</param>
         protected bool IsGranted(string permissionName)
         {
-            return PermissionChecker.IsGranted<TUserId>(permissionName);
+            return PermissionChecker.IsGranted(permissionName);
         }
 
         /// <summary>

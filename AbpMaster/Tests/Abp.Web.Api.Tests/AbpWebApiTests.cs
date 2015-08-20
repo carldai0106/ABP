@@ -6,7 +6,7 @@ namespace Abp.Web.Api.Tests
         where TTenantId : struct
         where TUserId : struct
     {
-        private static AbpBootstrapper _bootstrapper;
+        private static AbpBootstrapper<TTenantId, TUserId> _bootstrapper;
 
         public static void Initialize()
         {
@@ -15,8 +15,8 @@ namespace Abp.Web.Api.Tests
                 return;
             }
 
-            _bootstrapper = new AbpBootstrapper();
-            _bootstrapper.Initialize<TTenantId, TUserId>();
+            _bootstrapper = new AbpBootstrapper<TTenantId, TUserId>();
+            _bootstrapper.Initialize();
         }
     }
 }
