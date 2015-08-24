@@ -1,6 +1,4 @@
 ﻿using System.ComponentModel;
-using Abp.Dependency;
-
 
 namespace Abp.Web.Mvc.Localized
 {

@@ -47,23 +47,7 @@ namespace CMS.Domain.User
             get;
             set;
         }
-
-        public UserEntity()
-        {
-
-        }
-
-        public UserEntity(Guid tenantId, string userName, string password, string email, string firstName, string lastName)
-        {
-            this.Id = Guid.NewGuid();
-            TenantId = tenantId;
-            UserName = userName;
-            Password = password;
-            Email = email;
-            FirstName = firstName;
-            LastName = lastName;
-        }
-
+       
         public virtual bool IsActive { get; set; }
 
         public static string CreateRandomPassword()

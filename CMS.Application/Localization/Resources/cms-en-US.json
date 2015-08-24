@@ -32,6 +32,31 @@
         "CanNotDeleteAdminUser": "Can not delete user {0} since this is the default admin user!",
         "DuplicateModuleCode": "Module Code/Menu Code '{0}' is already taken.",
         "DuplicateRoleCode": "Role Code '{0}' is already taken.",
-        "UserName" :  "User Name"
+
+        "Custom.NumericModelValidator": "The field {0} must be a number.",
+        "Custom.StringLength": "Please enter {0} between {1} and {2} characters long.",
+
+        "Login.InvalidUserNameOrEmailAddress": "Invaild user name or email address.",
+        "Login.InvalidPassword": "Invaild password.",
+        "Login.UserIsNotActive": "User is not active.",
+        "Login.InvalidTenancyName": "Invalid tenancy name.",
+        "Login.TenantIsNotActive": "Tenant is not active.",
+        "Login.UserEmailIsNotConfirmed": "User email is not confirmed.",
+        
+        "Created.RecordSucceed": "Record : '{0}' created.",
+
+        "Dto.UserName": "User Name",
+        "Dto.Password": "Password",
+        "Dto.ReenterPassword": "Reenter Password",
+        "Dto.Email": "Email",
+        "Dto.FirstName": "First Name",
+        "Dto.LastName": "Last Name",
+        "Dto.InvaildEmail": "{0} is invaild; Eg : xx@xx.com.",
+        "Dto.DuplicateUserName":  "{0} is already taken.",
+
+        "Form.Cancel": "Cancel",
+        "Form.Save": "Save",
+
+        "Form.Title.AssignedRolesToUser" :  "Assigned roles to user"
     }
 }

@@ -61,9 +61,9 @@
     <Compile Include="Mapping\UserRoleEntityMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Migrations\201507290722163_InitialCreate.cs" />
-    <Compile Include="Migrations\201507290722163_InitialCreate.Designer.cs">
-      <DependentUpon>201507290722163_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201508240214526_InitalCreate.cs" />
+    <Compile Include="Migrations\201508240214526_InitalCreate.Designer.cs">
+      <DependentUpon>201508240214526_InitalCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,8 +106,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201507290722163_InitialCreate.resx">
-      <DependentUpon>201507290722163_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201508240214526_InitalCreate.resx">
+      <DependentUpon>201508240214526_InitalCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

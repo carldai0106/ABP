@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 
-namespace Framework.Core.Localized
+namespace Abp.Web.Mvc.Localized
 {
     /// <summary>
     /// 创建一个密封的数字验证特性类
@@ -45,7 +42,7 @@ namespace Framework.Core.Localized
                 else
                 {
                     //用自定义替换系统的数字验证
-                    var attribute = new NumericAttribute { ErrorMessage = Localization.GetLang("The field {0} must be a number.") };
+                    var attribute = new NumericAttribute { ErrorMessage = TranslationHelper.L("Custom.NumericModelValidator") };
                     var validator = new DataAnnotationsModelValidator(metadata, context, attribute);
                     validators.Add(validator);
                 }

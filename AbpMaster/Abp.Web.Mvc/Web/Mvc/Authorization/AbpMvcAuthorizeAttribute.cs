@@ -27,12 +27,19 @@ namespace Abp.Web.Mvc.Authorization
         /// <inheritdoc/>
         public bool RequireAllPermissions { get; set; }
 
+        public AbpMvcAuthorizeAttribute()
+        {
+
+        }
+
         /// <summary>
         /// Creates a new instance of <see cref="AbpMvcAuthorizeAttribute"/> class.
         /// </summary>
+        /// <param name="moduleCode">The code of module code or menu code </param>
         /// <param name="permissions">A list of permissions to authorize</param>
-        public AbpMvcAuthorizeAttribute(params string[] permissions)
+        public AbpMvcAuthorizeAttribute(string moduleCode, params string[] permissions)
         {
+            ModuleCode = moduleCode;
             Permissions = permissions;
         }
 

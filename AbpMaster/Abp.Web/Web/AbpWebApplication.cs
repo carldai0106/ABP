@@ -41,7 +41,6 @@ namespace Abp.Web
         {
             AbpBootstrapper.IocManager.RegisterIfNot<IAssemblyFinder, WebAssemblyFinder>();
             var cache = new ThreadSafeObjectCache<object>(new MemoryCache("_AbpWebApplicationCache"), TimeSpan.FromHours(3));
-            //AbpBootstrapper.IocManager.RegisterIfNot<ThreadSafeObjectCache<string>>();
 
             AbpBootstrapper.IocManager.IocContainer.Register(
                 Component.For<ThreadSafeObjectCache<object>>().Named("_AbpBootstrapper").Instance(cache).LifestyleTransient());

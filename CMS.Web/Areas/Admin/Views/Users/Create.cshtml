@@ -1,7 +1,8 @@
-﻿@model CMS.Application.User.Dto.UserEditDto
+﻿@using CMS.Application.Role.Dto
+@model CMS.Application.User.Dto.UserEditDto
 @{
     ViewBag.Title = "New User";
-    //var roles = ViewBag.Roles as IEnumerable<RoleEntry> ?? new List<RoleEntry>();
+    var roles = ViewBag.Roles as IReadOnlyList<RoleEditDto>;
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
@@ -32,20 +33,20 @@
                         </div>
                     </div>
 
-                    @*<div class="form-group">
+                    <div class="form-group">
                         @Html.LabelFor(x => x.Password, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
                         <div class="col-md-3 col-sm-4 col-xs-12">
                             @Html.PasswordFor(x => x.Password, new { @class = "form-control" })
                             @Html.ValidationMessageFor(x => x.Password)
                         </div>
 
-                        @Html.LabelFor(x => x.NonPassword, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
+                        @Html.LabelFor(x => x.ConfimPassword, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
                         <div class="col-md-3 col-sm-4 col-xs-12">
-                            @Html.PasswordFor(x => x.NonPassword, new {@class = "form-control"})
-                            @Html.ValidationMessageFor(x => x.NonPassword)
+                            @Html.PasswordFor(x => x.ConfimPassword, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(x => x.ConfimPassword)
                         </div>
 
-                    </div>*@
+                    </div>
 
                     <div class="form-group">
                         @Html.LabelFor(x => x.FirstName, new { @class = "col-md-2 col-sm-2 col-xs-12 control-label" })
@@ -61,17 +62,17 @@
                         </div>
                     </div>
 
-                    @*<div class="form-group">
+                    <div class="form-group">
                         <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
                         <div class="col-md-8 col-sm-10 col-xs-12">
                             <ul class="ul-list">
-                                <li class="title" style="border-bottom:1px solid #ccc;">@Html.Lang("Assigned Roles to User")</li>
+                                <li class="title" style="border-bottom:1px solid #ccc;">@L("Form.Title.AssignedRolesToUser")</li>
                                 <li>
                                     <ul class="ul-chk-list">
                                         @foreach (var role in roles)
                                         {
-                                            var chkNameOrId = "Role_" + role.RoleId;
-                                            var userRoleName = "UserRole_" + role.RoleId;
+                                            var chkNameOrId = "Role_" + role.Id;
+                                            var userRoleName = "UserRole_" + role.Id;
                                             <li class="gray-bg">
                                                 <label for="@chkNameOrId">
                                                     <input type="hidden" name="@userRoleName" value="0" />
@@ -84,14 +85,14 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>*@
+                    </div>
 
                     <div class="form-group">
                         <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
                         <div class="col-md-8 col-sm-10 col-xs-12 text-center">
-                            <a href="~/Admin/Users/Index" class="btn btn-info btn-sm">Cancel</a>
+                            <a href="~/Admin/Users/Index" class="btn btn-info btn-sm">@L("Form.Cancel")</a>
                             <span class="btn-space"></span>
-                            <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                            <button type="submit" class="btn btn-primary btn-sm">@L("Form.Save")</button>
                         </div>
                     </div>
                     

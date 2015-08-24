@@ -26,7 +26,7 @@ namespace Abp.EntityFramework.Repositories
 
             if (entities.IsNullOrEmpty())
             {
-                throw new AbpException("No class found derived from Entity or Entity<>.");
+                throw new AbpException("No class found derived from IEntity or IEntity<>.");
             }
 
             var dbContextTypes =

@@ -69,10 +69,11 @@ namespace CMS.Application.User
 
         }
 
-        public async Task CreateUser(CreateUserDto input)
+        public async Task<Guid> CreateUser(CreateUserDto input)
         {
             var user = input.MapTo<UserEntity>();
-            user.Id = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+            user.Id = Guid.NewGuid(); 
 
             if (!input.Password.IsNullOrEmpty())
             {
@@ -103,6 +104,8 @@ namespace CMS.Application.User
             }
 
             await _repository.InsertAsync(user);
+
+            return user.Id;
         }
 
         public async Task<UserEditDto> GetUser(string userName)

@@ -26,6 +26,7 @@ namespace CMS.Application.Role.Dto
         [StringLength(MaxDescriptionLength)]
         public string Description { get; set; }
         public virtual bool IsActive { get; set; }
+        public virtual int Order { get; set; }
         public virtual ICollection<RoleRightDto> RoleRights { get; set; }
     }
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 
-namespace Framework.Core.Localized
+namespace Abp.Web.Mvc.Localized
 {
     public class LocalizedRemote : RemoteAttribute
     {
@@ -27,7 +24,9 @@ namespace Framework.Core.Localized
 
         public override string FormatErrorMessage(string name)
         {
-            return string.Format(Localization.GetLang(base.ErrorMessage), name);
+            return string.Format(TranslationHelper.L(ErrorMessage), name);
         }
+
+        
     }
 }

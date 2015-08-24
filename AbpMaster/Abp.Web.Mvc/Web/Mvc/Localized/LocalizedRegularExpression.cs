@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Framework.Core.Localized
+namespace Abp.Web.Mvc.Localized
 {
     public class LocalizedRegularExpression : RegularExpressionAttribute
     {
@@ -14,7 +11,7 @@ namespace Framework.Core.Localized
 
         public override string FormatErrorMessage(string name)
         {
-            return string.Format(Localization.GetLang(ErrorMessage), name);
+            return string.Format(TranslationHelper.L(ErrorMessage), name);
         }       
     }
 }

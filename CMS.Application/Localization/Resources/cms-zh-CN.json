@@ -32,6 +32,30 @@
         "CanNotDeleteAdminUser": "不能删除默认管理员{0}!",
         "DuplicateModuleCode": "模块编码/菜单编码 '{0}' 已被占用.",
         "DuplicateRoleCode": "角色编码 '{0}' 已被占用.",
-        "UserName" :  "用户名"
+
+        "Custom.NumericModelValidator": "字段 '{0}' 必须是数字.",
+        "Custom.StringLength": "'{0}' 的长度必须是 {1} 到 {2} 个字符长.",
+
+        "Created.RecordSucceed": "记录 : '{0}' 已被创建.",
+
+        "Login.InvalidUserNameOrEmailAddress": "无效的用户名或者邮箱地址.",        
+        "Login.InvalidPassword": "无效的密码.",
+        "Login.UserIsNotActive": "用户没有被激活.",
+        "Login.InvalidTenancyName": "无效的租户名称.",
+        "Login.TenantIsNotActive": "租户没有被激活.",
+        "Login.UserEmailIsNotConfirmed": "用户邮箱没有被激活.",
+
+        "Dto.UserName": "用户名",
+        "Dto.Password": "密码",
+        "Dto.ReenterPassword": "确认密码",
+        "Dto.Email": "邮箱",
+        "Dto.FirstName": "姓",
+        "Dto.LastName": "名",
+        "Dto.InvaildEmail": "{0} 不符合要求; 例如：xx@xx.com.",
+        "Dto.DuplicateUserName":  "{0}已被占用.",
+
+        "Form.Cancel": "取 消",
+        "Form.Save": "保 存",
+        "Form.Title.AssignedRolesToUser": "给用户分配角色"
     }
 }

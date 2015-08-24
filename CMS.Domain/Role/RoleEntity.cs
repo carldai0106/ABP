@@ -29,6 +29,7 @@ namespace CMS.Domain.Role
         [StringLength(MaxDescriptionLength)]
         public string Description { get; set; }
         public virtual bool IsActive { get; set; }
+        public virtual int Order { get; set; }
         [ForeignKey("TenantId")]
         public virtual TenantEntity Tenant { get; set; }
 
@@ -37,19 +38,5 @@ namespace CMS.Domain.Role
 
         [ForeignKey("RoleId")]
         public virtual ICollection<RoleRightEntity> RoleRights { get; set; }
-
-        protected RoleEntity()
-        {
-
-        }
-
-        public RoleEntity(Guid tenantId, string roleCode, string displayName, string description)
-        {
-            Id = Guid.NewGuid();
-            TenantId = tenantId;
-            RoleCode = roleCode;
-            DisplayName = displayName;
-            Description = description;
-        }
     }
 }

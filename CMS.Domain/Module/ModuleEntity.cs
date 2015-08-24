@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Abp.Domain.Entities;
 using CMS.Domain.ActionModule;
 using CMS.Domain.Tenant;
@@ -49,10 +46,5 @@ namespace CMS.Domain.Module
 
         [ForeignKey("ModuleId")]
         public virtual ICollection<ActionModuleEntity> ActionModules { get; set; }
-
-        public ModuleEntity()
-        {
-            
-        }
     }
 }
