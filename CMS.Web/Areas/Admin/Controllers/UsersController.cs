@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Abp.Application.Services.Dto;
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.Localization;
@@ -27,11 +28,11 @@ namespace CMS.Web.Areas.Admin.Controllers
         private readonly IUserAppService _userAppService;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly IRoleAppService _roleAppService;
-        private readonly IUnitOfWorkManager<Guid,Guid> _unitOfWorkManager;
+        private readonly IUnitOfWorkManager<Guid, Guid> _unitOfWorkManager;
 
         public UsersController(
             IUnitOfWorkManager<Guid, Guid> unitOfWorkManager,
-            IUserAppService userAppService, 
+            IUserAppService userAppService,
             IRoleAppService roleAppService,
             IMultiTenancyConfig multiTenancyConfig)
         {
@@ -96,7 +97,7 @@ namespace CMS.Web.Areas.Admin.Controllers
         {
             AuthenticationManager.SignOut();
             return RedirectToAction("Login");
-        } 
+        }
 
         private void SignIn(UserEditDto user, ClaimsIdentity identity = null, bool rememberMe = false)
         {
@@ -130,12 +131,12 @@ namespace CMS.Web.Areas.Admin.Controllers
         [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Create")]
         public async Task<ActionResult> Create()
         {
-            var roles = await _roleAppService.GetRoles(new GetRolesInput(){ Sorting = "Order ASC" });
+            var roles = await _roleAppService.GetRoles(new GetRolesInput() { Sorting = "Order ASC" });
             ViewBag.Roles = roles.Items;
 
             return View();
         }
-        
+
         [HttpPost, ValidateAntiForgeryToken]
         [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Create")]
         public async Task<ActionResult> Create(CreateUserDto model, FormCollection collection)
@@ -146,6 +147,7 @@ namespace CMS.Web.Areas.Admin.Controllers
                 {
                     using (var uow = _unitOfWorkManager.Begin())
                     {
+                        model.IsActive = true;
                         var userId = await _userAppService.CreateUser(model);
 
                         var roles = await _roleAppService.GetRoles(new GetRolesInput());
@@ -159,6 +161,7 @@ namespace CMS.Web.Areas.Admin.Controllers
                             {
                                 info.RoleId = item.Id;
                                 info.UserId = userId;
+                                info.Status = true;
                                 list.Add(info);
                             }
                         }
@@ -181,16 +184,108 @@ namespace CMS.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Create", "CMS.Update")]
         public async Task<JsonResult> CheckUserName(string userName)
         {
+            return await CheckExists(userName);
+        }
+
+        [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Create", "CMS.Update")]
+        public async Task<JsonResult> CheckEmail(string email, string initialEmail)
+        {
+            if (email == initialEmail)
+                return Json(true, JsonRequestBehavior.AllowGet);
+
+            return await CheckExists(email);
+        }
+
+        private async Task<JsonResult> CheckExists(string value)
+        {
             var flag = true;
-            var info = await _userAppService.GetUser(userName);
+            var info = await _userAppService.GetUser(value);
             if (info != null)
             {
                 flag = false;
             }
 
             return Json(flag, JsonRequestBehavior.AllowGet);
-        } 
+        }
+
+        [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Update")]
+        public async Task<ActionResult> Edit(Guid? id)
+        {
+            if (!id.HasValue)
+                throw new UserFriendlyException("The paramenter id is null.");
+
+            var roles = await _roleAppService.GetRoles(new GetRolesInput() { Sorting = "Order ASC" });
+            ViewBag.Roles = roles.Items;
+
+            var info = await _userAppService.GetUser(new NullableIdInput<Guid> {Id = id});
+
+            return View(info);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Update")]
+        public async Task<ActionResult> Edit(UserEditDto model, FormCollection collection)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var uow = _unitOfWorkManager.Begin())
+                    {
+                        model.IsActive = true;
+                        await _userAppService.UpdateUser(model);
+
+                        var roles = await _roleAppService.GetRoles(new GetRolesInput());
+                        var list = new List<UserRoleDto>();
+                        foreach (var item in roles.Items)
+                        {
+                            var info = new UserRoleDto();
+                            var chkName = "Role_" + item.Id;
+                            var chkVal = collection[chkName];
+                            var userRole = "UserRole_" + item.Id;
+
+                            Guid userRoleId;
+                            bool status = Guid.TryParse(collection[userRole], out userRoleId);
+                            if (status)
+                                info.Id = userRoleId;
+
+                            if (chkVal == "on")
+                            {
+                                info.RoleId = item.Id;
+                                info.UserId = model.Id;
+                                info.Status = true;
+                                list.Add(info);
+                            }
+                            else
+                            {
+                                info.RoleId = item.Id;
+                                info.UserId = model.Id;
+                                info.Status = false;
+
+                                if (status)
+                                    list.Add(info);
+                            }
+                        }
+
+                        await _userAppService.CreateOrUpdate(list);
+
+                        await uow.CompleteAsync();
+                    }
+
+                    string lang = string.Format(L("Updated.RecordSucceed").Localize(), model.UserName);
+
+                    this.AddModelMessage("", lang, MessageTypes.Information);
+                }
+                catch (Exception ex)
+                {
+                    this.AddModelMessage("exception", ex.Message);
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

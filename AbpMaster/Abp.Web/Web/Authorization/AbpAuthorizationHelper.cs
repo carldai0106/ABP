@@ -42,7 +42,6 @@ namespace Abp.Web.Authorization
             Type userId;
             OutTypeOfTenantIdAndUserId(out tenantId, out userId);
             var authorizeAttributeHelperType = typeof(IAuthorizeAttributeHelper<,>).MakeGenericType(tenantId, userId);
-
             return authorizeAttributeHelperType;
         }
 

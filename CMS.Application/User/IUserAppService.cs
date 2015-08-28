@@ -12,7 +12,7 @@ namespace CMS.Application.User
     public interface IUserAppService : IApplicationService
     {
         Task<Guid> CreateUser(CreateUserDto input);
-        Task<UserEditDto> GetUser(string userName);
+        Task<UserEditDto> GetUser(string userNameOrEmail);
         Task<UserEditDto> GetUser(NullableIdInput<Guid> input);
         Task UpdateUser(UserEditDto input);
         Task DeleteUser(IdInput<Guid> input);

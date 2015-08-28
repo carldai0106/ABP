@@ -1,14 +1,14 @@
 ﻿@using CMS.Application.Role.Dto
 @model CMS.Application.User.Dto.UserEditDto
 @{
-    ViewBag.Title = "New User";
+    ViewBag.Title = L("Users.NewUser");
     var roles = ViewBag.Roles as IReadOnlyList<RoleEditDto>;
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
     <div class="breadcrumb">
-        <a href="#">Setup</a>
-        <a href="~/Admin/Users/Index">User List</a>
+        <a href="#">@L("Users.Setup")</a>
+        <a href="~/Admin/Users/Index">@L("Users.UserList")</a>
         <a href="#" class="active">@ViewBag.Title</a>
     </div>
 </div>
@@ -66,7 +66,7 @@
                         <label class="col-md-2 col-sm-2 col-xs-12 control-label"></label>
                         <div class="col-md-8 col-sm-10 col-xs-12">
                             <ul class="ul-list">
-                                <li class="title" style="border-bottom:1px solid #ccc;">@L("Form.Title.AssignedRolesToUser")</li>
+                                <li class="title" style="border-bottom:1px solid #ccc;">@L("Users.AssignedRolesToUser")</li>
                                 <li>
                                     <ul class="ul-chk-list">
                                         @foreach (var role in roles)

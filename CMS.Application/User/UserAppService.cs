@@ -108,11 +108,10 @@ namespace CMS.Application.User
             return user.Id;
         }
 
-        public async Task<UserEditDto> GetUser(string userName)
+        public async Task<UserEditDto> GetUser(string userNameOrEmail)
         {
-            var user = await _repository.FirstOrDefaultAsync(x => x.UserName == userName);
+            var user = await _repository.FirstOrDefaultAsync(x => x.UserName == userNameOrEmail || x.Email == userNameOrEmail);
             var ue = user.MapTo<UserEditDto>();
-            //ue.Id = user.Id;
             return ue;
         }
 
@@ -199,6 +198,7 @@ namespace CMS.Application.User
 
         public async Task CreateOrUpdate(IEnumerable<UserRoleDto> inputs)
         {
+
             foreach (var item in inputs)
             {
                 var rs = item.MapTo<UserRoleEntity>();
@@ -218,6 +218,8 @@ namespace CMS.Application.User
                     await _userRoleRepository.UpdateAsync(rs);
                 }
             }
+
+           
         }
 
         public async Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode, string actionCode)

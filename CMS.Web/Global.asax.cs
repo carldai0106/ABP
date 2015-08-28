@@ -8,12 +8,11 @@ namespace CMS.Web
 {
     public class MvcApplication : AbpWebApplication<Guid,Guid>
     {
-        protected void Application_Start()
+        protected override void Application_Start(object sender, EventArgs e)
         {
-            //AreaRegistration.RegisterAllAreas();
-            //RouteConfig.RegisterRoutes(RouteTable.Routes);
-
-            
+            base.Application_Start(sender, e);
+            HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
+            //ModelBinders.Binders.Add(typeof(Guid), new GuidModelBinder());
         }
     }
 }

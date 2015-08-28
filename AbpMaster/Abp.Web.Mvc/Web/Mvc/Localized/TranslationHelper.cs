@@ -14,7 +14,9 @@ namespace Abp.Web.Mvc.Localized
         static TranslationHelper()
         {
             Translation = new Lazy<Translation>(
-              () => IocManager.Instance.Resolve<Translation>());
+                () => IocManager.Instance.IsRegistered<Translation>()
+                    ? IocManager.Instance.Resolve<Translation>()
+                    : new Translation());
         }
 
         /// <summary>

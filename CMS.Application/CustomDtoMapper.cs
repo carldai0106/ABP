@@ -41,7 +41,8 @@ namespace CMS.Application
             Mapper.CreateMap<UserEntity, UserEditDto>()
                 .ForMember(dto => dto.Password, options => options.Ignore())
                 .ReverseMap()
-                .ForMember(user => user.Password, options => options.Ignore());
+                .ForMember(user => user.Password, options => options.Ignore())
+                .ForMember(user => user.UserRoles, options => options.Ignore());
             
         }
     }

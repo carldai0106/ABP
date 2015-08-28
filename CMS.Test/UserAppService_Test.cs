@@ -69,6 +69,7 @@ namespace CMS.Test
             var ue =  user.MapTo<UserEditDto>();
             ue.Email = "dc01062@126.com";
             ue.Password = "123321";
+            ue.ConfimPassword = "123321";
             ue.FirstName = "vivien";
             ue.LastName = "zhu";
 

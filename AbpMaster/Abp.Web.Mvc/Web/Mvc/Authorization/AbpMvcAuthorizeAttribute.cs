@@ -27,6 +27,9 @@ namespace Abp.Web.Mvc.Authorization
         /// <inheritdoc/>
         public bool RequireAllPermissions { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public AbpMvcAuthorizeAttribute()
         {
 

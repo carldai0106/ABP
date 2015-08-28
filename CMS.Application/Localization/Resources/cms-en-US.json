@@ -33,6 +33,13 @@
         "DuplicateModuleCode": "Module Code/Menu Code '{0}' is already taken.",
         "DuplicateRoleCode": "Role Code '{0}' is already taken.",
 
+        "Tools.Add": "Add",
+        "Tools.Edit": "Edit",
+        "Tools.Delete": "Delete",
+
+        "Search.AllOptions": "All Options",
+        "Search.Search...": "Search...",
+
         "Custom.NumericModelValidator": "The field {0} must be a number.",
         "Custom.StringLength": "Please enter {0} between {1} and {2} characters long.",
 
@@ -42,8 +49,9 @@
         "Login.InvalidTenancyName": "Invalid tenancy name.",
         "Login.TenantIsNotActive": "Tenant is not active.",
         "Login.UserEmailIsNotConfirmed": "User email is not confirmed.",
-        
+
         "Created.RecordSucceed": "Record : '{0}' created.",
+        "Updated.RecordSucceed": "Record : '{0}' updated.",
 
         "Dto.UserName": "User Name",
         "Dto.Password": "Password",
@@ -53,10 +61,16 @@
         "Dto.LastName": "Last Name",
         "Dto.InvaildEmail": "{0} is invaild; Eg : xx@xx.com.",
         "Dto.DuplicateUserName":  "{0} is already taken.",
+        "Dto.DuplicateEmail": "{0} is already taken.",
 
         "Form.Cancel": "Cancel",
         "Form.Save": "Save",
 
-        "Form.Title.AssignedRolesToUser" :  "Assigned roles to user"
+        "Users.AssignedRolesToUser": "Assigned roles to user",
+        "Users.NewUser": "New User",
+        "Users.EditUser":  "Edit User",
+        "Users.Setup": "Setup",
+        "Users.UserList": "User List",
+        "Users.ModifyPassword": "If you would like to change the password, please enter it. Otherwise leave it blank."
     }
 }

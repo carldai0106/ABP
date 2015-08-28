@@ -9,7 +9,6 @@ using CMS.Domain.User;
 
 namespace CMS.Application.User.Dto
 {
-    
     public class UserEditDto : IDoubleWayDto
     {
         public const int MinPasswordLength = 6;
@@ -35,6 +34,7 @@ namespace CMS.Application.User.Dto
         [LocalizedDisplay("Dto.Email")]
         [Required]
         [LocalizedRegularExpression(RegexUtils.EmailPattern, ErrorMessage="Dto.InvaildEmail")]
+        [LocalizedRemote("CheckEmail", "Users", AdditionalFields = "InitialEmail", ErrorMessage = "Dto.DuplicateEmail")]
         [StringLength(UserEntity.MaxEmailLength)]
         public virtual string Email { get; set; }
 

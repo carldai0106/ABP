@@ -33,10 +33,18 @@
         "DuplicateModuleCode": "模块编码/菜单编码 '{0}' 已被占用.",
         "DuplicateRoleCode": "角色编码 '{0}' 已被占用.",
 
+        "Tools.Add": "新增",
+        "Tools.Edit": "编辑",
+        "Tools.Delete": "删除",
+
+        "Search.AllOptions": "所有选项",
+        "Search.Search...": "搜索...",
+
         "Custom.NumericModelValidator": "字段 '{0}' 必须是数字.",
         "Custom.StringLength": "'{0}' 的长度必须是 {1} 到 {2} 个字符长.",
 
         "Created.RecordSucceed": "记录 : '{0}' 已被创建.",
+        "Updated.RecordSucceed": "记录 : '{0}' 已被更新.",
 
         "Login.InvalidUserNameOrEmailAddress": "无效的用户名或者邮箱地址.",        
         "Login.InvalidPassword": "无效的密码.",
@@ -52,10 +60,17 @@
         "Dto.FirstName": "姓",
         "Dto.LastName": "名",
         "Dto.InvaildEmail": "{0} 不符合要求; 例如：xx@xx.com.",
-        "Dto.DuplicateUserName":  "{0}已被占用.",
+        "Dto.DuplicateUserName": "{0}已被占用.",
+        "Dto.DuplicateEmail": "{0}已被占用.",
 
         "Form.Cancel": "取 消",
         "Form.Save": "保 存",
-        "Form.Title.AssignedRolesToUser": "给用户分配角色"
+        
+        "Users.AssignedRolesToUser": "给用户分配角色",
+        "Users.NewUser": "新增用户",
+        "Users.EditUser": "编辑用户",
+        "Users.Setup": "设置",
+        "Users.UserList": "用户信息列表",
+        "Users.ModifyPassword": "如果您想修改密码，请输入新密码；否则，请留空."
     }
 }

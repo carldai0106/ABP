@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<CMS.Application.User.Dto.UserEditDto>
 @{
-    ViewBag.Title = "User List";
+    ViewBag.Title = L("Users.UserList");
     string searchBy = ViewBag.SearchBy;
     string searchContent = ViewBag.SearchContext;
 
@@ -14,7 +14,7 @@
 
 <div class="breadcrumbs" id="breadcrumbs">
     <div class="breadcrumb">
-        <a href="#">Setup</a>
+        <a href="#">@L("Users.Setup")</a>
         <a href="~/Admin/Users/Index" class="active">@ViewBag.Title</a>
     </div>
 </div>
@@ -34,15 +34,15 @@
                     <ul class="nav-tools">
                         @if (hasAdd)
                         {
-                            <li><a href="~/Admin/Users/Create/" class="nav-btn"><i class="fa fa-plus"></i><span>Add</span></a></li>
+                            <li><a href="~/Admin/Users/Create/" class="nav-btn"><i class="fa fa-plus"></i><span>@L("Tools.Add")</span></a></li>
                         }
                         @if (hasEdit)
                         {
-                            <li><a href="#" rel="~/Admin/Users/Edit/" class="nav-btn edit"><i class="fa fa-edit"></i><span>Edit</span></a></li>                            
+                            <li><a href="#" rel="~/Admin/Users/Edit/" class="nav-btn edit"><i class="fa fa-edit"></i><span>@L("Tools.Edit")</span></a></li>
                         }
                         @if (hasDelete)
                         {
-                            <li><a href="#" rel="~/Admin/Users/Delete/" class="nav-btn delete"><i class="fa fa-remove"></i><span>Delete</span></a></li>
+                            <li><a href="#" rel="~/Admin/Users/Delete/" class="nav-btn delete"><i class="fa fa-remove"></i><span>@L("Tools.Delete")</span></a></li>
                         }
                     </ul>
                 </div>
@@ -55,14 +55,14 @@
                         <form class="navbar-form navbar-left clear-border" action="@Url.Content("~/Admin/Users/Index")" method="get" id="searchform">
                             <div class="form-group">
                                 <select class="form-control" id="SearchBy" name="SearchBy">
-                                    <option value="">All Options</option>
-                                    <option value="UserName" @(searchBy == "UserName" ? "selected" : "")>User Name</option>
-                                    <option value="FirstName" @(searchBy == "FirstName" ? "selected" : "")>First Name</option>
-                                    <option value="LastName" @(searchBy == "LastName" ? "selected" : "")>Last Name</option>
+                                    <option value="">@L("Search.AllOptions")</option>
+                                    <option value="UserName" @(searchBy == "UserName" ? "selected" : "")>@L("Dto.UserName")</option>
+                                    <option value="FirstName" @(searchBy == "FirstName" ? "selected" : "")>@L("Dto.FirstName")</option>
+                                    <option value="LastName" @(searchBy == "LastName" ? "selected" : "")>@L("Dto.LastName")</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <input name="SearchContent" id="SearchContent" type="text" class="form-control" placeholder="Search...">
+                                <input name="SearchContent" id="SearchContent" type="text" class="form-control" placeholder="@L("Search.Search...")">
                             </div>
                             <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                         </form>
