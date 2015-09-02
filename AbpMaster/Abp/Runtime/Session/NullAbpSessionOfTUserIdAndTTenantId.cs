@@ -3,7 +3,7 @@
 namespace Abp.Runtime.Session
 {
     /// <summary>
-    /// Implements null object pattern for <see cref="IAbpSession"/>.
+    /// Implements null object pattern for <see cref="IAbpSession{TTenantId, TUserId}"/>.
     /// </summary>
     public class NullAbpSession<TTenantId, TUserId> : IAbpSession<TTenantId, TUserId>
         where TTenantId : struct
@@ -16,13 +16,7 @@ namespace Abp.Runtime.Session
         private static readonly NullAbpSession<TTenantId, TUserId> SingletonInstance = new NullAbpSession<TTenantId, TUserId>();
 
         /// <inheritdoc/>
-        public TUserId? UserId
-        {
-            get
-            {
-                return null;
-            }
-        }
+        public TUserId? UserId { get { return null; } }
 
         /// <inheritdoc/>
         public TTenantId? TenantId { get { return null; } }

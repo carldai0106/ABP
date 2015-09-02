@@ -16,7 +16,6 @@ using Abp.Localization.Sources;
 using Abp.Reflection;
 using Abp.Runtime.Session;
 using Abp.Timing;
-//Todo : it is from Abp.Web carl
 using Abp.Web.Models;
 using Abp.Web.Mvc.Controllers.Results;
 using Castle.Core.Logging;

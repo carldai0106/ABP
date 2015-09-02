@@ -49,7 +49,7 @@ namespace Abp.NHibernate.Uow
                 ? _sessionFactory.OpenSession(DbConnection)
                 : _sessionFactory.OpenSession();
 
-
+            
 
             if (Options.IsTransactional == true)
             {
@@ -57,7 +57,7 @@ namespace Abp.NHibernate.Uow
                     ? Session.BeginTransaction(Options.IsolationLevel.Value.ToSystemDataIsolationLevel())
                     : Session.BeginTransaction();
             }
-
+            
             this.CheckAndSetMayHaveTenant();
             this.CheckAndSetMustHaveTenant();
 
@@ -128,12 +128,12 @@ namespace Abp.NHibernate.Uow
 
         protected override void ApplyEnableFilter(string filterName)
         {
-            if (Session.GetEnabledFilter(filterName) == null)
+            if( Session.GetEnabledFilter(filterName) == null )
                 Session.EnableFilter(filterName);
         }
         protected override void ApplyDisableFilter(string filterName)
         {
-            if (Session.GetEnabledFilter(filterName) != null)
+            if ( Session.GetEnabledFilter(filterName) != null )
                 Session.DisableFilter(filterName);
         }
 

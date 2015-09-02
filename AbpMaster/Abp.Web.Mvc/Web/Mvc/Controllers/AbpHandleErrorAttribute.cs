@@ -5,7 +5,6 @@ using Abp.Dependency;
 using Abp.Events.Bus;
 using Abp.Events.Bus.Exceptions;
 using Abp.Logging;
-//Todo : it is from Abp.Web carl
 using Abp.Web.Models;
 using Abp.Web.Mvc.Controllers.Results;
 using Abp.Web.Mvc.Models;

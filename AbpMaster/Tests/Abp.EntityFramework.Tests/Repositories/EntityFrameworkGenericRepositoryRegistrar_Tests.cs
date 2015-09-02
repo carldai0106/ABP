@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
 using Abp.EntityFramework.Repositories;
@@ -14,21 +17,22 @@ using Xunit;
 
 namespace Abp.EntityFramework.Tests.Repositories
 {
-    public class EntityFrameworkGenericRepositoryRegistrar_Tests : TestBaseWithLocalIocManager
+    public class EntityFrameworkGenericRepositoryRegistrar_Tests: TestBaseWithLocalIocManager
     {
-        [Fact]
-        public void Should_Resolve_Generic_Repositories()
+        public EntityFrameworkGenericRepositoryRegistrar_Tests()
         {
-            var fakeDbContextProvider = NSubstitute.Substitute.For<IDbContextProvider<MyDbContext<int, long>, int, long>>();
+            var fakeMainDbContextProvider = NSubstitute.Substitute.For<IDbContextProvider<MyMainDbContext<int,long>, int, long>>();
+            var fakeModuleDbContextProvider = NSubstitute.Substitute.For<IDbContextProvider<MyModuleDbContext<int, long>, int, long>>();
 
             LocalIocManager.IocContainer.Register(
                 Component.For<ITypeFinder>().ImplementedBy<TypeFinder>(),
-                Component.For<IDbContextProvider<MyDbContext<int, long>, int, long>>().UsingFactoryMethod(() => fakeDbContextProvider)
+                Component.For<IDbContextProvider<MyMainDbContext<int, long>, int, long>>().UsingFactoryMethod(() => fakeMainDbContextProvider),
+                Component.For<IDbContextProvider<MyModuleDbContext<int, long>, int, long>>().UsingFactoryMethod(() => fakeModuleDbContextProvider)
                 );
 
             var typeFinder = LocalIocManager.Resolve<ITypeFinder>();
             var finder = typeFinder as TypeFinder;
-            finder.AssemblyFinder = new AssembleFinder();
+            finder.AssemblyFinder = new Repositories.AssembleFinder();
 
 
             var entities = finder.Find(
@@ -38,56 +42,122 @@ namespace Abp.EntityFramework.Tests.Repositories
                    )
                );
 
-            //EntityFrameworkGenericRepositoryRegistrar.RegisterGenericRepositories<int, long>(finder,
-            //    LocalIocManager);
+            EntityFrameworkGenericRepositoryRegistrar.RegisterGenericRepositories<int, long>(finder, LocalIocManager);
+            EntityFrameworkGenericRepositoryRegistrar.RegisterGenericRepositories<int, long>(typeof(MyMainDbContext<int, long>), entities, LocalIocManager);
 
-            var dbContextType = typeof(MyDbContext<int, long>);
-            EntityFrameworkGenericRepositoryRegistrar.RegisterForDbContext<int, long>(dbContextType, LocalIocManager);
-
-            var entity1Repository = LocalIocManager.Resolve<IRepository<MyEntity1>>();
-            entity1Repository.ShouldNotBe(null);
-
-            var entity1RepositoryWithPk = LocalIocManager.Resolve<IRepository<MyEntity1, int>>();
-            entity1RepositoryWithPk.ShouldNotBe(null);
-
-            var entity2Repository = LocalIocManager.Resolve<IRepository<MyEntity2, long>>();
-            entity2Repository.ShouldNotBe(null);
+            //EntityFrameworkGenericRepositoryRegistrar.RegisterForDbContext<int, long>(typeof(MyModuleDbContext<int, long>), LocalIocManager);
+            //EntityFrameworkGenericRepositoryRegistrar.RegisterForDbContext<int, long>(typeof(MyMainDbContext<int, long>), LocalIocManager);
         }
-       
-    }
 
-    public class AssembleFinder : IAssemblyFinder
-    {
-        public List<Assembly> GetAllAssemblies()
+        public class AssembleFinder : IAssemblyFinder
         {
-            var list = System.AppDomain.CurrentDomain.GetAssemblies();
-            var types = list.Where(x => x.FullName.Contains("Abp.EntityFramework.Tests"));
+            public List<Assembly> GetAllAssemblies()
+            {
+                var list = System.AppDomain.CurrentDomain.GetAssemblies();
+                var types = list.Where(x => x.FullName.Contains("Abp.EntityFramework.Tests"));
 
-            return types.ToList();
+                return types.ToList();
+            }
+        }
+
+        [Fact]
+        public void Should_Resolve_Generic_Repositories()
+        {
+            //Entity 1 (with default PK)
+            var entity1Repository = LocalIocManager.Resolve<IRepository<MyEntity11>>();
+            entity1Repository.ShouldNotBe(null);
+            (entity1Repository is EfRepositoryBase<MyMainDbContext<int, long>, MyEntity11, int, long>).ShouldBe(true);
+
+            //Entity 1 (with specified PK)
+            var entity1RepositoryWithPk = LocalIocManager.Resolve<IRepository<MyEntity11, int>>();
+            entity1RepositoryWithPk.ShouldNotBe(null);
+            (entity1RepositoryWithPk is EfRepositoryBase<MyMainDbContext<int, long>, MyEntity11, int, int, long>).ShouldBe(true);
+
+            //Entity 2
+            var entity2Repository = LocalIocManager.Resolve<IRepository<MyEntity22, long>>();
+            (entity2Repository is EfRepositoryBase<MyMainDbContext<int, long>, MyEntity22, long, int, long>).ShouldBe(true);
+            entity2Repository.ShouldNotBe(null);
+
+            //Entity 3
+            var entity3Repository = LocalIocManager.Resolve<IMyModuleRepository<MyEntity33, Guid>>();
+            (entity3Repository is EfRepositoryBase<MyModuleDbContext<int, long>, MyEntity33, Guid, int, long>).ShouldBe(true);
+            entity3Repository.ShouldNotBe(null);
+        }
+
+    }
+
+
+    public class MyMainDbContext<TTenantId, TUserId> : MyBaseDbContext1<TTenantId, TUserId>
+        where TTenantId : struct
+        where TUserId : struct
+    {
+        public virtual DbSet<MyEntity22> MyEntities2 { get; set; }
+    }
+
+     [AutoRepositoryTypes(
+            typeof(IMyModuleRepository<>),
+            typeof(IMyModuleRepository<,>),
+            typeof(MyModuleRepositoryBase<>),
+            typeof(MyModuleRepositoryBase<,,,>)
+            )]
+    public class MyModuleDbContext<TTenantId, TUserId> : MyBaseDbContext1<TTenantId, TUserId>
+        where TTenantId : struct
+        where TUserId : struct
+    {
+        public virtual DbSet<MyEntity33> MyEntities3 { get; set; }
+    }
+
+     public abstract class MyBaseDbContext1<TTenantId, TUserId> : AbpDbContext<TTenantId, TUserId>
+        where TTenantId : struct
+        where TUserId : struct
+    {
+        public virtual IDbSet<MyEntity11> MyEntities1 { get; set; }
+    }
+
+    public class MyEntity11 : Entity
+    {
+
+    }
+
+    public class MyEntity22 : Entity<long>
+    {
+
+    }
+
+    public class MyEntity33 : Entity<Guid>
+    {
+
+    }
+
+    public interface IMyModuleRepository<TEntity> : IRepository<TEntity>
+        where TEntity : class, IEntity<int>
+    {
+
+    }
+
+    public interface IMyModuleRepository<TEntity, TPrimaryKey> : IRepository<TEntity, TPrimaryKey>
+        where TEntity : class, IEntity<TPrimaryKey>
+    {
+
+    }
+
+    public class MyModuleRepositoryBase<TEntity, TPrimaryKey, TTenantId, TUserId> : EfRepositoryBase<MyModuleDbContext<TTenantId, TUserId>, TEntity, TPrimaryKey, TTenantId, TUserId>, IMyModuleRepository<TEntity, TPrimaryKey>
+        where TEntity : class, IEntity<TPrimaryKey>
+        where TTenantId : struct
+        where TUserId : struct
+    {
+        public MyModuleRepositoryBase(IDbContextProvider<MyModuleDbContext<TTenantId, TUserId>, TTenantId, TUserId> dbContextProvider)
+            : base(dbContextProvider)
+        {
         }
     }
 
-    public class MyDbContext<TTenantId, TUserId> : MyBaseDbContext<TTenantId, TUserId>
-        where TTenantId : struct
-        where TUserId : struct
+    public class MyModuleRepositoryBase<TEntity> : MyModuleRepositoryBase<TEntity, int, int, long>, IMyModuleRepository<TEntity>
+        where TEntity : class, IEntity<int>
     {
-        public DbSet<MyEntity2> MyEntities2 { get; set; }
-    }
-
-    public abstract class MyBaseDbContext<TTenantId, TUserId> : AbpDbContext<TTenantId, TUserId>
-        where TTenantId : struct
-        where TUserId : struct
-    {
-        public IDbSet<MyEntity1> MyEntities1 { get; set; }
-    }
-
-    public class MyEntity1 : Entity
-    {
-
-    }
-
-    public class MyEntity2 : Entity<long>
-    {
-
+        public MyModuleRepositoryBase(IDbContextProvider<MyModuleDbContext<int, long>, int, long> dbContextProvider)
+            : base(dbContextProvider)
+        {
+        }
     }
 }

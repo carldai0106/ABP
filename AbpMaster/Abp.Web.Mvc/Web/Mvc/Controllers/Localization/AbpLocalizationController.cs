@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Mvc;
+using Abp.Auditing;
 using Abp.Localization;
 using Abp.Timing;
 using Abp.Web.Mvc.Models;
@@ -14,6 +15,7 @@ namespace Abp.Web.Mvc.Controllers.Localization
         where TTenantId : struct
         where TUserId : struct
     {
+		[DisableAuditing]
         public virtual ActionResult ChangeCulture(string cultureName, string returnUrl = "")
         {
             if (!GlobalizationHelper.IsValidCultureCode(cultureName))

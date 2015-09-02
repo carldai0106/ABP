@@ -418,9 +418,6 @@
     <Content Include="Content\plugins\ueditor\lang\zh-cn\images\music.png" />
     <Content Include="Content\plugins\ueditor\lang\zh-cn\images\upload.png" />
     <Content Include="Content\plugins\ueditor\lang\zh-cn\zh-cn.js" />
-    <Content Include="Content\plugins\ueditor\net\Bin\Newtonsoft.Json.dll" />
-    <Content Include="Content\plugins\ueditor\net\Bin\Newtonsoft.Json.pdb" />
-    <Content Include="Content\plugins\ueditor\net\Bin\Newtonsoft.Json.xml" />
     <Content Include="Content\plugins\ueditor\net\net.sln" />
     <Content Include="Content\plugins\ueditor\themes\default\css\ueditor.css" />
     <Content Include="Content\plugins\ueditor\themes\default\css\ueditor.min.css" />
@@ -814,6 +811,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Views\AbpLocalization\" />
+    <Folder Include="Content\plugins\ueditor\net\Bin\" />
     <Folder Include="Content\plugins\ueditor\net\upload\image\" />
   </ItemGroup>
   <ItemGroup>

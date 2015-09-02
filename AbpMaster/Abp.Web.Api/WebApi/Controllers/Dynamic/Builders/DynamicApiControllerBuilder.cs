@@ -14,7 +14,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// <typeparam name="T">Type of the proxied object</typeparam>
         /// <typeparam name="TTenantId"></typeparam>
         /// <typeparam name="TUserId"></typeparam>
-        public static IApiControllerBuilder<T> For<T, TTenantId, TUserId>(string serviceName)
+        public static IApiControllerBuilder<T, TTenantId, TUserId> For<T, TTenantId, TUserId>(string serviceName)
             where TTenantId : struct
             where TUserId : struct
         {

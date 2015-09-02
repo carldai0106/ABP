@@ -7,27 +7,31 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
     /// This interface is used to define a dynamic api controller action.
     /// </summary>
     /// <typeparam name="T">Type of the proxied object</typeparam>
-    public interface IApiControllerActionBuilder<T>
+    /// <typeparam name="TTenantId"></typeparam>
+    /// <typeparam name="TUserId"></typeparam>
+    public interface IApiControllerActionBuilder<T, TTenantId, TUserId>
+        where TTenantId : struct
+        where TUserId : struct
     {
         /// <summary>
         /// Used to specify Http verb of the action.
         /// </summary>
         /// <param name="verb">Http very</param>
         /// <returns>Action builder</returns>
-        IApiControllerActionBuilder<T> WithVerb(HttpVerb verb);
+        IApiControllerActionBuilder<T, TTenantId, TUserId> WithVerb(HttpVerb verb);
 
         /// <summary>
         /// Used to specify another method definition.
         /// </summary>
         /// <param name="methodName">Name of the method in proxied type</param>
         /// <returns>Action builder</returns>
-        IApiControllerActionBuilder<T> ForMethod(string methodName);
+        IApiControllerActionBuilder<T, TTenantId, TUserId> ForMethod(string methodName);
 
         /// <summary>
         /// Tells builder to not create action for this method.
         /// </summary>
         /// <returns>Controller builder</returns>
-        IApiControllerBuilder<T> DontCreateAction();
+        IApiControllerBuilder<T, TTenantId, TUserId> DontCreateAction();
 
         /// <summary>
         /// Builds the controller.
@@ -39,6 +43,6 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// Used to add action filters to apply to this method.
         /// </summary>
         /// <param name="filters"> Action Filters to apply.</param>
-        IApiControllerActionBuilder<T> WithFilters(params IFilter[] filters);
+        IApiControllerActionBuilder<T, TTenantId, TUserId> WithFilters(params IFilter[] filters);
     }
 }

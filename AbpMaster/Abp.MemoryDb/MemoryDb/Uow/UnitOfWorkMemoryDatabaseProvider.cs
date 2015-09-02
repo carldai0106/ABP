@@ -4,9 +4,9 @@ using Abp.Domain.Uow;
 namespace Abp.MemoryDb.Uow
 {
     /// <summary>
-    /// Implements <see cref="IMemoryDatabaseProvider"/> that gets database from active unit of work.
+    /// Implements <see cref="IMemoryDatabaseProvider{TTenantId, TUserId}"/> that gets database from active unit of work.
     /// </summary>
-    public class UnitOfWorkMemoryDatabaseProvider<TTenantId, TUserId> : IMemoryDatabaseProvider, ITransientDependency
+    public class UnitOfWorkMemoryDatabaseProvider<TTenantId, TUserId> : IMemoryDatabaseProvider<TTenantId, TUserId>, ITransientDependency
         where TTenantId : struct
         where TUserId : struct
     {

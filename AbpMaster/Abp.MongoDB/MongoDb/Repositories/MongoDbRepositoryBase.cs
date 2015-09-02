@@ -14,10 +14,14 @@ namespace Abp.MongoDb.Repositories
     /// Implements IRepository for MongoDB.
     /// </summary>
     /// <typeparam name="TEntity">Type of the Entity for this repository</typeparam>
-    public class MongoDbRepositoryBase<TEntity> : MongoDbRepositoryBase<TEntity, int>, IRepository<TEntity>
+    /// <typeparam name="TTenantId">Type of the tenant id</typeparam>
+    /// <typeparam name="TUserId">Type of the user id</typeparam>
+    public class MongoDbRepositoryBase<TEntity, TTenantId, TUserId> : MongoDbRepositoryBase<TEntity, int, TTenantId, TUserId>, IRepository<TEntity>
         where TEntity : class, IEntity<int>
+        where TTenantId : struct
+        where TUserId : struct
     {
-        public MongoDbRepositoryBase(IMongoDatabaseProvider databaseProvider)
+        public MongoDbRepositoryBase(IMongoDatabaseProvider<TTenantId, TUserId> databaseProvider)
             : base(databaseProvider)
         {
         }
@@ -28,10 +32,14 @@ namespace Abp.MongoDb.Repositories
     /// </summary>
     /// <typeparam name="TEntity">Type of the Entity for this repository</typeparam>
     /// <typeparam name="TPrimaryKey">Primary key of the entity</typeparam>
-    public class MongoDbRepositoryBase<TEntity, TPrimaryKey> : AbpRepositoryBase<TEntity, TPrimaryKey>
+    /// <typeparam name="TTenantId">Type of the tenant id</typeparam>
+    /// <typeparam name="TUserId">Type of the user id</typeparam>
+    public class MongoDbRepositoryBase<TEntity, TPrimaryKey, TTenantId, TUserId> : AbpRepositoryBase<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
+        where TTenantId : struct
+        where TUserId : struct
     {
-        private readonly IMongoDatabaseProvider _databaseProvider;
+        private readonly IMongoDatabaseProvider<TTenantId, TUserId> _databaseProvider;
 
         protected MongoDatabase Database
         {
@@ -46,7 +54,7 @@ namespace Abp.MongoDb.Repositories
             }
         }
 
-        public MongoDbRepositoryBase(IMongoDatabaseProvider databaseProvider)
+        public MongoDbRepositoryBase(IMongoDatabaseProvider<TTenantId, TUserId> databaseProvider)
         {
             _databaseProvider = databaseProvider;
         }

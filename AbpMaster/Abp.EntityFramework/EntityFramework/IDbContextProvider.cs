@@ -9,16 +9,6 @@ namespace Abp.EntityFramework
     public interface IDbContextProvider<out TDbContext, TTenantId, TUserId>
         where TDbContext : DbContext
     {
-        TDbContext DbContext { get; }
-
-        ///// <summary>
-        ///// 
-        ///// </summary>
-        ///// <typeparam name="TTenantId"></typeparam>
-        ///// <typeparam name="TUserId"></typeparam>
-        ///// <returns></returns>
-        //TDbContext GetDbContext<TTenantId, TUserId>()
-        //    where TTenantId : struct
-        //    where TUserId : struct;
+        TDbContext DbContext { get; }      
     }
 }

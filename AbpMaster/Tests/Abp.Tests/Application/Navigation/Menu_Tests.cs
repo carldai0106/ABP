@@ -11,7 +11,7 @@ namespace Abp.Tests.Application.Navigation
         [Fact]
         public async Task Test_Menu_System()
         {
-            var testCase = new NavigationTestCase<int, long>(1);
+            var testCase = new NavigationTestCase<int, long>();
 
             //Check created menu definitions
             var mainMenuDefinition = testCase.NavigationManager.MainMenu;

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Abp.Authorization;
-using Abp.Authorization.Interceptors;
 using Abp.Dependency;
 using Abp.Logging;
-using Abp.Reflection.Extensions;
-using Abp.Runtime.Caching;
 using Abp.Web.Authorization;
 
 namespace Abp.Web.Mvc.Authorization

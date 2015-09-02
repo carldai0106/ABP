@@ -7,29 +7,16 @@ using Castle.Core.Logging;
 
 namespace Abp.AutoMapper
 {
-    /// <summary>
-    /// 
-    /// </summary>
     public class AbpAutoMapperModule : AbpModule
     {
-        /// <summary>
-        /// 
-        /// </summary>
         public ILogger Logger { get; set; }
-        /// <summary>
-        /// 
-        /// </summary>
         public ILocalizationManager LocalizationManager { get; set; }
 
         private readonly ITypeFinder _typeFinder;
 
         private static bool _createdMappingsBefore;
-        private static readonly object SyncObj = new object();
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="typeFinder"></param>
+        private static readonly object _syncObj = new object();
+
         public AbpAutoMapperModule(ITypeFinder typeFinder)
         {
             _typeFinder = typeFinder;
@@ -44,7 +31,7 @@ namespace Abp.AutoMapper
 
         private void CreateMappings()
         {
-            lock (SyncObj)
+            lock (_syncObj)
             {
                 //We should prevent duplicate mapping in an application, since AutoMapper is static.
                 if (_createdMappingsBefore)

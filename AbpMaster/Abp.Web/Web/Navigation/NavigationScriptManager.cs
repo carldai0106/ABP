@@ -21,7 +21,7 @@ namespace Abp.Web.Navigation
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
         }
 
-           public async Task<string> GetScriptAsync()
+        public async Task<string> GetScriptAsync()
         {
             var userMenus = await _userNavigationManager.GetMenusAsync(AbpSession.UserId);
 

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using System.Transactions;
 using Abp.Collections.Extensions;
+using Abp.Domain.Uow;
 using Abp.Json;
 using Abp.Runtime.Session;
+using Abp.Threading;
 using Abp.Timing;
 using Castle.Core.Logging;
 using Castle.DynamicProxy;
@@ -23,11 +27,13 @@ namespace Abp.Auditing
         private readonly IAuditingConfiguration _configuration;
 
         private readonly IAuditInfoProvider _auditInfoProvider;
+        private readonly IUnitOfWorkManager<TTenantId, TUserId> _unitOfWorkManager;
 
-        public AuditingInterceptor(IAuditingConfiguration configuration, IAuditInfoProvider auditInfoProvider)
+        public AuditingInterceptor(IAuditingConfiguration configuration, IAuditInfoProvider auditInfoProvider, IUnitOfWorkManager<TTenantId,TUserId> unitOfWorkManager)
         {
             _configuration = configuration;
             _auditInfoProvider = auditInfoProvider;
+            _unitOfWorkManager = unitOfWorkManager;
 
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             Logger = NullLogger.Instance;
@@ -42,6 +48,20 @@ namespace Abp.Auditing
                 return;
             }
 
+            var auditInfo = CreateAuditInfo(invocation);
+
+            if (AsyncHelper.IsAsyncMethod(invocation.Method))
+            {
+                PerformAsyncAuditing(invocation, auditInfo);
+            }
+            else
+            {
+                PerformSyncAuditing(invocation, auditInfo);
+            }
+        }
+
+        private AuditInfo<TTenantId, TUserId> CreateAuditInfo(IInvocation invocation)
+        {
             var auditInfo = new AuditInfo<TTenantId, TUserId>
             {
                 TenantId = AbpSession.TenantId,
@@ -56,7 +76,13 @@ namespace Abp.Auditing
 
             _auditInfoProvider.Fill(auditInfo);
 
+            return auditInfo;
+        }
+
+        private void PerformSyncAuditing(IInvocation invocation, AuditInfo<TTenantId, TUserId> auditInfo)
+        {
             var stopwatch = Stopwatch.StartNew();
+
             try
             {
                 invocation.Proceed();
@@ -70,7 +96,29 @@ namespace Abp.Auditing
             {
                 stopwatch.Stop();
                 auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
-                AuditingStore.Save(auditInfo); //TODO: Call async when target method is async.
+                AuditingStore.Save(auditInfo);
+            }
+        }
+        private void PerformAsyncAuditing(IInvocation invocation, AuditInfo<TTenantId, TUserId> auditInfo)
+        {
+            var stopwatch = Stopwatch.StartNew();
+
+            invocation.Proceed();
+
+            if (invocation.Method.ReturnType == typeof(Task))
+            {
+                invocation.ReturnValue = InternalAsyncHelper.AwaitTaskWithFinally(
+                    (Task)invocation.ReturnValue,
+                    exception => SaveAuditInfo(auditInfo, stopwatch, exception)
+                    );
+            }
+            else 
+            {
+                invocation.ReturnValue = InternalAsyncHelper.CallAwaitTaskWithFinallyAndGetResult(
+                    invocation.Method.ReturnType.GenericTypeArguments[0],
+                    invocation.ReturnValue,
+                    exception => SaveAuditInfo(auditInfo, stopwatch, exception)
+                    );
             }
         }
 
@@ -99,6 +147,19 @@ namespace Abp.Auditing
                 Logger.Warn("Could not serialize arguments for method: " + invocation.MethodInvocationTarget.Name);
                 Logger.Warn(ex.ToString(), ex);
                 return "{}";
+            }
+        }
+
+        private void SaveAuditInfo(AuditInfo<TTenantId, TUserId> auditInfo, Stopwatch stopwatch, Exception exception)
+        {
+            stopwatch.Stop();
+            auditInfo.Exception = exception;
+            auditInfo.ExecutionDuration = Convert.ToInt32(stopwatch.Elapsed.TotalMilliseconds);
+
+            using (var uow = _unitOfWorkManager.Begin(TransactionScopeOption.Suppress))
+            {
+                AuditingStore.Save(auditInfo);
+                uow.Complete();
             }
         }
     }

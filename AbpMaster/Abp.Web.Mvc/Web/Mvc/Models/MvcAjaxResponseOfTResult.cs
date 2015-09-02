@@ -1,5 +1,4 @@
 ﻿using System;
-//Todo : it is from Abp.Web carl
 using Abp.Web.Models;
 
 namespace Abp.Web.Mvc.Models

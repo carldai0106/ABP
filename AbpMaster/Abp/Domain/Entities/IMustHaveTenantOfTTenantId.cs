@@ -3,7 +3,7 @@
     /// <summary>
     /// Implement this interface for an entity which must have TenantId.
     /// </summary>
-    public interface IMustHaveTenant<TTenantId> 
+    public interface IMustHaveTenant<TTenantId> where TTenantId : struct
     {
         /// <summary>
         /// TenantId of this entity.

@@ -13,6 +13,7 @@ namespace Abp.NHibernate.EntityMappings
         /// Maps full audit columns (defined by <see cref="IFullAudited"/>).
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
+        /// <typeparam name="TUserId"></typeparam>
         public static void MapFullAudited<TEntity,TUserId>(this ClassMap<TEntity> mapping)
             where TEntity : IFullAudited<TUserId> where TUserId :struct
         {

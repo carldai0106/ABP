@@ -16,10 +16,10 @@ namespace Abp.MemoryDb.Tests.Repositories
         {
             _database = new MemoryDatabase();
 
-            var databaseProvider = Substitute.For<IMemoryDatabaseProvider>();
+            var databaseProvider = Substitute.For<IMemoryDatabaseProvider<int, long>>();
             databaseProvider.Database.Returns(_database);
 
-            _repository = new MemoryRepository<MyEntity>(databaseProvider);
+            _repository = new MemoryRepository<MyEntity, int, long>(databaseProvider);
 
             //Testing Insert by creating initial data
             _repository.Insert(new MyEntity("test-1"));

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Globalization;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Threading.Tasks;
 using Abp.Collections.Extensions;
 using Abp.Dependency;
 using Abp.Domain.Uow;
-using Abp.Runtime.Caching;
+using Abp.Runtime.Caching.Memory;
 using Abp.Runtime.Session;
 using Abp.Threading;
 

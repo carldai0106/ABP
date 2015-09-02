@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Abp.Application.Navigation;
 using Abp.Application.Services;
 using Abp.Auditing;
@@ -32,12 +31,12 @@ namespace Abp
 
             ValidationInterceptorRegistrar.Initialize(IocManager);
 
-            //TODO: Consider to change order of Uow and Auth interceptors..?
-            UnitOfWorkRegistrar.Initialize<TTenantId, TUserId>(IocManager);
-            AuthorizationInterceptorRegistrar<TTenantId, TUserId>.Initialize(IocManager);
-
-            _auditingInterceptorRegistrar = new AuditingInterceptorRegistrar(IocManager.Resolve<IAuditingConfiguration>(), IocManager);
+            _auditingInterceptorRegistrar = new AuditingInterceptorRegistrar(IocManager);
             _auditingInterceptorRegistrar.Initialize<TTenantId, TUserId>();
+
+            UnitOfWorkRegistrar.Initialize<TTenantId, TUserId>(IocManager);
+
+            AuthorizationInterceptorRegistrar<TTenantId, TUserId>.Initialize(IocManager);
 
             Configuration.Auditing.Selectors.Add(
                 new NamedTypeSelector(
@@ -76,14 +75,10 @@ namespace Abp
         public override void PostInitialize<TTenantId, TUserId>()
         {
             RegisterMissingComponents<TTenantId, TUserId>();
-           
-            //modify by carl
-            IocManager.RegisterIfNot<IUnitOfWork<TTenantId, TUserId>, NullUnitOfWork<TTenantId, TUserId>>(DependencyLifeStyle.Transient);
-            IocManager.Resolve<PermissionManager<TTenantId, TUserId>>().Initialize();
-            //end
 
             IocManager.Resolve<LocalizationManager>().Initialize();
             IocManager.Resolve<NavigationManager>().Initialize();
+            IocManager.Resolve<PermissionManager<TTenantId, TUserId>>().Initialize();
             IocManager.Resolve<SettingDefinitionManager>().Initialize();
         }
 
@@ -91,6 +86,7 @@ namespace Abp
             where TTenantId : struct
             where TUserId : struct
         {
+            IocManager.RegisterIfNot<IUnitOfWork<TTenantId, TUserId>, NullUnitOfWork<TTenantId, TUserId>>(DependencyLifeStyle.Transient);
             IocManager.RegisterIfNot<IAuditInfoProvider, NullAuditInfoProvider>(DependencyLifeStyle.Transient);
             IocManager.RegisterIfNot<IAuditingStore<TTenantId, TUserId>, SimpleLogAuditingStore<TTenantId, TUserId>>(DependencyLifeStyle.Transient);
         }

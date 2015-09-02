@@ -7,6 +7,7 @@ using Abp.Authorization;
 using Abp.Dependency;
 using Abp.Reflection.Extensions;
 using Abp.Runtime.Caching;
+using Abp.Runtime.Caching.Memory;
 using Abp.Runtime.Session;
 
 namespace Abp.Web.Authorization

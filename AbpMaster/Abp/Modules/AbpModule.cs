@@ -24,16 +24,7 @@ namespace Abp.Modules
         /// <summary>
         /// Gets a reference to the ABP configuration.
         /// </summary>
-        protected internal IAbpStartupConfiguration Configuration { get; internal set; }
-
-        ///// <summary>
-        ///// This is the first event called on application startup. 
-        ///// Codes can be placed here to run before dependency injection registrations.
-        ///// </summary>
-        //public virtual void PreInitialize()
-        //{
-
-        //}
+        protected internal IAbpStartupConfiguration Configuration { get; internal set; }        
 
         /// <summary>
         /// This is the first event called on application startup. 
@@ -48,15 +39,7 @@ namespace Abp.Modules
         {
 
         }
-
-        ///// <summary>
-        ///// This method is used to register dependencies for this module.
-        ///// </summary>
-        //public virtual void Initialize()
-        //{
-
-        //}
-
+       
         /// <summary> 
         /// This method is used to register dependencies for this module.
         /// modify by carl
@@ -69,14 +52,6 @@ namespace Abp.Modules
         {
 
         }
-
-        ///// <summary>
-        ///// This method is called lastly on application startup.
-        ///// </summary>
-        //public virtual void PostInitialize()
-        //{
-            
-        //}
 
         /// <summary>
         /// This method is called lastly on application startup.

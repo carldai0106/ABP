@@ -84,9 +84,7 @@ namespace Abp.Modules
                 Logger.DebugFormat("Loaded module: " + moduleType.AssemblyQualifiedName);
             }
 
-            //AbpKernelModule must be the first module
-            //var startupModuleIndex = _modules.FindIndex(m => m.Type == typeof(AbpKernelModule<TTenantId, TUserId>));
-            //var startupModuleIndex = _modules.FindIndex(m => m.Type == typeof(AbpKernelModule<,>));
+            //AbpKernelModule must be the first module         
             var startupModuleIndex = _modules.FindIndex(m => m.Type == typeof(AbpKernelModule));
             if (startupModuleIndex > 0)
             {

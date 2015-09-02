@@ -1,6 +1,7 @@
 using System;
 using Abp.Domain.Entities;
-using Abp.NHibernate.Filter;
+using Abp.NHibernate.Filters;
+using Abp.Runtime.Session;
 using FluentNHibernate.Mapping;
 
 namespace Abp.NHibernate.EntityMappings
@@ -31,7 +32,7 @@ namespace Abp.NHibernate.EntityMappings
                 Where("IsDeleted = 0"); //TODO: Test with other DBMS then SQL Server
             }
 
-            if (typeof(IMustHaveTenant).IsAssignableFrom(typeof(TEntity)))
+            if (typeof(IMustHaveTenant).IsAssignableFrom(typeof (TEntity)))
                 ApplyFilter<MustHaveTenantFilter>();
             if (typeof(IMayHaveTenant).IsAssignableFrom(typeof(TEntity)))
                 ApplyFilter<MayHaveTenantFilter>();

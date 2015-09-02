@@ -8,7 +8,9 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
 {
     internal static class DynamicApiControllerActionHelper
     {
-        public static List<MethodInfo> GetMethodsOfType(Type type)
+        public static List<MethodInfo> GetMethodsOfType<TTenantId, TUserId>(Type type)
+            where TTenantId : struct
+            where TUserId : struct
         {
             var allMethods = new List<MethodInfo>();
 
@@ -16,7 +18,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
 
             return allMethods.Where(
                 method => method.DeclaringType != typeof (object) &&
-                          method.DeclaringType != typeof (ApplicationService<,>) &&
+                          method.DeclaringType != typeof (ApplicationService<TTenantId,TUserId>) &&
                           !IsPropertyAccessor(method)
                 ).ToList();
         }

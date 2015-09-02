@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Abp.Dependency;
-using Abp.Logging;
-using Abp.WebApi.Controllers.Dynamic.Interceptors;
-using Castle.MicroKernel.Registration;
 using System.Web.Http.Filters;
+using Abp.WebApi.Controllers.Dynamic.Interceptors;
 
 namespace Abp.WebApi.Controllers.Dynamic.Builders
 {
@@ -14,7 +11,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
     /// <typeparam name="T">The of the proxied object</typeparam>
     /// <typeparam name="TTenantId"></typeparam>
     /// <typeparam name="TUserId"></typeparam>
-    internal class ApiControllerBuilder<T, TTenantId, TUserId> : IApiControllerBuilder<T>
+    internal class ApiControllerBuilder<T, TTenantId, TUserId> : IApiControllerBuilder<T, TTenantId, TUserId>
         where TTenantId : struct
         where TUserId : struct
     {
@@ -32,6 +29,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// Action Filters to apply to the whole Dynamic Controller.
         /// </summary>
         private IFilter[] _filters;
+        private bool _conventionalVerbs;
 
         /// <summary>
         /// Creates a new instance of ApiControllerInfoBuilder.
@@ -52,7 +50,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
             _serviceName = serviceName;
 
             _actionBuilders = new Dictionary<string, ApiControllerActionBuilder<T, TTenantId, TUserId>>();
-            foreach (var methodInfo in DynamicApiControllerActionHelper.GetMethodsOfType(typeof(T)))
+            foreach (var methodInfo in DynamicApiControllerActionHelper.GetMethodsOfType<TTenantId, TUserId>(typeof(T)))
             {
                 _actionBuilders[methodInfo.Name] = new ApiControllerActionBuilder<T, TTenantId, TUserId>(this, methodInfo);
             }
@@ -63,7 +61,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// </summary>
         /// <param name="filters"> The filters. </param>
         /// <returns>The current Controller Builder </returns>
-        public IApiControllerBuilder<T> WithFilters(params IFilter[] filters)
+        public IApiControllerBuilder<T, TTenantId, TUserId> WithFilters(params IFilter[] filters)
         {
             _filters = filters;
             return this;
@@ -74,7 +72,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// </summary>
         /// <param name="methodName">Name of the method in proxied type</param>
         /// <returns>Action builder</returns>
-        public IApiControllerActionBuilder<T> ForMethod(string methodName)
+        public IApiControllerActionBuilder<T, TTenantId, TUserId> ForMethod(string methodName)
         {
             if (!_actionBuilders.ContainsKey(methodName))
             {
@@ -84,14 +82,24 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
             return _actionBuilders[methodName];
         }
 
+        public IApiControllerBuilder<T, TTenantId, TUserId> WithConventionalVerbs()
+        {
+            _conventionalVerbs = true;
+            return this;
+        }
         /// <summary>
         /// Builds the controller.
         /// This method must be called at last of the build operation.
         /// </summary>
         public void Build()
         {
-            var controllerInfo = new DynamicApiControllerInfo(_serviceName, typeof(DynamicApiController<T, TTenantId, TUserId>), _filters);
-            
+            var controllerInfo = new DynamicApiControllerInfo(
+                _serviceName,
+                typeof(T),
+                typeof(DynamicApiController<T, TTenantId, TUserId>),
+                typeof(AbpDynamicApiControllerInterceptor<T>),
+                _filters
+                );
             foreach (var actionBuilder in _actionBuilders.Values)
             {
                 if (actionBuilder.DontCreate)
@@ -99,17 +107,14 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
                     continue;
                 }
 
+                if (_conventionalVerbs && !actionBuilder.Verb.HasValue)
+                {
+                    actionBuilder.WithVerb(DynamicApiVerbHelper.GetConventionalVerbForMethodName(actionBuilder.ActionName));
+                }
                 controllerInfo.Actions[actionBuilder.ActionName] = actionBuilder.BuildActionInfo();
             }
 
-            IocManager.Instance.IocContainer.Register(
-                Component.For<AbpDynamicApiControllerInterceptor<T>>().LifestyleTransient(),
-                Component.For<DynamicApiController<T, TTenantId, TUserId>>().Proxy.AdditionalInterfaces(new[] { typeof(T) }).Interceptors<AbpDynamicApiControllerInterceptor<T>>().LifestyleTransient()
-                );
-
             DynamicApiControllerManager.Register(controllerInfo);
-
-            LogHelper.Logger.DebugFormat("Dynamic web api controller is created for type '{0}' with service name '{1}'.", typeof(T).FullName, controllerInfo.ServiceName);
         }
     }
 }

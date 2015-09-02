@@ -10,7 +10,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
     /// <typeparam name="T">Type of the proxied object</typeparam>
     /// <typeparam name="TTenantId"></typeparam>
     /// <typeparam name="TUserId"></typeparam>
-    internal class ApiControllerActionBuilder<T, TTenantId, TUserId> : IApiControllerActionBuilder<T>
+    internal class ApiControllerActionBuilder<T, TTenantId, TUserId> : IApiControllerActionBuilder<T, TTenantId, TUserId>
         where TTenantId : struct
         where TUserId : struct
     {
@@ -20,6 +20,11 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         public string ActionName { get; private set; }
 
         /// <summary>
+        /// Selected Http verb.
+        /// </summary>
+        public HttpVerb? Verb { get; private set; }
+
+        ///<summary>
         /// Reference to the <see cref="ApiControllerBuilder{T, TTenantId, TUserId}"/> which created this object.
         /// </summary>
         private readonly ApiControllerBuilder<T, TTenantId, TUserId> _controllerBuilder;
@@ -35,19 +40,9 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         private IFilter[] _filters;
 
         /// <summary>
-        /// Selected Http verb.
-        /// </summary>
-        private HttpVerb? _verb;
-
-        /// <summary>
         /// A flag to set if no action will be created for this method.
         /// </summary>
         public bool DontCreate { get; private set; }
-
-        /// <summary>
-        /// Default HTTP verb if not set.
-        /// </summary>
-        private const HttpVerb DefaultVerb = HttpVerb.Post;
 
         /// <summary>
         /// Creates a new <see cref="ApiControllerActionBuilder{T,TTenantId, TUserId}"/> object.
@@ -66,9 +61,9 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// </summary>
         /// <param name="verb">Http very</param>
         /// <returns>Action builder</returns>
-        public IApiControllerActionBuilder<T> WithVerb(HttpVerb verb)
+        public IApiControllerActionBuilder<T, TTenantId, TUserId> WithVerb(HttpVerb verb)
         {
-            _verb = verb;
+            Verb = verb;
             return this;
         }
 
@@ -77,7 +72,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// </summary>
         /// <param name="methodName">Name of the method in proxied type</param>
         /// <returns>Action builder</returns>
-        public IApiControllerActionBuilder<T> ForMethod(string methodName)
+        public IApiControllerActionBuilder<T, TTenantId, TUserId> ForMethod(string methodName)
         {
             return _controllerBuilder.ForMethod(methodName);
         }
@@ -86,17 +81,17 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// Used to add action filters to apply to this method.
         /// </summary>
         /// <param name="filters"> Action Filters to apply.</param>
-        public IApiControllerActionBuilder<T> WithFilters(params IFilter[] filters)
+        public IApiControllerActionBuilder<T, TTenantId, TUserId> WithFilters(params IFilter[] filters)
         {
             _filters = filters;
             return this;
         }
-        
+
         /// <summary>
         /// Tells builder to not create action for this method.
         /// </summary>
         /// <returns>Controller builder</returns>
-        public IApiControllerBuilder<T> DontCreateAction()
+        public IApiControllerBuilder<T, TTenantId, TUserId> DontCreateAction()
         {
             DontCreate = true;
             return _controllerBuilder;
@@ -117,12 +112,12 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// <returns></returns>
         public DynamicApiActionInfo BuildActionInfo()
         {
-            if (_verb == null)
+            if (Verb == null)
             {
-                _verb = DefaultVerb;
+                Verb = DynamicApiVerbHelper.GetDefaultHttpVerb();
             }
 
-            return new DynamicApiActionInfo(ActionName, _verb.Value, _methodInfo, _filters);
+            return new DynamicApiActionInfo(ActionName, Verb.Value, _methodInfo, _filters);
         }
     }
 }

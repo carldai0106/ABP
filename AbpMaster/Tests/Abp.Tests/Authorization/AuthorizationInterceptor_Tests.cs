@@ -7,9 +7,6 @@ using Castle.MicroKernel.Registration;
 using NSubstitute;
 using Shouldly;
 using Xunit;
-using System.Linq;
-using System.Web.Mvc;
-using Castle.Core.Internal;
 
 namespace Abp.Tests.Authorization
 {
@@ -23,32 +20,10 @@ namespace Abp.Tests.Authorization
             //SUT: AuthorizationInterceptor and AuthorizeAttributeHelper
             LocalIocManager.Register<AuthorizationInterceptor<int,long>>(DependencyLifeStyle.Transient);
             LocalIocManager.Register<IAuthorizeAttributeHelper<int, long>, AuthorizeAttributeHelper<int, long>>(DependencyLifeStyle.Transient);
-
-
             LocalIocManager.IocContainer.Register(
-                Component.For(typeof (IAuthorizeAttributeHelper<,>)).ImplementedBy(typeof (AuthorizeAttributeHelper<,>)),
                 Component.For<MyTestClassToBeAuthorized_Sync>().Interceptors<AuthorizationInterceptor<int, long>>().LifestyleTransient(),
                 Component.For<MyTestClassToBeAuthorized_Async>().Interceptors<AuthorizationInterceptor<int, long>>().LifestyleTransient()
-                );
-
-            var handlers = LocalIocManager.IocContainer.Kernel.GetAssignableHandlers(typeof(object));
-            var obj = handlers.FirstOrDefault(
-                x => x.ComponentModel.Implementation.IsGenericType && x.ComponentModel.Implementation.GetGenericTypeDefinition() == typeof (AuthorizationInterceptor<,>));
-
-            var i = obj.ComponentModel.Implementation;
-            var type1 = i.GetGenericArguments()[0];
-            var type2 = i.GetGenericArguments()[1];
-
-            dynamic helper = LocalIocManager.ResolveAsDisposable(typeof(IAuthorizeAttributeHelper<,>).MakeGenericType(type1, type2));
-            dynamic obj2 = helper.Object;
-
-            var ss = Substitute.For<AbpAuthorizeAttribute>();
-            
-
-            //obj2.Authorize(ss);
-            
-
-            //helper.Object.
+                );          
             //Mock session
             var session = Substitute.For<IAbpSession<int, long>>();
             session.TenantId.Returns(1);

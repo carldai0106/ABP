@@ -6,17 +6,19 @@ using Abp.Domain.Repositories;
 namespace Abp.MemoryDb.Repositories
 {
     //TODO: Implement thread-safety..?
-    public class MemoryRepository<TEntity, TPrimaryKey> : AbpRepositoryBase<TEntity, TPrimaryKey>
+    public class MemoryRepository<TEntity, TPrimaryKey, TTenantId, TUserId> : AbpRepositoryBase<TEntity, TPrimaryKey>
         where TEntity : class, IEntity<TPrimaryKey>
+        where TTenantId : struct
+        where TUserId : struct
     {
-        private readonly IMemoryDatabaseProvider _databaseProvider;
+        private readonly IMemoryDatabaseProvider<TTenantId, TUserId> _databaseProvider;
         protected MemoryDatabase Database { get { return _databaseProvider.Database; } }
 
         protected List<TEntity> Table { get { return Database.Set<TEntity>(); } }
 
         private readonly MemoryPrimaryKeyGenerator<TPrimaryKey> _primaryKeyGenerator;
 
-        public MemoryRepository(IMemoryDatabaseProvider databaseProvider)
+        public MemoryRepository(IMemoryDatabaseProvider<TTenantId, TUserId> databaseProvider)
         {
             _databaseProvider = databaseProvider;
             _primaryKeyGenerator = new MemoryPrimaryKeyGenerator<TPrimaryKey>();

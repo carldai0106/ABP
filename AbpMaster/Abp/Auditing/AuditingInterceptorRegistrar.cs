@@ -7,17 +7,14 @@ using Castle.MicroKernel;
 namespace Abp.Auditing
 {
     internal class AuditingInterceptorRegistrar
-        //<TTenantId, TUserId>
-        //where TTenantId : struct
-        //where TUserId : struct
     {
-        private readonly IAuditingConfiguration _auditingConfiguration;
         private readonly IIocManager _iocManager;
+        private readonly IAuditingConfiguration _auditingConfiguration;
 
-        public AuditingInterceptorRegistrar(IAuditingConfiguration auditingConfiguration, IIocManager iocManager)
+        public AuditingInterceptorRegistrar(IIocManager iocManager)
         {
-            _auditingConfiguration = auditingConfiguration;
             _iocManager = iocManager;
+            _auditingConfiguration = _iocManager.Resolve<IAuditingConfiguration>();
         }
 
         public void Initialize<TTenantId, TUserId>()
@@ -28,8 +25,6 @@ namespace Abp.Auditing
             {
                 return;
             }
-
-            //_iocManager.IocContainer.Kernel.ComponentRegistered += Kernel_ComponentRegistered;
             _iocManager.IocContainer.Kernel.ComponentRegistered += Kernel_ComponentRegistered<TTenantId, TUserId>;
         }
        
@@ -40,8 +35,6 @@ namespace Abp.Auditing
         {
             if (ShouldIntercept(handler.ComponentModel.Implementation))
             {
-                //todo : modify by carl
-                //handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AuditingInterceptor<,>)));
                 handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AuditingInterceptor<TTenantId,TUserId>)));
             }
         }

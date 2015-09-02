@@ -21,7 +21,7 @@ namespace Abp.EntityFramework.Repositories
                 x => (
                     typeof(IEntity).IsAssignableFrom(x) ||
                     x.IsInheritsOrImplements(typeof(IEntity<>))
-                    )
+                    ) && !x.FullName.Contains("Abp.Domain.Entities")
                 );
 
             if (entities.IsNullOrEmpty())
@@ -36,7 +36,7 @@ namespace Abp.EntityFramework.Repositories
                    type.IsClass && type.IsInheritsOrImplements(typeof(AbpDbContext<,>)));
             if (dbContextTypes.IsNullOrEmpty())
             {
-                throw new AbpException("No class found derived from AbpDbContext.");
+                throw new AbpException("No class found derived from AbpDbContext<,>.");
             }
 
             foreach (var dbContextType in dbContextTypes)
@@ -51,16 +51,11 @@ namespace Abp.EntityFramework.Repositories
             where TTenantId : struct
             where TUserId : struct
         {
-            var autoRepositoryAttr = dbContextType.GetSingleAttributeOrNull<AutoRepositoryTypeAttribute>();
+            var autoRepositoryAttr = dbContextType.GetSingleAttributeOrNull<AutoRepositoryTypesAttribute>();
 
             if (autoRepositoryAttr == null)
             {
-                autoRepositoryAttr = new AutoRepositoryTypeAttribute( //TODO: Make a default static property!
-                    typeof(IRepository<>),
-                    typeof(IRepository<,>),
-                    typeof(EfRepositoryBase<,,,>),
-                    typeof(EfRepositoryBase<,,,,>)
-                    );
+                autoRepositoryAttr = AutoRepositoryTypesAttribute.Default;
             }
 
             foreach (var entityType in entities)
@@ -114,16 +109,11 @@ namespace Abp.EntityFramework.Repositories
             where TTenantId : struct
             where TUserId : struct
         {
-            var autoRepositoryAttr = dbContextType.GetSingleAttributeOrNull<AutoRepositoryTypeAttribute>();
+            var autoRepositoryAttr = dbContextType.GetSingleAttributeOrNull<AutoRepositoryTypesAttribute>();
 
             if (autoRepositoryAttr == null)
             {
-                autoRepositoryAttr = new AutoRepositoryTypeAttribute( //TODO: Make a default static property!
-                    typeof(IRepository<>),
-                    typeof(IRepository<,>),
-                    typeof(EfRepositoryBase<,,,>),
-                    typeof(EfRepositoryBase<,,,,>)
-                    );
+                autoRepositoryAttr = AutoRepositoryTypesAttribute.Default;
             }
 
             var entities = dbContextType.GetEntityTypes();
@@ -173,7 +163,7 @@ namespace Abp.EntityFramework.Repositories
         }
 
         private static Type GetMakedGenericType<TTenantId, TUserId>(bool hasPrimaryKey, IIocManager iocManager, 
-            AutoRepositoryTypeAttribute autoRepositoryAttr, 
+            AutoRepositoryTypesAttribute autoRepositoryAttr, 
             Type dbContextType, Type entityType, Type primaryKeyType)
         {
             var genericArgs = hasPrimaryKey

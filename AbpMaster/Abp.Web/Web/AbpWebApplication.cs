@@ -8,6 +8,7 @@ using Abp.Dependency;
 using Abp.Localization;
 using Abp.Reflection;
 using Abp.Runtime.Caching;
+using Abp.Runtime.Caching.Memory;
 using Abp.Runtime.Security;
 using Castle.MicroKernel.Registration;
 

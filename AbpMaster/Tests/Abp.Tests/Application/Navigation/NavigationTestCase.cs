@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Abp.Application.Navigation;
 using Abp.Authorization;
@@ -16,20 +17,17 @@ namespace Abp.Tests.Application.Navigation
 
         public IUserNavigationManager<TTenantId, TUserId> UserNavigationManager { get; private set; }
 
-        private readonly IIocManager _iocManager;
+        private readonly IIocManager _iocManager;        
 
-        private static TUserId UserId { get; set; }
-
-        public NavigationTestCase(TUserId userId)
-            : this(new IocManager(), userId)
+        public NavigationTestCase()
+            : this(new IocManager())
         {
            
         }
 
-        public NavigationTestCase(IIocManager iocManager, TUserId userId)
+        public NavigationTestCase(IIocManager iocManager)
         {
-            _iocManager = iocManager;
-            UserId = userId;
+            _iocManager = iocManager;           
             Initialize();
         }
 
@@ -51,15 +49,16 @@ namespace Abp.Tests.Application.Navigation
             //Create user navigation manager to test
             UserNavigationManager = new UserNavigationManager<TTenantId, TUserId>(NavigationManager)
             {
-                PermissionChecker = CreateMockPermissionChecker(UserId)
+                PermissionChecker = CreateMockPermissionChecker()
             };
         }
 
-        private static IPermissionChecker<TTenantId, TUserId> CreateMockPermissionChecker(TUserId userId)
+        private static IPermissionChecker<TTenantId, TUserId> CreateMockPermissionChecker()
         {
             var permissionChecker = Substitute.For<IPermissionChecker<TTenantId, TUserId>>();
-            permissionChecker.IsGrantedAsync(userId, "Abp.Zero.UserManagement").Returns(Task.FromResult(true));
-            permissionChecker.IsGrantedAsync(userId, "Abp.Zero.RoleManagement").Returns(Task.FromResult(false));
+            var o = Convert.ChangeType(1, typeof (TUserId));
+            permissionChecker.IsGrantedAsync((TUserId)o, "Abp.Zero.UserManagement").Returns(Task.FromResult(true));
+            permissionChecker.IsGrantedAsync((TUserId)o, "Abp.Zero.RoleManagement").Returns(Task.FromResult(false));
             return permissionChecker;
         }
 

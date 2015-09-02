@@ -26,6 +26,27 @@ namespace Abp.Auditing
             Logger = NullLogger.Instance;
         }
 
+ 		public void Fill<TTenantId, TUserId>(AuditInfo<TTenantId, TUserId> auditInfo) where TTenantId : struct where TUserId : struct
+        {
+            var httpContext = HttpContext.Current ?? _httpContext;
+            if (httpContext == null)
+            {
+                return;
+            }
+
+            try
+            {
+                auditInfo.BrowserInfo = GetBrowserInfo(httpContext);
+                auditInfo.ClientIpAddress = GetClientIpAddress(httpContext);
+                auditInfo.ClientName = GetComputerName(httpContext);
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn("Could not obtain web parameters for audit info.");
+                Logger.Warn(ex.ToString(), ex);
+            }
+        }
+		
         private static string GetBrowserInfo(HttpContext httpContext)
         {
             return httpContext.Request.Browser.Browser + " / " +
@@ -74,27 +95,6 @@ namespace Abp.Auditing
             {
                 return null;
             }
-        }
-
-        public void Fill<TTenantId, TUserId>(AuditInfo<TTenantId, TUserId> auditInfo) where TTenantId : struct where TUserId : struct
-        {
-            var httpContext = HttpContext.Current ?? _httpContext;
-            if (httpContext == null)
-            {
-                return;
-            }
-
-            try
-            {
-                auditInfo.BrowserInfo = GetBrowserInfo(httpContext);
-                auditInfo.ClientIpAddress = GetClientIpAddress(httpContext);
-                auditInfo.ClientName = GetComputerName(httpContext);
-            }
-            catch (Exception ex)
-            {
-                Logger.Warn("Could not obtain web parameters for audit info.");
-                Logger.Warn(ex.ToString(), ex);
-            }
-        }
+        }       
     }
 }

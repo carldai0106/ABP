@@ -11,8 +11,8 @@ namespace Abp.TestBase.SampleApplication
     [Table("Messages")]
     public class Message : Entity, IMayHaveTenant<int>
     {
-        public virtual int? TenantId { get; set; }
+        public int? TenantId { get; set; }
 
-        public virtual string Text { get; set; }
+        public string Text { get; set; }
     }
 }

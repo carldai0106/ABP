@@ -1,9 +1,5 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Abp.Collections.Extensions;
-using Abp.Dependency;
-using Abp.Domain.Entities;
-using Abp.Domain.Repositories;
 using Abp.EntityFramework.Dependency;
 using Abp.EntityFramework.Repositories;
 using Abp.EntityFramework.Uow;
@@ -24,10 +20,6 @@ namespace Abp.EntityFramework
 
         private readonly ITypeFinder _typeFinder;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="typeFinder"></param>
         public AbpEntityFrameworkModule(ITypeFinder typeFinder)
         {
             _typeFinder = typeFinder;

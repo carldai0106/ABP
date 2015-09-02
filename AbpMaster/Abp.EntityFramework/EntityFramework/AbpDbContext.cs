@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
-using System.Globalization;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,7 +16,9 @@ using Abp.Events.Bus.Entities;
 using Abp.Extensions;
 using Abp.Runtime.Session;
 using Abp.Timing;
+using Castle.Core.Logging;
 using EntityFramework.DynamicFilters;
+
 
 namespace Abp.EntityFramework
 {
@@ -38,7 +39,10 @@ namespace Abp.EntityFramework
         /// </summary>
         public IEntityChangedEventHelper<TTenantId, TUserId> EntityChangedEventHelper { get; set; }
 
-        
+        /// <summary>
+        /// Reference to the logger.
+        /// </summary>
+        public ILogger Logger { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -46,6 +50,7 @@ namespace Abp.EntityFramework
         /// </summary>
         protected AbpDbContext()
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -56,6 +61,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -66,6 +72,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(DbCompiledModel model)
             : base(model)
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -76,6 +83,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -86,6 +94,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -96,6 +105,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(ObjectContext objectContext, bool dbContextOwnsObjectContext)
             : base(objectContext, dbContextOwnsObjectContext)
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -106,6 +116,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
+			Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -145,19 +156,33 @@ namespace Abp.EntityFramework
 
         public override int SaveChanges()
         {
-            ApplyAbpConcepts();
-            return base.SaveChanges();
+			try
+            {
+                ApplyAbpConcepts();
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                LogDbEntityValidationException(ex);
+                throw;
+            }
         }
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
-            ApplyAbpConcepts();
-            return base.SaveChangesAsync(cancellationToken);
+            try
+            {
+                ApplyAbpConcepts();
+                return await base.SaveChangesAsync(cancellationToken);
+            }
+            catch (DbEntityValidationException ex)
+            {
+                LogDbEntityValidationException(ex);
+                throw;
+            }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+      
         protected virtual void ApplyAbpConcepts()
         {
             foreach (var entry in ChangeTracker.Entries())
@@ -329,7 +354,13 @@ namespace Abp.EntityFramework
             entity.DeletionTime = Clock.Now;
             entity.DeleterUserId = AbpSession.UserId;
         }
+		private void LogDbEntityValidationException(DbEntityValidationException exception)
+        {
+            Logger.Error("There are some validation errors while saving changes in EntityFramework:");
+            foreach (var ve in exception.EntityValidationErrors.SelectMany(eve => eve.ValidationErrors))
+            {
+                Logger.Error(" - " + ve.PropertyName + ": " + ve.ErrorMessage);
+            }
+        }
     }
-
-   
 }

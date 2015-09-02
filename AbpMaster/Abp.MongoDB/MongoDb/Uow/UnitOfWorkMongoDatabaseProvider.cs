@@ -5,9 +5,9 @@ using MongoDB.Driver;
 namespace Abp.MongoDb.Uow
 {
     /// <summary>
-    /// Implements <see cref="IMongoDatabaseProvider"/> that gets database from active unit of work.
+    /// Implements <see cref="IMongoDatabaseProvider{TTenantId, TUserId}"/> that gets database from active unit of work.
     /// </summary>
-    public class UnitOfWorkMongoDatabaseProvider<TTenantId, TUserId> : IMongoDatabaseProvider, ITransientDependency
+    public class UnitOfWorkMongoDatabaseProvider<TTenantId, TUserId> : IMongoDatabaseProvider<TTenantId, TUserId>, ITransientDependency
         where TTenantId : struct
         where TUserId : struct
     {
