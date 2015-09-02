@@ -135,6 +135,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Abp\Framework\scripts\abp.js" />
+    <Content Include="Abp\Framework\scripts\libs\abp.blockUI.js" />
+    <Content Include="Abp\Framework\scripts\libs\abp.jquery.js" />
+    <Content Include="Abp\Framework\scripts\libs\abp.jtable.js" />
+    <Content Include="Abp\Framework\scripts\libs\abp.spin.js" />
+    <Content Include="Abp\Framework\scripts\libs\abp.sweet-alert.js" />
+    <Content Include="Abp\Framework\scripts\libs\abp.toastr.js" />
+    <Content Include="Abp\Framework\scripts\libs\angularjs\abp.ng.js" />
+    <Content Include="Abp\Framework\scripts\libs\requirejs\plugins\service.js" />
+    <Content Include="Abp\Framework\scripts\utils\ie10fix.js" />
+    <Content Include="Abp\Framework\styles\abp.css">
+      <DependentUpon>abp.less</DependentUpon>
+    </Content>
+    <Content Include="Abp\Framework\styles\abp.min.css">
+      <DependentUpon>abp.css</DependentUpon>
+    </Content>
+    <Content Include="Abp\Framework\styles\abp.mixings.css" />
+    <Content Include="Abp\Framework\styles\abp.mixings.min.css" />
+    <Content Include="Abp\Framework\styles\utils\ie10fix.css" />
     <Content Include="Content\404.html" />
     <Content Include="Content\flags\famfamfam-flags.css" />
     <Content Include="Content\flags\famfamfam-flags.png" />
@@ -729,6 +748,7 @@
     <Compile Include="App_Start\Startup.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AbpLocalizationController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AbpScriptsController.cs" />
     <Compile Include="Areas\Admin\Controllers\CmsControllerBase.cs" />
     <Compile Include="Areas\Admin\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Admin\Controllers\LayoutController.cs" />
@@ -744,6 +764,7 @@
     <Compile Include="Content\plugins\ueditor\net\App_Code\PathFormater.cs" />
     <Compile Include="Content\plugins\ueditor\net\App_Code\UploadHandler.cs" />
     <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Filters\GlobalFilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -801,6 +822,12 @@
     <Content Include="Areas\Admin\Views\Dashboard\Index.cshtml" />
     <Content Include="Views\Test\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Layout\_Header.cshtml" />
+    <Content Include="Abp\Framework\styles\abp.less" />
+    <Content Include="Abp\Framework\styles\abp.css.map">
+      <DependentUpon>abp.css</DependentUpon>
+    </Content>
+    <Content Include="Abp\Framework\styles\abp.mixings.css.map" />
+    <Content Include="Abp\Framework\styles\abp.mixings.less" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

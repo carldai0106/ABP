@@ -8,8 +8,8 @@ namespace CMS.Web.Areas.Admin.Controllers
 {
     public class LayoutController : CmsControllerBase
     {
-        private readonly ISessionAppService _sessionAppService;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
+        private readonly ISessionAppService _sessionAppService;
 
         public LayoutController(ISessionAppService sessionAppService, IMultiTenancyConfig multiTenancyConfig)
         {
@@ -24,7 +24,8 @@ namespace CMS.Web.Areas.Admin.Controllers
 
             if (AbpSession.UserId.HasValue)
             {
-                headerModel.LoginInformations = AsyncHelper.RunSync(() => _sessionAppService.GetCurrentLoginInformations());
+                headerModel.LoginInformations =
+                    AsyncHelper.RunSync(() => _sessionAppService.GetCurrentLoginInformations());
             }
 
             headerModel.Languages = LocalizationManager.GetAllLanguages();
@@ -34,6 +35,6 @@ namespace CMS.Web.Areas.Admin.Controllers
             headerModel.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
 
             return PartialView("~/Areas/Admin/Views/Layout/_Header.cshtml", headerModel);
-        } 
+        }
     }
 }

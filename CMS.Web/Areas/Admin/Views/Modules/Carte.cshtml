@@ -3,8 +3,8 @@
 @model ModuleTreeNode
 @{
     Layout = null;
-    //int currentId = DataCast.Get<int>(ViewBag.CurrentMenuID);
-    Guid? currentId = ViewBag.CurrentMenuID;
+    Guid? currentId = ViewBag.CurrentMenuId;
+    
     var colors = new List<string>
     {
         "bg-danger",
@@ -23,7 +23,7 @@
 {
     if (model.Children.Count > 0)
     {
-        Guid? currentId = ViewBag.CurrentMenuID;
+        Guid? currentId = ViewBag.CurrentMenuId;
 
         <ul class="carte-children">
             @foreach (var item in model.Children)
@@ -45,7 +45,7 @@
                 }
                 else
                 {
-                    url = Url.Content(item.AppUrl + "?MenuID=" + item.Id);
+                    url = Url.Content(item.AppUrl + "?mid=" + item.Id);
                 }
                 if (IsGranted<Guid, Guid>(item.ModuleCode, "CMS.Display"))
                 {
@@ -97,7 +97,7 @@
                 }
                 else
                 {
-                    url = Url.Content(item.AppUrl + "?MenuID=" + item.Id);
+                    url = Url.Content(item.AppUrl + "?mid=" + item.Id);
                 }
                 
                 if (IsGranted<Guid, Guid>(item.ModuleCode, "CMS.Display"))

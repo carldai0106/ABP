@@ -26,12 +26,13 @@ namespace Abp.Web.Sessions
 
             if (AbpSession.UserId.HasValue)
             {
-                script.AppendLine("    abp.session.userId = " + AbpSession.UserId.Value + ";");
+
+                script.AppendLine("    abp.session.userId = '" + AbpSession.UserId.Value + "';");
             }
 
             if (AbpSession.TenantId.HasValue)
             {
-                script.AppendLine("    abp.session.tenantId = " + AbpSession.TenantId.Value + ";");
+                script.AppendLine("    abp.session.tenantId = '" + AbpSession.TenantId.Value + "';");
             }
 
             script.AppendLine("    abp.session.multiTenancySide = " + ((int)AbpSession.MultiTenancySide) + ";");

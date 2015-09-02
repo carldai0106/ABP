@@ -5,6 +5,5 @@ namespace CMS.Web.Areas.Admin.Controllers
 {
     public class AbpLocalizationController : AbpLocalizationController<Guid, Guid>
     {
-        
     }
 }

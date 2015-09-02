@@ -8,10 +8,10 @@ using Abp.Application.Services.Dto;
 using Abp.Configuration.Startup;
 using Abp.Domain.Uow;
 using Abp.Localization;
-using Abp.Web.Mvc.Controllers;
 using Abp.Runtime.Security;
 using Abp.UI;
 using Abp.Web.Mvc.Authorization;
+using Abp.Web.Mvc.Controllers;
 using CMS.Application.Localization;
 using CMS.Application.Role;
 using CMS.Application.Role.Dto;
@@ -25,10 +25,10 @@ namespace CMS.Web.Areas.Admin.Controllers
 {
     public class UsersController : Controller
     {
-        private readonly IUserAppService _userAppService;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
         private readonly IRoleAppService _roleAppService;
         private readonly IUnitOfWorkManager<Guid, Guid> _unitOfWorkManager;
+        private readonly IUserAppService _userAppService;
 
         public UsersController(
             IUnitOfWorkManager<Guid, Guid> unitOfWorkManager,
@@ -40,6 +40,11 @@ namespace CMS.Web.Areas.Admin.Controllers
             _userAppService = userAppService;
             _roleAppService = roleAppService;
             _multiTenancyConfig = multiTenancyConfig;
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get { return HttpContext.GetOwinContext().Authentication; }
         }
 
         private static ILocalizableString L(string name)
@@ -63,8 +68,8 @@ namespace CMS.Web.Areas.Admin.Controllers
             return View(
                 new LoginFormViewModel
                 {
-                    TenancyName = "Default",//_tenancyNameFinder.GetCurrentTenancyNameOrNull(),
-                    IsSelfRegistrationEnabled = true,//IsSelfRegistrationEnabled(),
+                    TenancyName = "Default", //_tenancyNameFinder.GetCurrentTenancyNameOrNull(),
+                    IsSelfRegistrationEnabled = true, //IsSelfRegistrationEnabled(),
                     SuccessMessage = successMessage,
                     UserNameOrEmailAddress = userNameOrEmailAddress
                 });
@@ -73,7 +78,9 @@ namespace CMS.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<ActionResult> Login(LoginViewModel loginModel, string returnUrl = "")
         {
-            var loginResult = await _userAppService.Login(loginModel.UsernameOrEmailAddress, loginModel.Password, loginModel.TenancyName);
+            var loginResult =
+                await
+                    _userAppService.Login(loginModel.UsernameOrEmailAddress, loginModel.Password, loginModel.TenancyName);
 
             if (loginResult.Result == LoginResultType.Success)
             {
@@ -109,15 +116,7 @@ namespace CMS.Web.Areas.Admin.Controllers
             }
 
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = rememberMe }, identity);
-        }
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = rememberMe}, identity);
         }
 
         public async Task<ActionResult> Index()
@@ -131,7 +130,7 @@ namespace CMS.Web.Areas.Admin.Controllers
         [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Create")]
         public async Task<ActionResult> Create()
         {
-            var roles = await _roleAppService.GetRoles(new GetRolesInput() { Sorting = "Order ASC" });
+            var roles = await _roleAppService.GetRoles(new GetRolesInput {Sorting = "Order ASC"});
             ViewBag.Roles = roles.Items;
 
             return View();
@@ -171,7 +170,7 @@ namespace CMS.Web.Areas.Admin.Controllers
                         await uow.CompleteAsync();
                     }
 
-                    string lang = string.Format(L("Created.RecordSucceed").Localize(), model.UserName);
+                    var lang = string.Format(L("Created.RecordSucceed").Localize(), model.UserName);
 
                     this.AddModelMessage("", lang, MessageTypes.Information);
                 }
@@ -217,7 +216,7 @@ namespace CMS.Web.Areas.Admin.Controllers
             if (!id.HasValue)
                 throw new UserFriendlyException("The paramenter id is null.");
 
-            var roles = await _roleAppService.GetRoles(new GetRolesInput() { Sorting = "Order ASC" });
+            var roles = await _roleAppService.GetRoles(new GetRolesInput {Sorting = "Order ASC"});
             ViewBag.Roles = roles.Items;
 
             var info = await _userAppService.GetUser(new NullableIdInput<Guid> {Id = id});
@@ -248,7 +247,7 @@ namespace CMS.Web.Areas.Admin.Controllers
                             var userRole = "UserRole_" + item.Id;
 
                             Guid userRoleId;
-                            bool status = Guid.TryParse(collection[userRole], out userRoleId);
+                            var status = Guid.TryParse(collection[userRole], out userRoleId);
                             if (status)
                                 info.Id = userRoleId;
 
@@ -275,7 +274,7 @@ namespace CMS.Web.Areas.Admin.Controllers
                         await uow.CompleteAsync();
                     }
 
-                    string lang = string.Format(L("Updated.RecordSucceed").Localize(), model.UserName);
+                    var lang = string.Format(L("Updated.RecordSucceed").Localize(), model.UserName);
 
                     this.AddModelMessage("", lang, MessageTypes.Information);
                 }

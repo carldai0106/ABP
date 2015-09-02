@@ -3,6 +3,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Abp.Web;
+using CMS.Web.Filters;
 
 namespace CMS.Web
 {
@@ -13,6 +14,8 @@ namespace CMS.Web
             base.Application_Start(sender, e);
             HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
             //ModelBinders.Binders.Add(typeof(Guid), new GuidModelBinder());
+
+            GlobalFilters.Filters.Add(new GlobalFilterAttribute());
         }
     }
 }
