@@ -46,7 +46,7 @@ namespace Abp.Auditing
                 Logger.Warn(ex.ToString(), ex);
             }
         }
-		
+
         private static string GetBrowserInfo(HttpContext httpContext)
         {
             return httpContext.Request.Browser.Browser + " / " +
@@ -95,6 +95,6 @@ namespace Abp.Auditing
             {
                 return null;
             }
-        }       
+        }
     }
 }

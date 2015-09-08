@@ -42,7 +42,7 @@ namespace Abp.Authorization.Interceptors
             //}
             //else
             //{
-            InterceptSync(invocation, authorizeAttributes);
+                InterceptSync(invocation, authorizeAttributes);
             //}
         }
 
@@ -83,7 +83,9 @@ namespace Abp.Authorization.Interceptors
 
         private void Authorize(IEnumerable<AbpAuthorizeAttribute> authorizeAttributes)
         {
-            using (var authorizationAttributeHelper = _iocResolver.ResolveAsDisposable<IAuthorizeAttributeHelper<TTenantId, TUserId>>())
+            using (
+                var authorizationAttributeHelper =
+                    _iocResolver.ResolveAsDisposable<IAuthorizeAttributeHelper<TTenantId, TUserId>>())
             {
                 authorizationAttributeHelper.Object.Authorize(authorizeAttributes);
             }
@@ -91,7 +93,9 @@ namespace Abp.Authorization.Interceptors
 
         private async Task AuthorizeAsync(IEnumerable<AbpAuthorizeAttribute> authorizeAttributes)
         {
-            using (var authorizationAttributeHelper = _iocResolver.ResolveAsDisposable<IAuthorizeAttributeHelper<TTenantId, TUserId>>())
+            using (
+                var authorizationAttributeHelper =
+                    _iocResolver.ResolveAsDisposable<IAuthorizeAttributeHelper<TTenantId, TUserId>>())
             {
                 await authorizationAttributeHelper.Object.AuthorizeAsync(authorizeAttributes);
             }

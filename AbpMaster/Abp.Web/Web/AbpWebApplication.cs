@@ -41,10 +41,17 @@ namespace Abp.Web
         protected virtual void Application_Start(object sender, EventArgs e)
         {
             AbpBootstrapper.IocManager.RegisterIfNot<IAssemblyFinder, WebAssemblyFinder>();
-            var cache = new ThreadSafeObjectCache<object>(new MemoryCache("_AbpWebApplicationCache"), TimeSpan.FromHours(3));
+
+            //var cache = new ThreadSafeObjectCache<object>(new MemoryCache("_AbpWebApplicationCache"), TimeSpan.FromHours(3));
+
+            var cache = new AbpMemoryCache("_AbpWebApplicationCache") { DefaultSlidingExpireTime = TimeSpan.FromDays(1) };
+
+            //AbpBootstrapper.IocManager.IocContainer.Register(
+            //    Component.For<ThreadSafeObjectCache<object>>().Named("_AbpBootstrapper").Instance(cache).LifestyleTransient());
 
             AbpBootstrapper.IocManager.IocContainer.Register(
-                Component.For<ThreadSafeObjectCache<object>>().Named("_AbpBootstrapper").Instance(cache).LifestyleTransient());
+                Component.For<AbpMemoryCache>().Named("_AbpBootstrapper").Instance(cache).LifestyleTransient()
+                );
 
             AbpBootstrapper.Initialize();
 

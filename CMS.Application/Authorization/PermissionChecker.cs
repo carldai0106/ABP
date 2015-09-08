@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.Authorization;
@@ -14,6 +12,7 @@ namespace CMS.Application.Authorization
     public class PermissionChecker : IPermissionChecker<Guid, Guid>, ITransientDependency
     {
         private readonly IUserAppService _userAppService;
+
         public PermissionChecker(IUserAppService userAppService)
         {
             _userAppService = userAppService;
@@ -38,7 +37,10 @@ namespace CMS.Application.Authorization
                 throw new AbpAuthorizationException("No user logged in!");
             }
 
-            var list = await _userAppService.GetPermission(new NullableIdInput<Guid> { Id = AbpSession.UserId.Value }, moduleCode, permissionName);
+            var list =
+                await
+                    _userAppService.GetPermission(new NullableIdInput<Guid> {Id = AbpSession.UserId.Value}, moduleCode,
+                        permissionName);
             return list.Any(x => x.Status);
         }
     }

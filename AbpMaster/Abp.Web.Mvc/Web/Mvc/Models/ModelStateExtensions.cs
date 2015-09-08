@@ -26,11 +26,11 @@ namespace Abp.Web.Mvc.Models
                     validationErrors.Add(new ValidationErrorInfo(error.ErrorMessage, state.Key));
                 }
             }
-            
+
             var errorInfo = new ErrorInfo(AbpWebLocalizedMessages.ValidationError)
-            {
-                ValidationErrors = validationErrors.ToArray()
-            };
+                            {
+                                ValidationErrors = validationErrors.ToArray()
+                            };
 
             return new MvcAjaxResponse(errorInfo);
         }

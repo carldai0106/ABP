@@ -6,12 +6,11 @@ using Abp.Dependency;
 
 namespace Abp.Application.Navigation
 {
-    internal class UserNavigationManager<TTenantId, TUserId> : IUserNavigationManager<TTenantId, TUserId>, ITransientDependency
+    internal class UserNavigationManager<TTenantId, TUserId> : IUserNavigationManager<TTenantId, TUserId>,
+        ITransientDependency
         where TTenantId : struct
         where TUserId : struct
     {
-        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
-
         private readonly INavigationManager _navigationManager;
 
         public UserNavigationManager(INavigationManager navigationManager)
@@ -19,6 +18,8 @@ namespace Abp.Application.Navigation
             _navigationManager = navigationManager;
             PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
         }
+
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
 
         public async Task<UserMenu> GetMenuAsync(string menuName, TUserId? userId)
         {
@@ -45,7 +46,8 @@ namespace Abp.Application.Navigation
             return userMenus;
         }
 
-        private async Task<int> FillUserMenuItems(TUserId? userId, IList<MenuItemDefinition> menuItemDefinitions, IList<UserMenuItem> userMenuItems)
+        private async Task<int> FillUserMenuItems(TUserId? userId, IList<MenuItemDefinition> menuItemDefinitions,
+            IList<UserMenuItem> userMenuItems)
         {
             var addedMenuItemCount = 0;
 
@@ -59,15 +61,16 @@ namespace Abp.Application.Navigation
                 var requiredPermissionName = menuItemDefinition.RequiredPermissionName;
                 //var rs = await PermissionChecker.IsGrantedAsync(userId.Value, requiredPermissionName);
 
-                if (!string.IsNullOrEmpty(requiredPermissionName) && 
-                    (!userId.HasValue || 
-                    !(await PermissionChecker.IsGrantedAsync(userId.Value, menuItemDefinition.RequiredPermissionName))))
+                if (!string.IsNullOrEmpty(requiredPermissionName) &&
+                    (!userId.HasValue ||
+                     !(await PermissionChecker.IsGrantedAsync(userId.Value, menuItemDefinition.RequiredPermissionName))))
                 {
                     continue;
                 }
 
                 var userMenuItem = new UserMenuItem(menuItemDefinition);
-                if (menuItemDefinition.IsLeaf || (await FillUserMenuItems(userId, menuItemDefinition.Items, userMenuItem.Items)) > 0)
+                if (menuItemDefinition.IsLeaf ||
+                    (await FillUserMenuItems(userId, menuItemDefinition.Items, userMenuItem.Items)) > 0)
                 {
                     userMenuItems.Add(userMenuItem);
                     ++addedMenuItemCount;

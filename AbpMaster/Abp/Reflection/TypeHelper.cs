@@ -15,7 +15,7 @@ namespace Abp.Reflection
                 return false;
             }
 
-            return type.GetGenericTypeDefinition() == typeof(Func<>);
+            return type.GetGenericTypeDefinition() == typeof (Func<>);
         }
 
         public static bool IsFunc<TReturn>(object obj)

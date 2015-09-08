@@ -31,9 +31,9 @@ namespace Abp.EntityFramework.Repositories
         }
 
         public AutoRepositoryTypesAttribute(
-            Type repositoryInterface,
-            Type repositoryInterfaceWithPrimaryKey,
-            Type repositoryImplementation,
+            Type repositoryInterface, 
+            Type repositoryInterfaceWithPrimaryKey, 
+            Type repositoryImplementation, 
             Type repositoryImplementationWithPrimaryKey)
         {
             RepositoryInterface = repositoryInterface;

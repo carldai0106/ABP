@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
@@ -20,6 +18,5 @@ namespace CMS.Application.User
         Task CreateOrUpdate(IEnumerable<UserRoleDto> inputs);
         Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode, string actionCode);
         Task<LoginResultDto> Login(string userNameOrEmailAddress, string plainPassword, string tenancyName = null);
-
     }
 }

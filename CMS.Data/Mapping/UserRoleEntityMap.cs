@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CMS.Domain.Tenant;
+﻿using System.Data.Entity.ModelConfiguration;
 using CMS.Domain.UserRole;
 
 namespace CMS.Data.Mapping

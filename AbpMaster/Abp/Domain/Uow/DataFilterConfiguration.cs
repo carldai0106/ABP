@@ -14,7 +14,7 @@ namespace Abp.Domain.Uow
         {
             FilterName = filterName;
             IsEnabled = isEnabled;
-            FilterParameters = new Dictionary<string, object>();           
+            FilterParameters = new Dictionary<string, object>();
         }
 
         internal DataFilterConfiguration(DataFilterConfiguration filterToClone)

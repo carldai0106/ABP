@@ -11,19 +11,18 @@ using Abp.Runtime.Session;
 namespace Abp.Authorization
 {
     /// <summary>
-    /// Permission manager.
+    ///     Permission manager.
     /// </summary>
-    internal class PermissionManager<TTenantId, TUserId> : PermissionDefinitionContextBase, IPermissionManager<TTenantId, TUserId>, ISingletonDependency
+    internal class PermissionManager<TTenantId, TUserId> : PermissionDefinitionContextBase,
+        IPermissionManager<TTenantId, TUserId>, ISingletonDependency
         where TTenantId : struct
         where TUserId : struct
     {
-        public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
-
-        private readonly IIocManager _iocManager;
         private readonly IAuthorizationConfiguration _authorizationConfiguration;
+        private readonly IIocManager _iocManager;
 
         /// <summary>
-        /// Constructor.
+        ///     Constructor.
         /// </summary>
         public PermissionManager(IIocManager iocManager, IAuthorizationConfiguration authorizationConfiguration)
         {
@@ -33,15 +32,7 @@ namespace Abp.Authorization
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
         }
 
-        public void Initialize()
-        {
-            foreach (var providerType in _authorizationConfiguration.Providers)
-            {
-                CreateAuthorizationProvider(providerType).SetPermissions(this);
-            }
-
-            Permissions.AddAllPermissions();
-        }
+        public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
 
         public Permission GetPermission(string name)
         {
@@ -68,6 +59,16 @@ namespace Abp.Authorization
                 .ToImmutableList();
         }
 
+        public void Initialize()
+        {
+            foreach (var providerType in _authorizationConfiguration.Providers)
+            {
+                CreateAuthorizationProvider(providerType).SetPermissions(this);
+            }
+
+            Permissions.AddAllPermissions();
+        }
+
         private AuthorizationProvider CreateAuthorizationProvider(Type providerType)
         {
             if (!_iocManager.IsRegistered(providerType))
@@ -75,7 +76,7 @@ namespace Abp.Authorization
                 _iocManager.Register(providerType);
             }
 
-            return (AuthorizationProvider)_iocManager.Resolve(providerType);
+            return (AuthorizationProvider) _iocManager.Resolve(providerType);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Abp.Application.Navigation
         /// </summary>
         public UserMenuItem()
         {
-
+            
         }
 
         /// <summary>

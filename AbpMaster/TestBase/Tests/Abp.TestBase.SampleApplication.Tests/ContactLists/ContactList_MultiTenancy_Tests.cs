@@ -14,7 +14,6 @@ namespace Abp.TestBase.SampleApplication.Tests.ContactLists
 
         public ContactList_MultiTenancy_Tests()
         {
-            
             Resolve<IMultiTenancyConfig>().IsEnabled = true;
             _contactListRepository = Resolve<IRepository<ContactList>>();
         }

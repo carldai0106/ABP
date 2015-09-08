@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 
 namespace CMS.Application
 {
     public class PagedAndSortedInputDto : IInputDto, IPagedResultRequest, ISortedResultRequest
     {
+        public PagedAndSortedInputDto()
+        {
+            MaxResultCount = AppConsts.DefaultPageSize;
+        }
+
         [Range(1, AppConsts.MaxPageSize)]
         public int MaxResultCount { get; set; }
 
@@ -17,10 +17,5 @@ namespace CMS.Application
         public int SkipCount { get; set; }
 
         public string Sorting { get; set; }
-
-        public PagedAndSortedInputDto()
-        {
-            MaxResultCount = AppConsts.DefaultPageSize;
-        }
     }
 }

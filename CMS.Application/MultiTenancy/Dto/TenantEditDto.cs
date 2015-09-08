@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using CMS.Domain.Tenant;
 
 namespace CMS.Application.MultiTenancy.Dto
 {
-    [AutoMap(typeof(TenantEntity))]
+    [AutoMap(typeof (TenantEntity))]
     public class TenantEditDto : EntityDto<Guid>, IDoubleWayDto
     {
         [Required]

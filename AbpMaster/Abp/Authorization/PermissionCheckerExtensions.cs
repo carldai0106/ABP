@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Abp.Collections.Extensions;
 using Abp.Threading;
@@ -6,16 +5,17 @@ using Abp.Threading;
 namespace Abp.Authorization
 {
     /// <summary>
-    /// Extension methods for <see cref="IPermissionChecker{TTenantId, TUserId}"/>
+    ///     Extension methods for <see cref="IPermissionChecker{TTenantId, TUserId}" />
     /// </summary>
     public static class PermissionCheckerExtensions
     {
         /// <summary>
-        /// Checks if current user is granted for a permission.
+        ///     Checks if current user is granted for a permission.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="permissionName">Name of the permission</param>
-        public static bool IsGranted<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, string permissionName)
+        public static bool IsGranted<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker,
+            string permissionName)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -23,12 +23,13 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Checks if a user is granted for a permission.
+        ///     Checks if a user is granted for a permission.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="userId">Id of the user to check</param>
         /// <param name="permissionName">Name of the permission</param>
-        public static bool IsGranted<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, TUserId userId, string permissionName)
+        public static bool IsGranted<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker,
+            TUserId userId, string permissionName)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -36,12 +37,13 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Checks if a user is granted for a permission.
+        ///     Checks if a user is granted for a permission.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="moduleCode">code of the module or menu</param>
         /// <param name="permissionName">Name of the permission</param>
-        public static bool IsGranted<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, string moduleCode, string permissionName)
+        public static bool IsGranted<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker,
+            string moduleCode, string permissionName)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -49,14 +51,15 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Authorizes current user for given permission or permissions,
-        /// throws <see cref="AbpAuthorizationException"/> if not authorized.
-        /// User it authorized if any of the <see cref="permissionNames"/> are granted.
+        ///     Authorizes current user for given permission or permissions,
+        ///     throws <see cref="AbpAuthorizationException" /> if not authorized.
+        ///     User it authorized if any of the <see cref="permissionNames" /> are granted.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="permissionNames">Name of the permissions to authorize</param>
         /// <exception cref="AbpAuthorizationException">Throws authorization exception if</exception>
-        public static void Authorize<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, params string[] permissionNames)
+        public static void Authorize<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker,
+            params string[] permissionNames)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -64,18 +67,19 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Authorizes current user for given permission or permissions,
-        /// throws <see cref="AbpAuthorizationException"/> if not authorized.
-        /// User it authorized if any of the <see cref="permissionNames"/> are granted.
+        ///     Authorizes current user for given permission or permissions,
+        ///     throws <see cref="AbpAuthorizationException" /> if not authorized.
+        ///     User it authorized if any of the <see cref="permissionNames" /> are granted.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="requireAll">
-        /// If this is set to true, all of the <see cref="permissionNames"/> must be granted.
-        /// If it's false, at least one of the <see cref="permissionNames"/> must be granted.
+        ///     If this is set to true, all of the <see cref="permissionNames" /> must be granted.
+        ///     If it's false, at least one of the <see cref="permissionNames" /> must be granted.
         /// </param>
         /// <param name="permissionNames">Name of the permissions to authorize</param>
         /// <exception cref="AbpAuthorizationException">Throws authorization exception if</exception>
-        public static void Authorize<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, bool requireAll, params string[] permissionNames)
+        public static void Authorize<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker,
+            bool requireAll, params string[] permissionNames)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -83,14 +87,15 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Authorizes current user for given permission or permissions,
-        /// throws <see cref="AbpAuthorizationException"/> if not authorized.
-        /// User it authorized if any of the <see cref="permissionNames"/> are granted.
+        ///     Authorizes current user for given permission or permissions,
+        ///     throws <see cref="AbpAuthorizationException" /> if not authorized.
+        ///     User it authorized if any of the <see cref="permissionNames" /> are granted.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="permissionNames">Name of the permissions to authorize</param>
         /// <exception cref="AbpAuthorizationException">Throws authorization exception if</exception>
-        public static Task AuthorizeAsync<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, params string[] permissionNames)
+        public static Task AuthorizeAsync<TTenantId, TUserId>(
+            this IPermissionChecker<TTenantId, TUserId> permissionChecker, params string[] permissionNames)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -98,17 +103,19 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Authorizes current user for given permission or permissions,
-        /// throws <see cref="AbpAuthorizationException"/> if not authorized.
+        ///     Authorizes current user for given permission or permissions,
+        ///     throws <see cref="AbpAuthorizationException" /> if not authorized.
         /// </summary>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="requireAll">
-        /// If this is set to true, all of the <see cref="permissionNames"/> must be granted.
-        /// If it's false, at least one of the <see cref="permissionNames"/> must be granted.
+        ///     If this is set to true, all of the <see cref="permissionNames" /> must be granted.
+        ///     If it's false, at least one of the <see cref="permissionNames" /> must be granted.
         /// </param>
         /// <param name="permissionNames">Name of the permissions to authorize</param>
         /// <exception cref="AbpAuthorizationException">Throws authorization exception if</exception>
-        public static async Task AuthorizeAsync<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker, bool requireAll, params string[] permissionNames)
+        public static async Task AuthorizeAsync<TTenantId, TUserId>(
+            this IPermissionChecker<TTenantId, TUserId> permissionChecker, bool requireAll,
+            params string[] permissionNames)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -125,7 +132,7 @@ namespace Abp.Authorization
                     {
                         throw new AbpAuthorizationException(
                             "Required permissions are not granted. All of these permissions must be granted: " +
-                            String.Join(", ", permissionNames)
+                            string.Join(", ", permissionNames)
                             );
                     }
                 }
@@ -142,21 +149,22 @@ namespace Abp.Authorization
 
                 throw new AbpAuthorizationException(
                     "Required permissions are not granted. At least one of these permissions must be granted: " +
-                    String.Join(", ", permissionNames)
+                    string.Join(", ", permissionNames)
                     );
             }
         }
 
         /// <summary>
-        /// Authorizes current user for given permission or permissions,
-        /// throws <see cref="AbpAuthorizationException"/> if not authorized.
+        ///     Authorizes current user for given permission or permissions,
+        ///     throws <see cref="AbpAuthorizationException" /> if not authorized.
         /// </summary>
         /// <typeparam name="TUserId">The type of UserId</typeparam>
         /// <typeparam name="TTenantId">The type of TenantId</typeparam>
         /// <param name="permissionChecker">Permission checker</param>
         /// <param name="abpAuthorizeAttribute">Abp authorization attributes.</param>
         /// <returns></returns>
-        public static async Task AuthorizeAsync<TTenantId, TUserId>(this IPermissionChecker<TTenantId, TUserId> permissionChecker,
+        public static async Task AuthorizeAsync<TTenantId, TUserId>(
+            this IPermissionChecker<TTenantId, TUserId> permissionChecker,
             IAbpAuthorizeAttribute abpAuthorizeAttribute)
             where TTenantId : struct
             where TUserId : struct
@@ -183,7 +191,8 @@ namespace Abp.Authorization
                     if (!(await permissionChecker.IsGrantedAsync(moduleCode, permissionName)))
                     {
                         throw new AbpAuthorizationException(
-                            "Required permissions of " + moduleCode + " are not granted. All of these permissions must be granted: " +
+                            "Required permissions of " + moduleCode +
+                            " are not granted. All of these permissions must be granted: " +
                             string.Join(", ", permissions)
                             );
                     }
@@ -200,7 +209,8 @@ namespace Abp.Authorization
                 }
 
                 throw new AbpAuthorizationException(
-                    "Required permissions of " + moduleCode + " are not granted. At least one of these permissions must be granted: " +
+                    "Required permissions of " + moduleCode +
+                    " are not granted. At least one of these permissions must be granted: " +
                     string.Join(", ", permissions)
                     );
             }

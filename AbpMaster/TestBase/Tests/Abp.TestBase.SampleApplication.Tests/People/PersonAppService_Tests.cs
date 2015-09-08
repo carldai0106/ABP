@@ -121,5 +121,11 @@ namespace Abp.TestBase.SampleApplication.Tests.People
             await _personAppService.DeletePerson(new EntityRequestInput(halil.Id));
             (await UsingDbContextAsync(async context => await context.People.FirstOrDefaultAsync(p => p.Name == "halil"))).IsDeleted.ShouldBe(true);
         }
+
+        [Fact]
+        public void Test_TestPrimitiveMethod()
+        {
+            _personAppService.TestPrimitiveMethod(42, "adana", new EntityRequestInput(7)).ShouldBe("42#adana#7");
+        }
     }
 }

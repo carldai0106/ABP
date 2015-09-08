@@ -6,8 +6,8 @@ namespace Abp.Web.Navigation
     /// Used to generate navigation scripts.
     /// </summary>
     public interface INavigationScriptManager<TTenantId, TUserId>
-        where TTenantId :struct
-        where TUserId :struct
+        where TTenantId : struct
+        where TUserId : struct
     {
         /// <summary>
         /// Used to generate navigation scripts.

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abp.Authorization;
-using Abp.Dependency;
-using Abp.Web.Mvc.Views;
+﻿using Abp.Web.Mvc.Views;
 using CMS.Application.Localization;
 
 namespace CMS.Web
@@ -15,7 +8,7 @@ namespace CMS.Web
         protected CmsTemplateWebViewPageBase()
         {
             LocalizationSourceName = CmsConsts.LocalizationSourceName;
-           
+
         }
     }
 

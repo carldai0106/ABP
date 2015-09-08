@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Abp.Application.Navigation;
 using Abp.Application.Services;
 using Abp.Auditing;
@@ -57,6 +58,8 @@ namespace Abp
             Configuration.UnitOfWork.RegisterFilter(AbpDataFilters.SoftDelete, true);
             Configuration.UnitOfWork.RegisterFilter(AbpDataFilters.MustHaveTenant, true);
             Configuration.UnitOfWork.RegisterFilter(AbpDataFilters.MayHaveTenant, true);
+
+            ConfigureCaches<TTenantId, TUserId>();
         }
 
         public override void Initialize<TTenantId, TUserId>()
@@ -80,6 +83,26 @@ namespace Abp
             IocManager.Resolve<NavigationManager>().Initialize();
             IocManager.Resolve<PermissionManager<TTenantId, TUserId>>().Initialize();
             IocManager.Resolve<SettingDefinitionManager>().Initialize();
+        }
+
+        private void ConfigureCaches<TTenantId, TUserId>()
+            where TTenantId : struct
+            where TUserId : struct
+        {
+            Configuration.Caching.Configure(SettingManager<TTenantId, TUserId>.ApplicationSettingsCacheName, cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromHours(8);
+            });
+
+            Configuration.Caching.Configure(SettingManager<TTenantId, TUserId>.TenantSettingsCacheName, cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(60);
+            });
+
+            Configuration.Caching.Configure(SettingManager<TTenantId, TUserId>.ApplicationSettingsCacheName, cache =>
+            {
+                cache.DefaultSlidingExpireTime = TimeSpan.FromMinutes(20);
+            });
         }
 
         private void RegisterMissingComponents<TTenantId, TUserId>()

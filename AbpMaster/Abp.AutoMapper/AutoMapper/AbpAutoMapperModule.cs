@@ -10,6 +10,7 @@ namespace Abp.AutoMapper
     public class AbpAutoMapperModule : AbpModule
     {
         public ILogger Logger { get; set; }
+
         public ILocalizationManager LocalizationManager { get; set; }
 
         private readonly ITypeFinder _typeFinder;
@@ -24,7 +25,7 @@ namespace Abp.AutoMapper
             LocalizationManager = NullLocalizationManager.Instance;
         }
 
-        public override void PreInitialize<TTenantId, TUserId>()
+        public override void PostInitialize<TTenantId, TUserId>()
         {
             CreateMappings();
         }
@@ -39,14 +40,18 @@ namespace Abp.AutoMapper
                     return;
                 }
 
-                FindAndAutoMapTypes();
-                CreateOtherMappings();
+                AutoMapperHelper.Initialize(configuration =>
+                {
+
+                    FindAndAutoMapTypes(configuration);
+                    CreateOtherMappings(configuration);
+                });
 
                 _createdMappingsBefore = true;
             }
         }
 
-        private void FindAndAutoMapTypes()
+        private void FindAndAutoMapTypes(IConfiguration configuration)
         {
             var types = _typeFinder.Find(type =>
                 type.IsDefined(typeof(AutoMapAttribute)) ||
@@ -58,13 +63,13 @@ namespace Abp.AutoMapper
             foreach (var type in types)
             {
                 Logger.Debug(type.FullName);
-                AutoMapperHelper.CreateMap(type);
+                AutoMapperHelper.CreateMap(configuration, type);
             }
         }
 
-        private void CreateOtherMappings()
+        private void CreateOtherMappings(IConfiguration configuration)
         {
-            Mapper.CreateMap<LocalizableString, string>().ConvertUsing(ls => LocalizationManager.GetString(ls.SourceName, ls.Name));
+            configuration.CreateMap<LocalizableString, string>().ConvertUsing(ls => LocalizationManager.GetString(ls.SourceName, ls.Name));
         }
     }
 }

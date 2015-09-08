@@ -7,7 +7,6 @@ namespace Abp.Authorization
         where TTenantId : struct
         where TUserId : struct
     {
-        public static IPermissionChecker<TTenantId, TUserId> Instance { get { return LazyInstance.Value; } }
         private static readonly Lazy<IPermissionChecker<TTenantId, TUserId>> LazyInstance;
 
         static StaticPermissionChecker()
@@ -21,9 +20,14 @@ namespace Abp.Authorization
             else
             {
                 LazyInstance = new Lazy<IPermissionChecker<TTenantId, TUserId>>(
-                                   () => NullPermissionChecker<TTenantId, TUserId>.Instance
-                                   );
+                    () => NullPermissionChecker<TTenantId, TUserId>.Instance
+                    );
             }
+        }
+
+        public static IPermissionChecker<TTenantId, TUserId> Instance
+        {
+            get { return LazyInstance.Value; }
         }
     }
 }

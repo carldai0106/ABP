@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq.Dynamic;
 using System.Threading.Tasks;
-using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using Abp.Linq.Extensions;
 using Abp.UI;
-using CMS.Application.Localization;
 using CMS.Application.Role.Dto;
 using CMS.Domain;
 using CMS.Domain.Role;
 using CMS.Domain.RoleRight;
-
 
 namespace CMS.Application.Role
 {
@@ -21,7 +18,9 @@ namespace CMS.Application.Role
     {
         private readonly ICmsRepository<RoleEntity, Guid> _repository;
         private readonly ICmsRepository<RoleRightEntity, Guid> _roleRightRepository;
-        public RoleAppService(ICmsRepository<RoleEntity, Guid> repository, ICmsRepository<RoleRightEntity, Guid> roleRightRepository)
+
+        public RoleAppService(ICmsRepository<RoleEntity, Guid> repository,
+            ICmsRepository<RoleRightEntity, Guid> roleRightRepository)
         {
             _repository = repository;
             _roleRightRepository = roleRightRepository;
@@ -38,7 +37,6 @@ namespace CMS.Application.Role
             role.Id = Guid.NewGuid();
 
             await _repository.InsertAsync(role);
-
         }
 
         public async Task Update(RoleEditDto input)
@@ -97,7 +95,7 @@ namespace CMS.Application.Role
                 if (!item.Id.HasValue)
                 {
                     if (await _roleRightRepository.FirstOrDefaultAsync(
-                            x => x.ActionModuleId == item.ActionModuleId && x.RoleId == item.RoleId) == null)
+                        x => x.ActionModuleId == item.ActionModuleId && x.RoleId == item.RoleId) == null)
                     {
                         rs.Id = Guid.NewGuid();
                         await _roleRightRepository.InsertAsync(rs);

@@ -8,6 +8,6 @@ namespace Abp.Runtime.Validation
     [AttributeUsage(AttributeTargets.Method)]
     public class DisableValidationAttribute : Attribute
     {
-
+        
     }
 }

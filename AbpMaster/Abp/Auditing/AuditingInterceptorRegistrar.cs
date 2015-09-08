@@ -8,8 +8,8 @@ namespace Abp.Auditing
 {
     internal class AuditingInterceptorRegistrar
     {
-        private readonly IIocManager _iocManager;
         private readonly IAuditingConfiguration _auditingConfiguration;
+        private readonly IIocManager _iocManager;
 
         public AuditingInterceptorRegistrar(IIocManager iocManager)
         {
@@ -27,15 +27,14 @@ namespace Abp.Auditing
             }
             _iocManager.IocContainer.Kernel.ComponentRegistered += Kernel_ComponentRegistered<TTenantId, TUserId>;
         }
-       
 
         private void Kernel_ComponentRegistered<TTenantId, TUserId>(string key, IHandler handler)
             where TTenantId : struct
             where TUserId : struct
         {
             if (ShouldIntercept(handler.ComponentModel.Implementation))
-            {
-                handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AuditingInterceptor<TTenantId,TUserId>)));
+            {                
+				handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof (AuditingInterceptor<TTenantId, TUserId>)));
             }
         }
 
@@ -46,12 +45,12 @@ namespace Abp.Auditing
                 return true;
             }
 
-            if (type.IsDefined(typeof(AuditedAttribute), true)) //TODO: true or false?
+            if (type.IsDefined(typeof (AuditedAttribute), true)) //TODO: true or false?
             {
                 return true;
             }
 
-            if (type.GetMethods().Any(m => m.IsDefined(typeof(AuditedAttribute), true))) //TODO: true or false?
+            if (type.GetMethods().Any(m => m.IsDefined(typeof (AuditedAttribute), true))) //TODO: true or false?
             {
                 return true;
             }

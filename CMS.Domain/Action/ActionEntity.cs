@@ -5,7 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities;
 using Abp.Domain.Entities.Auditing;
 using CMS.Domain.ActionModule;
-using CMS.FW.Domain;
 
 namespace CMS.Domain.Action
 {
@@ -19,12 +18,16 @@ namespace CMS.Domain.Action
         [Required]
         [StringLength(MaxActionCodeLength)]
         public virtual string ActionCode { get; set; }
+
         [Required]
         [StringLength(MaxDisplayNameLength)]
         public virtual string DisplayName { get; set; }
+
         [StringLength(MaxDescriptionLength)]
         public string Description { get; set; }
+
         public bool IsActive { get; set; }
+
         [ForeignKey("ActionId")]
         public virtual ICollection<ActionModuleEntity> ActionModuels { get; set; }
     }

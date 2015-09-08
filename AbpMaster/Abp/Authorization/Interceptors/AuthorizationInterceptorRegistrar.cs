@@ -6,7 +6,7 @@ using Castle.MicroKernel;
 namespace Abp.Authorization.Interceptors
 {
     /// <summary>
-    /// This class is used to register interceptors on the Application Layer.
+    ///     This class is used to register interceptors on the Application Layer.
     /// </summary>
     internal static class AuthorizationInterceptorRegistrar<TTenantId, TUserId>
         where TTenantId : struct
@@ -18,11 +18,12 @@ namespace Abp.Authorization.Interceptors
         }
 
         private static void Kernel_ComponentRegistered(string key, IHandler handler)
-            
+
         {
-            if (typeof(IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation))
+            if (typeof (IApplicationService).IsAssignableFrom(handler.ComponentModel.Implementation))
             {
-                handler.ComponentModel.Interceptors.Add(new InterceptorReference(typeof(AuthorizationInterceptor<TTenantId, TUserId>)));
+                handler.ComponentModel.Interceptors.Add(
+                    new InterceptorReference(typeof (AuthorizationInterceptor<TTenantId, TUserId>)));
             }
         }
     }

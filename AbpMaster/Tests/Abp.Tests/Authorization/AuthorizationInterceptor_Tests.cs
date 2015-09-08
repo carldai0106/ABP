@@ -95,8 +95,6 @@ namespace Abp.Tests.Authorization
             _asyncObj.Called_MethodWithPermission1AndPermission3WithRequireAll.ShouldBe(false);
         }
 
-       
-
         public class MyTestClassToBeAuthorized_Sync
         {
             public bool Called_MethodWithoutPermission { get; private set; }

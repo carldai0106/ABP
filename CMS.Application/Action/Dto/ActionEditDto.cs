@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
 using CMS.Domain.Action;
 
 namespace CMS.Application.Action.Dto
 {
-     [AutoMap(typeof(ActionEntity))]
+    [AutoMap(typeof (ActionEntity))]
     public class ActionEditDto : EntityDto<Guid>, IDoubleWayDto
     {
         public const int MaxActionCodeLength = 128;
@@ -20,11 +16,14 @@ namespace CMS.Application.Action.Dto
         [Required]
         [StringLength(MaxActionCodeLength)]
         public string ActionCode { get; set; }
+
         [Required]
         [StringLength(MaxDisplayNameLength)]
         public string DisplayName { get; set; }
+
         [StringLength(MaxDescriptionLength)]
         public string Description { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

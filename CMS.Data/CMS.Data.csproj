@@ -65,9 +65,9 @@
     <Compile Include="Mapping\UserRoleEntityMap.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Migrations\201508240214526_InitalCreate.cs" />
-    <Compile Include="Migrations\201508240214526_InitalCreate.Designer.cs">
-      <DependentUpon>201508240214526_InitalCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201509070230045_InitialCreate.cs" />
+    <Compile Include="Migrations\201509070230045_InitialCreate.Designer.cs">
+      <DependentUpon>201509070230045_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,9 +76,9 @@
     <Compile Include="CmsDataModule.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ABP.Extension\Abp.Extensions.csproj">
+    <ProjectReference Include="..\ABP.Extension\Abp.Extended.csproj">
       <Project>{57438e73-edde-445a-a5fc-e8d22dc1f12a}</Project>
-      <Name>Abp.Extensions</Name>
+      <Name>Abp.Extended</Name>
     </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp.EntityFramework\Abp.EntityFramework.csproj">
       <Project>{948f0caf-3382-4e03-9a0f-0ddb206fe40d}</Project>
@@ -96,18 +96,14 @@
       <Project>{bf813e48-d151-4e31-bb2d-1fea44a9a2e5}</Project>
       <Name>CMS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CMS.FW\CMS.FW.csproj">
-      <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
-      <Name>CMS.FW</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201508240214526_InitalCreate.resx">
-      <DependentUpon>201508240214526_InitalCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509070230045_InitialCreate.resx">
+      <DependentUpon>201509070230045_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

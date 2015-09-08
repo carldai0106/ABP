@@ -29,9 +29,12 @@ namespace CMS.Web
                         "~/Content/scripts/jquery.bganimate.js",
                         "~/Content/scripts/jquery.slimscroll.js",
                         "~/Content/scripts/jquery.powertip.js",
-                        "~/Content/scripts/jquery.fancybox.js",
-                        "~/Content/scripts/main.js"
+                        "~/Content/scripts/jquery.fancybox.js"
                         ));
+
+            bundles.Add(new ScriptBundle("~/bundles/custom").Include(
+                "~/Content/scripts/main.js"
+                ));
 
 
             //// 使用要用于开发和学习的 Modernizr 的开发版本。然后，当你做好

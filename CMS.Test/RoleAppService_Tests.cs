@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.Configuration.Startup;
 using CMS.Application.Action;
 using CMS.Application.Module;
@@ -21,15 +22,14 @@ namespace CMS.Test
     [TestCaseOrderer("Xunit.Extensions.PriorityOrderer", "Xunit.Extensions")]
     public class RoleAppService_Tests : TestBase<Guid, Guid>
     {
-        private readonly IRoleAppService _roleAppService;
-        private readonly IModuleAppService _moduleAppService;
         private readonly IActionAppService _actionAppService;
-        private readonly IUserAppService _userAppService;
+        private readonly IModuleAppService _moduleAppService;
         private readonly ITestOutputHelper _output;
+        private readonly IRoleAppService _roleAppService;
+        private readonly IUserAppService _userAppService;
 
         public RoleAppService_Tests(ITestOutputHelper output)
         {
-            
             _roleAppService = Resolve<IRoleAppService>();
             _moduleAppService = Resolve<IModuleAppService>();
             _actionAppService = Resolve<IActionAppService>();
@@ -56,25 +56,29 @@ namespace CMS.Test
                     DisplayName = "Manager",
                     IsActive = true,
                     RoleCode = "Manager"
-                },new RoleCreateDto
+                },
+                new RoleCreateDto
                 {
                     Description = "",
                     DisplayName = "Accountant",
                     IsActive = true,
                     RoleCode = "Accountant"
-                },new RoleCreateDto
+                },
+                new RoleCreateDto
                 {
                     Description = "",
                     DisplayName = "Group Leader",
                     IsActive = true,
                     RoleCode = "GroupLeader"
-                },new RoleCreateDto
+                },
+                new RoleCreateDto
                 {
                     Description = "",
                     DisplayName = "Staff",
                     IsActive = true,
                     RoleCode = "Staff"
-                },new RoleCreateDto
+                },
+                new RoleCreateDto
                 {
                     Description = "",
                     DisplayName = "Test",
@@ -100,9 +104,9 @@ namespace CMS.Test
             rs.ShouldNotBe(null);
             rs.RoleCode.ShouldBe("TestRole");
 
-            await _roleAppService.Delete(new Abp.Application.Services.Dto.IdInput<Guid> {Id = rs.Id});
+            await _roleAppService.Delete(new IdInput<Guid> {Id = rs.Id});
 
-            rs = await _roleAppService.GetRole(new Abp.Application.Services.Dto.IdInput<Guid> { Id = rs.Id});
+            rs = await _roleAppService.GetRole(new IdInput<Guid> {Id = rs.Id});
             rs.ShouldBe(null);
         }
 
@@ -110,7 +114,7 @@ namespace CMS.Test
         public async Task Create_UserRole_Test()
         {
             var pageResult = await _roleAppService.GetRoles(new GetRolesInput());
-            string str = JsonConvert.SerializeObject(pageResult.Items, Formatting.Indented);
+            var str = JsonConvert.SerializeObject(pageResult.Items, Formatting.Indented);
             _output.WriteLine(str);
 
             var userAdmin = await _userAppService.GetUser("admin");
@@ -185,7 +189,7 @@ namespace CMS.Test
             str = JsonConvert.SerializeObject(userPerry, Formatting.Indented);
             _output.WriteLine(str);
 
-            var rs = await _userAppService.GetPermission(new Abp.Application.Services.Dto.NullableIdInput<Guid>
+            var rs = await _userAppService.GetPermission(new NullableIdInput<Guid>
             {
                 Id = userAdmin.Id
             }, "CMS.Admin.RoleRights", "");
@@ -224,9 +228,10 @@ namespace CMS.Test
             await _roleAppService.CreateOrUpdate(list);
 
             role = roles.Items.FirstOrDefault(x => x.RoleCode == "GroupLeader");
-            
+
             list = new List<RoleRightDto>();
-            foreach (var m in items.Where(x => x.ModuleCode == "CMS.Admin.Setup" || x.ModuleCode == "CMS.Admin.Modules"))
+            foreach (var m in items.Where(x => x.ModuleCode == "CMS.Admin.Setup" || x.ModuleCode == "CMS.Admin.Modules")
+                )
             {
                 foreach (var am in m.ActionModules)
                 {
@@ -251,7 +256,7 @@ namespace CMS.Test
 
             var action = await _actionAppService.GetAction("CMS.Delete");
 
-            Guid actionid = default(Guid);
+            var actionid = default(Guid);
             foreach (var am in module.ActionModules)
             {
                 foreach (var r2 in role.RoleRights)

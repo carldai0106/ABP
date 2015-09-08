@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Abp.Reflection.Extensions
 {
     /// <summary>
-    /// AssignableExtensions
-    /// Modify by carl
+    ///     AssignableExtensions
+    ///     Modify by carl
     /// </summary>
     public static class AssignableExtensions
     {
         /// <summary>
-        ///  Checks whether <paramref name="child"/> implements/inherits <paramref name="parent"/>
+        ///     Checks whether <paramref name="child" /> implements/inherits <paramref name="parent" />
         /// </summary>
         /// <param name="child">Current Type</param>
         /// <param name="parent">Parent Type</param>
@@ -27,18 +24,13 @@ namespace Abp.Reflection.Extensions
             if (child.IsSubclassOf(parent))
                 return true;
 
-            int a = 1;
-            if (child.Name.Contains("SampleApplicationDbContext"))
-            {
-                a = 2;
-            }
-
             var parameters = parent.GetGenericArguments();
 
             var isParameterLessGeneric = !(parameters.Length > 0 &&
-                ((parameters[0].Attributes & TypeAttributes.BeforeFieldInit) == TypeAttributes.BeforeFieldInit));
+                                           ((parameters[0].Attributes & TypeAttributes.BeforeFieldInit) ==
+                                            TypeAttributes.BeforeFieldInit));
 
-            while (child != null && child != typeof(object))
+            while (child != null && child != typeof (object))
             {
                 var cur = GetFullTypeDefinition(child);
                 if (parent == cur ||
@@ -72,7 +64,8 @@ namespace Abp.Reflection.Extensions
                         //}
 
                         if (child.GetInterfaces()
-                            .Where(i => GetFullTypeDefinition(parent) == GetFullTypeDefinition(i)).Any(item => VerifyGenericArguments(parent, item)))
+                            .Where(i => GetFullTypeDefinition(parent) == GetFullTypeDefinition(i))
+                            .Any(item => VerifyGenericArguments(parent, item)))
                         {
                             return true;
                         }
@@ -95,7 +88,7 @@ namespace Abp.Reflection.Extensions
             var parentArguments = parent.GetGenericArguments();
             if (childArguments.Length == parentArguments.Length)
             {
-                for (int i = 0; i < childArguments.Length; i++)
+                for (var i = 0; i < childArguments.Length; i++)
                 {
                     if (childArguments[i].Assembly != parentArguments[i].Assembly ||
                         childArguments[i].Name != parentArguments[i].Name ||

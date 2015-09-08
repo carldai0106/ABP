@@ -6,7 +6,8 @@ namespace Abp.Auditing
 {
     public static class AuditingHelper
     {
-        public static bool ShouldSaveAudit<TTenantId, TUserId>(MethodInfo methodInfo, IAuditingConfiguration configuration, IAbpSession<TTenantId, TUserId> abpSession, bool defaultValue = false)
+        public static bool ShouldSaveAudit<TTenantId, TUserId>(MethodInfo methodInfo,
+            IAuditingConfiguration configuration, IAbpSession<TTenantId, TUserId> abpSession, bool defaultValue = false)
             where TTenantId : struct
             where TUserId : struct
         {
@@ -30,12 +31,12 @@ namespace Abp.Auditing
                 return false;
             }
 
-            if (methodInfo.IsDefined(typeof(AuditedAttribute)))
+            if (methodInfo.IsDefined(typeof (AuditedAttribute)))
             {
                 return true;
             }
 
-            if (methodInfo.IsDefined(typeof(DisableAuditingAttribute)))
+            if (methodInfo.IsDefined(typeof (DisableAuditingAttribute)))
             {
                 return false;
             }
@@ -43,12 +44,12 @@ namespace Abp.Auditing
             var classType = methodInfo.DeclaringType;
             if (classType != null)
             {
-                if (classType.IsDefined(typeof(AuditedAttribute)))
+                if (classType.IsDefined(typeof (AuditedAttribute)))
                 {
                     return true;
                 }
 
-                if (classType.IsDefined(typeof(DisableAuditingAttribute)))
+                if (classType.IsDefined(typeof (DisableAuditingAttribute)))
                 {
                     return false;
                 }

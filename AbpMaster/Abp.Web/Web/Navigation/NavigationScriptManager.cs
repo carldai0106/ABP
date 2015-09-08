@@ -129,5 +129,4 @@ namespace Abp.Web.Navigation
             sb.Append(new string(' ', indentLength) + "}");
         }
     }
-    
 }

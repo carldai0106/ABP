@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading;
@@ -13,12 +12,22 @@ using Microsoft.AspNet.Identity;
 namespace Abp.Runtime.Session
 {
     /// <summary>
-    /// Implements IAbpSession to get session informations from ASP.NET Identity framework.
+    ///     Implements IAbpSession to get session informations from ASP.NET Identity framework.
     /// </summary>
     public class AbpSession<TTenatId, TUserId> : IAbpSession<TTenatId, TUserId>, ISingletonDependency
         where TTenatId : struct
         where TUserId : struct
     {
+        private readonly IMultiTenancyConfig _multiTenancy;
+
+        /// <summary>
+        ///     Constructor.
+        /// </summary>
+        public AbpSession(IMultiTenancyConfig multiTenancy)
+        {
+            _multiTenancy = multiTenancy;
+        }
+
         public TUserId? UserId
         {
             get
@@ -26,7 +35,7 @@ namespace Abp.Runtime.Session
                 if (Thread.CurrentPrincipal.Identity == null)
                     throw new ArgumentException("Identity");
 
-                string userId = string.Empty;
+                var userId = string.Empty;
                 var claimsIdentity = Thread.CurrentPrincipal.Identity as ClaimsIdentity;
                 if (claimsIdentity != null)
                 {
@@ -38,9 +47,10 @@ namespace Abp.Runtime.Session
                     return null;
                 }
 
-                var convertFromInvariantString = TypeDescriptor.GetConverter(typeof(TUserId)).ConvertFromInvariantString(userId);
+                var convertFromInvariantString =
+                    TypeDescriptor.GetConverter(typeof (TUserId)).ConvertFromInvariantString(userId);
                 if (convertFromInvariantString != null)
-                    return (TUserId)convertFromInvariantString;
+                    return (TUserId) convertFromInvariantString;
 
                 throw new InvalidCastException("The type of string : " + userId + " can not convert to type of " +
                                                typeof (TUserId).Name);
@@ -69,12 +79,13 @@ namespace Abp.Runtime.Session
                 }
 
                 var tenantId = claim.Value;
-                var convertFromInvariantString = TypeDescriptor.GetConverter(typeof(TTenatId)).ConvertFromInvariantString(tenantId);
+                var convertFromInvariantString =
+                    TypeDescriptor.GetConverter(typeof (TTenatId)).ConvertFromInvariantString(tenantId);
                 if (convertFromInvariantString != null)
-                    return (TTenatId)convertFromInvariantString;
+                    return (TTenatId) convertFromInvariantString;
 
                 throw new InvalidCastException("The type of string : " + tenantId + " can not convert to type of " +
-                                               typeof(TTenatId).Name);
+                                               typeof (TTenatId).Name);
             }
         }
 
@@ -86,16 +97,6 @@ namespace Abp.Runtime.Session
                     ? MultiTenancySides.Host
                     : MultiTenancySides.Tenant;
             }
-        }
-
-        private readonly IMultiTenancyConfig _multiTenancy;
-
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        public AbpSession(IMultiTenancyConfig multiTenancy)
-        {
-            _multiTenancy = multiTenancy;
         }
     }
 }

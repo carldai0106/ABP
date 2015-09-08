@@ -5,7 +5,6 @@ using Abp.Domain.Entities.Auditing;
 using CMS.Domain.Action;
 using CMS.Domain.RoleRight;
 
-
 namespace CMS.Domain.ActionModule
 {
     [Table("ActionModules")]

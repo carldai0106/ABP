@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Abp.Application.Services.Dto;
-using Abp.Domain.Entities;
-using AutoMapper;
+﻿using AutoMapper;
 using CMS.Application.User.Dto;
 using CMS.Domain.User;
 
@@ -33,6 +26,20 @@ namespace CMS.Application
 
         private static void CreateMappingsInternal()
         {
+            //Mapper.Initialize(cfg =>
+            //{
+            //    cfg.CreateMap<UserEntity, CreateUserDto>()
+            //        .ForMember(dto => dto.Password, options => options.Ignore())
+            //        .ReverseMap()
+            //        .ForMember(user => user.Password, options => options.Ignore());
+
+            //    cfg.CreateMap<UserEntity, UserEditDto>()
+            //        .ForMember(dto => dto.Password, options => options.Ignore())
+            //        .ReverseMap()
+            //        .ForMember(user => user.Password, options => options.Ignore())
+            //        .ForMember(user => user.UserRoles, options => options.Ignore());
+            //});
+
             Mapper.CreateMap<UserEntity, CreateUserDto>()
                 .ForMember(dto => dto.Password, options => options.Ignore())
                 .ReverseMap()
@@ -43,7 +50,6 @@ namespace CMS.Application
                 .ReverseMap()
                 .ForMember(user => user.Password, options => options.Ignore())
                 .ForMember(user => user.UserRoles, options => options.Ignore());
-            
         }
     }
 }

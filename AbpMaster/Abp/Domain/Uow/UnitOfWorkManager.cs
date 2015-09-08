@@ -1,11 +1,10 @@
-﻿using System;
-using System.Transactions;
+﻿using System.Transactions;
 using Abp.Dependency;
 
 namespace Abp.Domain.Uow
 {
     /// <summary>
-    /// Unit of work manager.
+    ///     Unit of work manager.
     /// </summary>
     internal class UnitOfWorkManager<TTenantId, TUserId> : IUnitOfWorkManager<TTenantId, TUserId>, ITransientDependency
         where TTenantId : struct
@@ -37,7 +36,7 @@ namespace Abp.Domain.Uow
 
         public IUnitOfWorkCompleteHandle Begin(TransactionScopeOption scope)
         {
-            return Begin(new UnitOfWorkOptions { Scope = scope });
+            return Begin(new UnitOfWorkOptions {Scope = scope});
         }
 
         public IUnitOfWorkCompleteHandle Begin(UnitOfWorkOptions options)

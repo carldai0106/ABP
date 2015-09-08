@@ -64,8 +64,8 @@
       <HintPath>..\packages\NSubstitute.1.8.2.0\lib\net45\NSubstitute.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Shouldly, Version=2.5.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
-      <HintPath>..\packages\Shouldly.2.5.0\lib\net40\Shouldly.dll</HintPath>
+    <Reference Include="Shouldly, Version=2.6.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
+      <HintPath>..\packages\Shouldly.2.6.0\lib\net40\Shouldly.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -108,9 +108,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ABP.Extension\Abp.Extensions.csproj">
+    <ProjectReference Include="..\ABP.Extension\Abp.Extended.csproj">
       <Project>{57438e73-edde-445a-a5fc-e8d22dc1f12a}</Project>
-      <Name>Abp.Extensions</Name>
+      <Name>Abp.Extended</Name>
     </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp.AutoMapper\Abp.AutoMapper.csproj">
       <Project>{06EB5F7C-B974-4775-A305-F175D645F7C9}</Project>
@@ -139,10 +139,6 @@
     <ProjectReference Include="..\CMS.Domain\CMS.Domain.csproj">
       <Project>{bf813e48-d151-4e31-bb2d-1fea44a9a2e5}</Project>
       <Name>CMS.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CMS.FW\CMS.FW.csproj">
-      <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
-      <Name>CMS.FW</Name>
     </ProjectReference>
     <ProjectReference Include="..\Xunit.Extensions\Xunit.Extensions.csproj">
       <Project>{4a01cd22-7cc5-4c73-a41c-755d96fa3c87}</Project>

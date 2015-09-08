@@ -1,7 +1,4 @@
 $(function () {
-
-    var lang = null;//$.parseJSON($("#LocalizationLang").html());
-
     $("a.switcher").on("click", function () {
         if ($(window).width() >= 534) {
             if ($(this).attr("data") === "true") {
@@ -168,11 +165,11 @@ $(function () {
             }
         });
         if (list.length === 0) {
-            openAlert(lang.SelectToEdit);
+            openAlert(abp.localization.localize("Script.SeletedToEdit", "cms-en-US"));
             return false;
         }
         else if (list.length > 1) {
-            openAlert(lang.SelectOneToEdit);
+            openAlert(abp.localization.localize("Script.SelectOneToEdit", "cms-en-US"));
             return false;
         } else {
             var id = list[0];
@@ -189,12 +186,12 @@ $(function () {
             }
         });
         if (arr.length === 0) {
-            openAlert(lang.SelectToDelete);
+            openAlert(abp.localization.localize("Script.SelectedToDelete", "cms-en-US"));
             return false;
         } else {
             var url = $(this).attr("rel");
-            openConfirm(lang.SureDelete, function () {
-                var toUrl = "";
+            openConfirm(abp.localization.localize("Script.AreYourSureDelete", "cms-en-US"), function () {
+                var toUrl;
                 if (url.indexOf("?") >= 0) {
                     toUrl = url + "&id=" + arr.join(",");
                 } else {
@@ -205,6 +202,15 @@ $(function () {
 
             return false;
         }
+    });
+
+    $("a[name=btnDelete]").on("click", function() {
+        var url = $(this).attr("href");
+        openConfirm(abp.localization.localize("Script.AreYourSureDelete", "cms-en-US"), function () {
+            window.location = url;
+        });
+
+        return false;
     });
 
     if ($(".message-box").length > 0) {
@@ -237,10 +243,7 @@ function closeLoading() {
 }
 
 function openAlert(message) {
-
-    var lang = $.parseJSON($("#LocalizationLang").html());
-
-    $("#dlgmsg").attr("title", lang.Information);
+    $("#dlgmsg").attr("title", abp.localization.localize("Script.Information", "cms-en-US"));
     $("#dlgmsg-text").html(message);
     $("#dlgmsg").dialog({
         position: {
@@ -259,10 +262,9 @@ function openAlert(message) {
 }
 
 function openConfirm(message, callback, title) {
-    var lang = $.parseJSON($("#LocalizationLang").html());
 
     if (typeof (title) === "undefined" || title === "") {
-        title = lang.Confirmation;
+        title = abp.localization.localize("Script.Confirmation", "cms-en-US");
     }
 
     $("#dlgmsg").attr("title", title);

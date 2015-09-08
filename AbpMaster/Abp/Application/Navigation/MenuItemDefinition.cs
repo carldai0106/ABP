@@ -20,17 +20,17 @@ namespace Abp.Application.Navigation
         /// Display name of the menu item. Required.
         /// </summary>
         public ILocalizableString DisplayName { get; set; }
-
+        
         /// <summary>
         /// The Display order of the menu. Optional.
         /// </summary>
         public int Order { get; set; }
-
+        
         /// <summary>
         /// Icon of the menu item if exists. Optional.
         /// </summary>
         public string Icon { get; set; }
-
+        
         /// <summary>
         /// The URL to navigate when this menu item is selected. Optional.
         /// </summary>

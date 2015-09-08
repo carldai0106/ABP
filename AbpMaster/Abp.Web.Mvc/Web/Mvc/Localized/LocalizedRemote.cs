@@ -15,7 +15,7 @@ namespace Abp.Web.Mvc.Localized
         {
         }
 
-        
+
 
         public LocalizedRemote(string action, string controller, string areaName)
             : base(action, controller, areaName)
@@ -27,6 +27,6 @@ namespace Abp.Web.Mvc.Localized
             return string.Format(TranslationHelper.L(ErrorMessage), name);
         }
 
-        
+
     }
 }

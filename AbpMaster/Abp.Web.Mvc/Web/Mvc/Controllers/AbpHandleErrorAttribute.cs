@@ -107,12 +107,12 @@ namespace Abp.Web.Mvc.Controllers
         {
             context.HttpContext.Response.StatusCode = 500;
             return new ViewResult
-                   {
-                       ViewName = View,
-                       MasterName = Master,
-                       ViewData = new ViewDataDictionary<ErrorViewModel>(new ErrorViewModel(context.Exception)),
-                       TempData = context.Controller.TempData
-                   };
+            {
+                ViewName = View,
+                MasterName = Master,
+                ViewData = new ViewDataDictionary<ErrorViewModel>(new ErrorViewModel(context.Exception)),
+                TempData = context.Controller.TempData
+            };
         }
     }
 }

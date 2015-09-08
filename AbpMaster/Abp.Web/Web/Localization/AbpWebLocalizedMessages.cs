@@ -14,7 +14,7 @@ namespace Abp.Web.Localization
         public static string InternalServerError { get { return L("InternalServerError"); } }
 
         public static string ValidationError { get { return L("ValidationError"); } }
-
+        
         private static readonly ILocalizationSource Source;
 
         static AbpWebLocalizedMessages()

@@ -44,10 +44,10 @@ namespace Abp.Runtime.Validation.Interception
                 return;
             }
 
-            if (_method.IsDefined(typeof(DisableValidationAttribute)))
+            if (_method.IsDefined(typeof (DisableValidationAttribute)))
             {
                 //Don't validate if explicitly requested!
-                return;
+                return;                
             }
 
             if (_parameters.IsNullOrEmpty())

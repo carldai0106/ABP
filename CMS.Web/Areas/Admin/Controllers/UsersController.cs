@@ -20,6 +20,8 @@ using CMS.Application.User.Dto;
 using CMS.Web.Models.User;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using Abp.Extensions;
+using System.Linq;
 
 namespace CMS.Web.Areas.Admin.Controllers
 {
@@ -116,7 +118,7 @@ namespace CMS.Web.Areas.Admin.Controllers
             }
 
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            AuthenticationManager.SignIn(new AuthenticationProperties {IsPersistent = rememberMe}, identity);
+            AuthenticationManager.SignIn(new AuthenticationProperties { IsPersistent = rememberMe }, identity);
         }
 
         public async Task<ActionResult> Index()
@@ -130,7 +132,7 @@ namespace CMS.Web.Areas.Admin.Controllers
         [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Create")]
         public async Task<ActionResult> Create()
         {
-            var roles = await _roleAppService.GetRoles(new GetRolesInput {Sorting = "Order ASC"});
+            var roles = await _roleAppService.GetRoles(new GetRolesInput { Sorting = "Order ASC" });
             ViewBag.Roles = roles.Items;
 
             return View();
@@ -216,10 +218,10 @@ namespace CMS.Web.Areas.Admin.Controllers
             if (!id.HasValue)
                 throw new UserFriendlyException("The paramenter id is null.");
 
-            var roles = await _roleAppService.GetRoles(new GetRolesInput {Sorting = "Order ASC"});
+            var roles = await _roleAppService.GetRoles(new GetRolesInput { Sorting = "Order ASC" });
             ViewBag.Roles = roles.Items;
 
-            var info = await _userAppService.GetUser(new NullableIdInput<Guid> {Id = id});
+            var info = await _userAppService.GetUser(new NullableIdInput<Guid> { Id = id });
 
             return View(info);
         }
@@ -282,6 +284,29 @@ namespace CMS.Web.Areas.Admin.Controllers
                 {
                     this.AddModelMessage("exception", ex.Message);
                 }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [AbpMvcAuthorize("CMS.Admin.Users", "CMS.Delete")]
+        public async Task<ActionResult> Delete(string id)
+        {
+            try
+            {
+                var list = id.Split(",").Select(Guid.Parse);
+                using (var uow = _unitOfWorkManager.Begin())
+                {
+                    foreach (var item in list)
+                    {
+                        await _userAppService.DeleteUser(new IdInput<Guid> {Id = item});
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.AddModelMessage(ex.Message);
             }
 
             return RedirectToAction("Index");

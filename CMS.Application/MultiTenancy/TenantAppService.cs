@@ -1,28 +1,20 @@
 ﻿using System;
-
-using System.Diagnostics;
-using System.Linq;
-
 using System.Threading.Tasks;
 using Abp;
-using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using Abp.Domain.Repositories;
 using Abp.Domain.Uow;
 using Abp.UI;
 using CMS.Application.MultiTenancy.Dto;
 using CMS.Domain;
-using CMS.Application.Localization;
 using CMS.Domain.Tenant;
-using Microsoft.AspNet.Identity;
-
 
 namespace CMS.Application.MultiTenancy
 {
     public class TenantAppService : CmsAppServiceBase, ITenantAppService
     {
         private readonly ICmsRepository<TenantEntity, Guid> _repository;
+
         public TenantAppService(ICmsRepository<TenantEntity, Guid> repository)
         {
             _repository = repository;
@@ -41,12 +33,13 @@ namespace CMS.Application.MultiTenancy
             }
 
             await _repository.InsertAsync(tenant);
-            
+
 
             await CurrentUnitOfWork.SaveChangesAsync(); //To get new tenant's id.
 
             //We are working entities of new tenant, so changing tenant filter
-            CurrentUnitOfWork.SetFilterParameter(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId, tenant.Id);
+            CurrentUnitOfWork.SetFilterParameter(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId,
+                tenant.Id);
         }
 
         public async Task<TenantEditDto> GetTenant(EntityRequestInput<Guid> input)
@@ -56,7 +49,8 @@ namespace CMS.Application.MultiTenancy
 
         public async Task UpdateTenant(TenantEditDto input)
         {
-            if (await _repository.FirstOrDefaultAsync(t => t.TenancyName == input.TenancyName && t.Id != input.Id) != null)
+            if (await _repository.FirstOrDefaultAsync(t => t.TenancyName == input.TenancyName && t.Id != input.Id) !=
+                null)
             {
                 throw new UserFriendlyException(string.Format(L("TenancyNameIsAlreadyTaken"), input.TenancyName));
             }

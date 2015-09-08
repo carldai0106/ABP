@@ -9,7 +9,6 @@ namespace Abp.Collections
     /// </summary>
     public class TypeList : TypeList<object>, ITypeList
     {
-
     }
 
     /// <summary>

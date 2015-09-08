@@ -32,7 +32,7 @@ namespace Abp.Web.Mvc
             }
             //添加自定义的验证类型
             ModelValidatorProviders.Providers.Add(new FilterableClientDataTypeModelValidatorProvider());
-            
+
             DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(LocalizedRequired), typeof(RequiredAttributeAdapter));
             DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(LocalizedStringLength), typeof(StringLengthAttributeAdapter));
             DataAnnotationsModelValidatorProvider.RegisterAdapter(typeof(LocalizedRegularExpression), typeof(RegularExpressionAttributeAdapter));

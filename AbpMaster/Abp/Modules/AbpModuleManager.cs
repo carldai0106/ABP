@@ -11,8 +11,6 @@ namespace Abp.Modules
     /// <summary>
     /// This class is used to manage modules.
     /// </summary>
-    //internal class AbpModuleManager : IAbpModuleManager
-
     internal class AbpModuleManager : IAbpModuleManager
     {
         public ILogger Logger { get; set; }
@@ -29,7 +27,6 @@ namespace Abp.Modules
             _moduleFinder = moduleFinder;
             Logger = NullLogger.Instance;
         }
-
         public virtual void InitializeModules<TTenantId, TUserId>()
             where TTenantId : struct
             where TUserId : struct
@@ -62,7 +59,8 @@ namespace Abp.Modules
             {
                 if (!AbpModule.IsAbpModule(moduleType))
                 {
-                    throw new AbpInitializationException("This type is not an ABP module: " + moduleType.AssemblyQualifiedName);
+                    throw new AbpInitializationException("This type is not an ABP module: " +
+                                                         moduleType.AssemblyQualifiedName);
                 }
 
                 if (!_iocManager.IsRegistered(moduleType))
@@ -74,7 +72,7 @@ namespace Abp.Modules
             //Add to module collection
             foreach (var moduleType in moduleTypes)
             {
-                var moduleObject = (AbpModule)_iocManager.Resolve(moduleType);
+                var moduleObject = (AbpModule) _iocManager.Resolve(moduleType);
 
                 moduleObject.IocManager = _iocManager;
                 moduleObject.Configuration = _iocManager.Resolve<IAbpStartupConfiguration>();
@@ -84,8 +82,8 @@ namespace Abp.Modules
                 Logger.DebugFormat("Loaded module: " + moduleType.AssemblyQualifiedName);
             }
 
-            //AbpKernelModule must be the first module         
-            var startupModuleIndex = _modules.FindIndex(m => m.Type == typeof(AbpKernelModule));
+            //AbpKernelModule must be the first module
+            var startupModuleIndex = _modules.FindIndex(m => m.Type == typeof (AbpKernelModule));
             if (startupModuleIndex > 0)
             {
                 var startupModule = _modules[startupModuleIndex];
@@ -119,7 +117,9 @@ namespace Abp.Modules
                     var dependedModuleInfo = _modules.FirstOrDefault(m => m.Type == dependedModuleType);
                     if (dependedModuleInfo == null)
                     {
-                        throw new AbpInitializationException("Could not find a depended module " + dependedModuleType.AssemblyQualifiedName + " for " + moduleInfo.Type.AssemblyQualifiedName);
+                        throw new AbpInitializationException("Could not find a depended module " +
+                                                             dependedModuleType.AssemblyQualifiedName + " for " +
+                                                             moduleInfo.Type.AssemblyQualifiedName);
                     }
 
                     if ((moduleInfo.Dependencies.FirstOrDefault(dm => dm.Type == dependedModuleType) == null))

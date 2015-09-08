@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 using Abp.Application.Services.Dto;
 using Abp.Text.RegularExpressions;
 using Abp.Web.Mvc.Localized;
@@ -9,11 +8,10 @@ using CMS.Domain.User;
 
 namespace CMS.Application.User.Dto
 {
-    public class UserEditDto : IDoubleWayDto
+    public class UserEditDto : CreationAuditedEntityDto<Guid>, IDoubleWayDto
     {
         public const int MinPasswordLength = 6;
         public const int MaxPasswordLength = 20;
-
         public Guid Id { get; set; }
 
         [LocalizedDisplay("Dto.UserName")]
@@ -28,12 +26,12 @@ namespace CMS.Application.User.Dto
 
         [LocalizedDisplay("Dto.ReenterPassword")]
         [StringLength(MaxPasswordLength, MinimumLength = MinPasswordLength)]
-        [System.ComponentModel.DataAnnotations.Compare("Password")]
+        [Compare("Password")]
         public virtual string ConfimPassword { get; set; }
 
         [LocalizedDisplay("Dto.Email")]
         [Required]
-        [LocalizedRegularExpression(RegexUtils.EmailPattern, ErrorMessage="Dto.InvaildEmail")]
+        [LocalizedRegularExpression(RegexUtils.EmailPattern, ErrorMessage = "Dto.InvaildEmail")]
         [LocalizedRemote("CheckEmail", "Users", AdditionalFields = "InitialEmail", ErrorMessage = "Dto.DuplicateEmail")]
         [StringLength(UserEntity.MaxEmailLength)]
         public virtual string Email { get; set; }
@@ -49,7 +47,6 @@ namespace CMS.Application.User.Dto
         public virtual string LastName { get; set; }
 
         public virtual bool IsActive { get; set; }
-
         public virtual ICollection<UserRoleDto> UserRoles { get; set; }
     }
 }

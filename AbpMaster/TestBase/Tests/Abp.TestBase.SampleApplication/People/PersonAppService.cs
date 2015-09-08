@@ -47,5 +47,10 @@ namespace Abp.TestBase.SampleApplication.People
         {
             await _personRepository.DeleteAsync(input.Id);
         }
+
+        public string TestPrimitiveMethod(int a, string b, EntityRequestInput c)
+        {
+            return a + "#" + b + "#" + c.Id;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Abp.Collections.Extensions;
+using Abp.Extensions;
 using Abp.Runtime.Validation;
 using Abp.UI;
 using Abp.Web.Configuration;
@@ -55,9 +56,9 @@ namespace Abp.Web.Models
             if (exception is AbpValidationException)
             {
                 return new ErrorInfo(AbpWebLocalizedMessages.ValidationError)
-                       {
-                           ValidationErrors = GetValidationErrorInfos(exception as AbpValidationException)
-                       };
+                {
+                    ValidationErrors = GetValidationErrorInfos(exception as AbpValidationException)
+                };
             }
 
             if (exception is Abp.Authorization.AbpAuthorizationException)
@@ -138,7 +139,7 @@ namespace Abp.Web.Models
 
                 if (validationResult.MemberNames != null && validationResult.MemberNames.Any())
                 {
-                    validationError.Members = validationResult.MemberNames.ToArray();
+                    validationError.Members = validationResult.MemberNames.Select(m => m.ToCamelCase()).ToArray();
                 }
 
                 validationErrorInfos.Add(validationError);

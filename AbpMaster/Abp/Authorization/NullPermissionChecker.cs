@@ -4,26 +4,31 @@ using Abp.Runtime.Session;
 namespace Abp.Authorization
 {
     /// <summary>
-    /// Null (and default) implementation of <see cref="IPermissionChecker{TTenantId, TUserId}"/>.
+    ///     Null (and default) implementation of <see cref="IPermissionChecker{TTenantId, TUserId}" />.
     /// </summary>
-    public sealed class NullPermissionChecker<TTenantId, TUserId> : IPermissionChecker<TTenantId, TUserId> 
+    public sealed class NullPermissionChecker<TTenantId, TUserId> : IPermissionChecker<TTenantId, TUserId>
         where TTenantId : struct
         where TUserId : struct
     {
-        /// <summary>
-        /// Singleton instance.
-        /// </summary>
-        public static NullPermissionChecker<TTenantId, TUserId> Instance { get { return SingletonInstance; } }
-        private static readonly NullPermissionChecker<TTenantId, TUserId> SingletonInstance = new NullPermissionChecker<TTenantId, TUserId>();
+        private static readonly NullPermissionChecker<TTenantId, TUserId> SingletonInstance =
+            new NullPermissionChecker<TTenantId, TUserId>();
 
-        public IAbpSession<TTenantId, TUserId> AbpSession 
-        { 
-            get; 
-            set; 
+        private NullPermissionChecker()
+        {
         }
 
         /// <summary>
-        /// Checks if a user is granted for a permission.
+        ///     Singleton instance.
+        /// </summary>
+        public static NullPermissionChecker<TTenantId, TUserId> Instance
+        {
+            get { return SingletonInstance; }
+        }
+
+        public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
+
+        /// <summary>
+        ///     Checks if a user is granted for a permission.
         /// </summary>
         /// <param name="permissionName">Name of the permission</param>
         /// <returns><c>true</c> if this instance is granted the specified userId permissionName; otherwise, <c>false</c>.</returns>
@@ -33,7 +38,7 @@ namespace Abp.Authorization
         }
 
         /// <summary>
-        /// Checks if current user is granted for a permission.
+        ///     Checks if current user is granted for a permission.
         /// </summary>
         /// <param name="userId">Id of user to check</param>
         /// <param name="permissionName">Name of the permission</param>
@@ -42,13 +47,8 @@ namespace Abp.Authorization
             return Task.FromResult(true);
         }
 
-        private NullPermissionChecker()
-        {
-
-        }
-
         /// <summary>
-        /// Checks if a user is granted for a module code and permission.
+        ///     Checks if a user is granted for a module code and permission.
         /// </summary>
         /// <param name="moduleCode">Code of the menu or module</param>
         /// <param name="permissionName">Name of the permission</param>

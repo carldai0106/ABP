@@ -10,7 +10,7 @@ namespace Abp.Configuration
     /// Only <see cref="GetSettingOrNullAsync"/> method is implemented and it gets setting's value
     /// from application's configuration file if exists, or returns null if not.
     /// </summary>
-    public class DefaultConfigSettingStore<TTenantId, TUserId> : ISettingStore<TTenantId, TUserId>
+    public class DefaultConfigSettingStore<TTenantId, TUserId> : ISettingStore<TTenantId, TUserId> 
         where TTenantId : struct
         where TUserId : struct
     {
@@ -27,7 +27,7 @@ namespace Abp.Configuration
         public Task<SettingInfo<TTenantId, TUserId>> GetSettingOrNullAsync(TTenantId? tenantId, TUserId? userId, string name)
         {
             var value = ConfigurationManager.AppSettings[name];
-
+            
             if (value == null)
             {
                 return Task.FromResult<SettingInfo<TTenantId, TUserId>>(null);

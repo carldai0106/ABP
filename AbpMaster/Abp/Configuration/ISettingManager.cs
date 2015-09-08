@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Abp.Configuration
 {
     /// <summary>
-    /// This is the main interface that must be implemented to be able to load/change values of settings.
+    ///     This is the main interface that must be implemented to be able to load/change values of settings.
     /// </summary>
     public interface ISettingManager<TTenantId, TUserId>
         where TTenantId : struct

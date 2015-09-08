@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
-using CMS.Domain;
 using CMS.Domain.Tenant;
 
 namespace CMS.Application.MultiTenancy.Dto
@@ -16,9 +10,11 @@ namespace CMS.Application.MultiTenancy.Dto
         [Required]
         [StringLength(TenantEntity.MaxTenancyNameLength)]
         public string TenancyName { get; set; }
+
         [Required]
         [StringLength(TenantEntity.MaxDisplayNameLength)]
         public string DisplayName { get; set; }
+
         public bool IsActive { get; set; }
     }
 }

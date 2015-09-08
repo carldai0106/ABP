@@ -71,6 +71,15 @@
         "Users.EditUser":  "Edit User",
         "Users.Setup": "Setup",
         "Users.UserList": "User List",
-        "Users.ModifyPassword": "If you would like to change the password, please enter it. Otherwise leave it blank."
+        "Users.ModifyPassword": "If you would like to change the password, please enter it. Otherwise leave it blank.",
+
+        "Page.Loading": "Loading...",
+
+        "Script.SelectedToDelete": "Select record(s) to be deleted.",
+        "Script.AreYourSureDelete": "Are your sure you want to delete?",
+        "Script.SeletedToEdit": "Select a record to be edited.",
+        "Script.SelectOneToEdit": "Select only one record to edited.",
+        "Script.Information": "Information",
+        "Script.Confirmation": "Confirmation"
     }
 }

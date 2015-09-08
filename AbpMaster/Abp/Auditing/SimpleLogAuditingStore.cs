@@ -4,23 +4,25 @@ using Castle.Core.Logging;
 namespace Abp.Auditing
 {
     /// <summary>
-    /// Implements <see cref="IAuditingStore{TTenantId, TUserId}"/> to simply write audits to logs.
+    ///     Implements <see cref="IAuditingStore{TTenantId, TUserId}" /> to simply write audits to logs.
     /// </summary>
     public class SimpleLogAuditingStore<TTenantId, TUserId> : IAuditingStore<TTenantId, TUserId>
         where TTenantId : struct
         where TUserId : struct
     {
+        private static readonly SimpleLogAuditingStore<TTenantId, TUserId> SingletonInstance =
+            new SimpleLogAuditingStore<TTenantId, TUserId>();
+
         /// <summary>
         /// Singleton instance.
         /// </summary>
-        public static SimpleLogAuditingStore<TTenantId, TUserId> Instance { get { return SingletonInstance; } }
-        private static readonly SimpleLogAuditingStore<TTenantId, TUserId> SingletonInstance = new SimpleLogAuditingStore<TTenantId, TUserId>();
+        public static SimpleLogAuditingStore<TTenantId, TUserId> Instance
+        {
+            get { return SingletonInstance; }
+        }
 
         public ILogger Logger { get; set; }
 
-        /// <summary>
-        /// 
-        /// </summary>
         public SimpleLogAuditingStore()
         {
             Logger = NullLogger.Instance;

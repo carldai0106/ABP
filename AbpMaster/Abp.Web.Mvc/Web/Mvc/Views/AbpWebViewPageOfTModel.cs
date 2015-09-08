@@ -32,7 +32,7 @@ namespace Abp.Web.Mvc.Views
                 return appPath;
             }
         }
-        
+
         /// <summary>
         /// Gets/sets name of the localization source that is used in this controller.
         /// It must be set in order to use <see cref="L(string)"/> and <see cref="L(string,CultureInfo)"/> methods.
@@ -101,7 +101,7 @@ namespace Abp.Web.Mvc.Views
         /// Checks if current user is granted for a permission.
         /// </summary>
         /// <param name="permissionName">Name of the permission</param>
-        protected bool IsGranted<TTenantId, TUserId>(string permissionName) 
+        protected bool IsGranted<TTenantId, TUserId>(string permissionName)
             where TTenantId : struct
             where TUserId : struct
         {

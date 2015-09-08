@@ -32,7 +32,7 @@ namespace Abp.Application.Navigation
         /// </summary>
         public UserMenu()
         {
-
+            
         }
 
         /// <summary>

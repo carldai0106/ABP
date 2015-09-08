@@ -51,14 +51,17 @@
       <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nito.AsyncEx">
-      <HintPath>..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.dll</HintPath>
+    <Reference Include="Nito.AsyncEx, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Nito.AsyncEx.Concurrent">
-      <HintPath>..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+    <Reference Include="Nito.AsyncEx.Concurrent, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Concurrent.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Nito.AsyncEx.Enlightenment">
-      <HintPath>..\packages\Nito.AsyncEx.3.0.0\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+    <Reference Include="Nito.AsyncEx.Enlightenment, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Nito.AsyncEx.3.0.1\lib\net45\Nito.AsyncEx.Enlightenment.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.0.34.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -106,6 +109,7 @@
     <Compile Include="Auditing\AuditingHelper.cs" />
     <Compile Include="Auditing\IMvcControllersAuditingConfiguration.cs" />
     <Compile Include="Auditing\MvcControllersAuditingConfiguration.cs" />
+    <Compile Include="Configuration\CacheManagerSettingExtensions.cs" />
     <Compile Include="Configuration\DefaultConfigSettingStore.cs" />
     <Compile Include="Domain\Entities\Auditing\IAuditedOfTUserId.cs" />
     <Compile Include="Domain\Entities\Auditing\ICreationAuditedOfTUserId.cs" />
@@ -143,18 +147,25 @@
     <Compile Include="Auditing\SimpleLogAuditingStore.cs" />
     <Compile Include="Reflection\Extensions\AssignableExtensions.cs" />
     <Compile Include="Reflection\TypeHelper.cs" />
-    <Compile Include="Runtime\Caching\CacheProviderBase.cs" />
-    <Compile Include="Runtime\Caching\CacheStoreBase.cs" />
-    <Compile Include="Runtime\Caching\ICacheProvider.cs" />
-    <Compile Include="Runtime\Caching\ICacheStore.cs" />
-    <Compile Include="Runtime\Caching\ICacheStoreCommon.cs" />
+    <Compile Include="Runtime\Caching\CacheBase.cs" />
+    <Compile Include="Runtime\Caching\CacheExtensions.cs" />
+    <Compile Include="Runtime\Caching\CacheManagerBase.cs" />
+    <Compile Include="Runtime\Caching\Configuration\CacheConfigurator.cs" />
+    <Compile Include="Runtime\Caching\Configuration\CachingConfiguration.cs" />
+    <Compile Include="Runtime\Caching\Configuration\ICacheConfigurator.cs" />
+    <Compile Include="Runtime\Caching\Configuration\ICachingConfiguration.cs" />
+    <Compile Include="Runtime\Caching\ICache.cs" />
+    <Compile Include="Runtime\Caching\ICacheManager.cs" />
+    <Compile Include="Runtime\Caching\ITypedCache.cs" />
+    <Compile Include="Runtime\Caching\Memory\AbpMemoryCache.cs" />
+    <Compile Include="Runtime\Caching\Memory\AbpMemoryCacheManager.cs" />
     <Compile Include="Runtime\Caching\Memory\AsyncThreadSafeObjectCache.cs" />
-    <Compile Include="Runtime\Caching\Memory\MemoryCacheProvider.cs" />
-    <Compile Include="Runtime\Caching\Memory\MemoryCacheStore.cs" />
     <Compile Include="Runtime\Caching\Memory\ThreadSafeObjectCache.cs" />
+    <Compile Include="Runtime\Caching\TypedCacheWrapper.cs" />
     <Compile Include="Runtime\Session\IAbpSessionOfTUserIdAndTTenantId.cs" />
     <Compile Include="Runtime\Session\NullAbpSessionOfTUserIdAndTTenantId.cs" />
     <Compile Include="Runtime\Validation\DisableValidationAttribute.cs" />
+    <Compile Include="Runtime\Validation\Interception\ValidationInterceptorRegistrar.cs" />
     <Compile Include="Text\Formatting\FormatStringToken.cs" />
     <Compile Include="Text\Formatting\FormatStringTokenType.cs" />
     <Compile Include="Text\Formatting\FormatStringTokenizer.cs" />

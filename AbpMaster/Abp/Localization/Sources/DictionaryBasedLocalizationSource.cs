@@ -94,7 +94,7 @@ namespace Abp.Localization.Sources
             var cultureCode = culture.Name;
 
             //Try to get from original dictionary (with country code)
-
+            
             ILocalizationDictionary originalDictionary;
             if (_dictionaries.TryGetValue(cultureCode, out originalDictionary))
             {
@@ -106,7 +106,7 @@ namespace Abp.Localization.Sources
             }
 
             //Try to get from same language dictionary (without country code)
-
+            
             if (cultureCode.Length == 5) //Example: "tr-TR" (length=5)
             {
                 var langCode = cultureCode.Substring(0, 2);
@@ -122,7 +122,7 @@ namespace Abp.Localization.Sources
             }
 
             //Try to get from default language
-
+            
             if (_defaultDictionary == null)
             {
                 var exceptionMessage = string.Format(

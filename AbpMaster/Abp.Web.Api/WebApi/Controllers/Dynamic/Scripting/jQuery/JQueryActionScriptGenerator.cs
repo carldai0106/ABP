@@ -1,4 +1,6 @@
-﻿using Abp.Extensions;
+﻿using System.Text;
+using Abp.Extensions;
+using Abp.Web;
 
 namespace Abp.WebApi.Controllers.Dynamic.Scripting.jQuery
 {
@@ -8,16 +10,11 @@ namespace Abp.WebApi.Controllers.Dynamic.Scripting.jQuery
         private readonly DynamicApiActionInfo _actionInfo;
 
         private const string JsMethodTemplate =
-                            @"    serviceNamespace.{jsMethodName} = function({jsMethodParameterList}) {
-                                    return abp.ajax($.extend({
-                            {ajaxCallParameters}
-                                    }, ajaxParams));
-                                };";
-
-        private const string AjaxParametersTemplate =
-                            @"            url: abp.appPath + '{url}',
-                                        type: '{type}',
-                                        data: JSON.stringify({postData})";
+@"    serviceNamespace.{jsMethodName} = function({jsMethodParameterList}) {
+        return abp.ajax($.extend({
+{ajaxCallParameters}
+        }, ajaxParams));
+    };";
 
         public JQueryActionScriptGenerator(DynamicApiControllerInfo controllerInfo, DynamicApiActionInfo actionInfo)
         {
@@ -40,12 +37,21 @@ namespace Abp.WebApi.Controllers.Dynamic.Scripting.jQuery
 
         protected string GenerateAjaxCallParameters()
         {
-            var ajaxParameters = AjaxParametersTemplate
-                .Replace("{url}", ActionScriptingHelper.GenerateUrlWithParameters(_controllerInfo, _actionInfo))
-                .Replace("{type}", _actionInfo.Verb.ToString().ToUpperInvariant())
-                .Replace("{postData}", ActionScriptingHelper.GenerateBody(_actionInfo));
+            var script = new StringBuilder();
+            
+            script.AppendLine("            url: abp.appPath + '" + ActionScriptingHelper.GenerateUrlWithParameters(_controllerInfo, _actionInfo) + "',");
+            script.AppendLine("            type: '" + _actionInfo.Verb.ToString().ToUpperInvariant() + "',");
 
-            return ajaxParameters;
+            if (_actionInfo.Verb == HttpVerb.Get)
+            {
+                script.Append("            data: " + ActionScriptingHelper.GenerateBody(_actionInfo));
+            }
+            else
+            {
+                script.Append("            data: JSON.stringify(" + ActionScriptingHelper.GenerateBody(_actionInfo) + ")");                
+            }
+            
+            return script.ToString();
         }
     }
 }

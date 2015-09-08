@@ -5,7 +5,7 @@ using Abp.Web.Mvc.Controllers;
 using CMS.Application.Localization;
 
 namespace CMS.Web.Areas.Admin.Controllers
-{      
+{
     [AbpMvcAuthorize]
     public abstract class CmsControllerBase : AbpController<Guid, Guid>
     {
@@ -18,7 +18,7 @@ namespace CMS.Web.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
-                  throw new UserFriendlyException(L("FormIsNotValidMessage"));
+                throw new UserFriendlyException(L("FormIsNotValidMessage"));
             }
         }
     }

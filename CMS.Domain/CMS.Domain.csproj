@@ -58,13 +58,13 @@
     <Compile Include="User\UserEntity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ABP.Extension\Abp.Extended.csproj">
+      <Project>{57438E73-EDDE-445A-A5FC-E8D22DC1F12A}</Project>
+      <Name>Abp.Extended</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp\Abp.csproj">
       <Project>{2c221d3b-5f54-4c5b-8082-318636415132}</Project>
       <Name>Abp</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CMS.FW\CMS.FW.csproj">
-      <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
-      <Name>CMS.FW</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

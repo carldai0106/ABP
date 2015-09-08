@@ -11,7 +11,8 @@ namespace Abp.MultiTenancy
         /// Gets multi-tenancy side (<see cref="MultiTenancySides"/>) of an object that implements <see cref="IMayHaveTenant"/>.
         /// </summary>
         /// <param name="obj">The object</param>
-        public static MultiTenancySides GetMultiTenancySide<TTenantId>(this IMayHaveTenant<TTenantId> obj) where TTenantId : struct
+        public static MultiTenancySides GetMultiTenancySide<TTenantId>(this IMayHaveTenant<TTenantId> obj)
+            where TTenantId : struct
         {
             return obj.TenantId.HasValue
                 ? MultiTenancySides.Tenant

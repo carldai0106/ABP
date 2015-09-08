@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Abp.Localization.Dictionaries.Json;
 using Abp.Localization.Dictionaries.Xml;
-using Abp.Localization.Sources.Xml;
 
 namespace Abp.Localization.Sources.Json
 {
     /// <summary>
-    /// Provides localization dictionaries from XML files in a directory.
+    ///     Provides localization dictionaries from XML files in a directory.
     /// </summary>
     public class JsonFileLocalizationDictionaryProvider : ILocalizationDictionaryProvider
     {
         private readonly string _directoryPath;
 
         /// <summary>
-        /// Creates a new <see cref="JsonFileLocalizationDictionaryProvider"/>.
+        ///     Creates a new <see cref="JsonFileLocalizationDictionaryProvider" />.
         /// </summary>
         /// <param name="directoryPath">Path of the dictionary that contains all related XML files</param>
         public JsonFileLocalizationDictionaryProvider(string directoryPath)
@@ -37,8 +35,7 @@ namespace Abp.Localization.Sources.Json
             {
                 dictionaries.Add(
                     new LocalizationDictionaryInfo(
-                        XmlLocalizationDictionary.BuildFomFile(fileName),
-                        isDefault: fileName.EndsWith(sourceName + ".json")
+                        XmlLocalizationDictionary.BuildFomFile(fileName), fileName.EndsWith(sourceName + ".json")
                         )
                     );
             }

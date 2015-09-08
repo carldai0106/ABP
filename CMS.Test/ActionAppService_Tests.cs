@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.Configuration.Startup;
 using CMS.Application.Action;
 using CMS.Application.Action.Dto;
-using CMS.Application.MultiTenancy;
 using Shouldly;
 using Xunit;
 
@@ -16,6 +12,7 @@ namespace CMS.Test
     public class ActionAppService_Tests : TestBase<Guid, Guid>
     {
         private readonly IActionAppService _actionAppService;
+
         public ActionAppService_Tests()
         {
             _actionAppService = Resolve<IActionAppService>();
@@ -54,7 +51,7 @@ namespace CMS.Test
             action.ShouldNotBe(null);
             action.Description.ShouldBe("Test, just a test!");
 
-            await _actionAppService.Delete(new Abp.Application.Services.Dto.IdInput<Guid>{ Id = action.Id });
+            await _actionAppService.Delete(new IdInput<Guid> {Id = action.Id});
 
             action = await _actionAppService.GetAction("CMS.Test");
             action.ShouldBe(null);

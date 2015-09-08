@@ -26,7 +26,8 @@ namespace CMS.Web.Areas.Admin.Controllers
         public ActionResult Carte()
         {
             var id = ViewBag.CurrentMenuID;
-            var result = Task.Run(async () => await _moduleService.GetModuleTree(new NullableIdInput<Guid> { Id = id })).Result;
+            var result =
+                Task.Run(async () => await _moduleService.GetModuleTree(new NullableIdInput<Guid> {Id = id})).Result;
             return View(result);
         }
     }

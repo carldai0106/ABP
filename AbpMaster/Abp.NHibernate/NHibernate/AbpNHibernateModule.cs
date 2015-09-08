@@ -6,7 +6,6 @@ using Abp.NHibernate.Filters;
 using Abp.NHibernate.Interceptors;
 using Abp.NHibernate.Repositories;
 using Abp.Reflection;
-using Castle.Components.DictionaryAdapter.Xml;
 using NHibernate;
 
 

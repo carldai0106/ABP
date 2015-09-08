@@ -22,12 +22,12 @@ namespace Abp.Localization.Sources
 
         private NullLocalizationSource()
         {
-
+            
         }
 
         public void Initialize(ILocalizationConfiguration configuration, IIocResolver iocResolver)
         {
-
+            
         }
 
         public string GetString(string name)

@@ -1,7 +1,7 @@
 ﻿namespace Abp.Auditing
 {
     /// <summary>
-    /// Null implementation of <see cref="IAuditInfoProvider"/>.
+    ///     Null implementation of <see cref="IAuditInfoProvider" />.
     /// </summary>
     internal class NullAuditInfoProvider : IAuditInfoProvider
     {
@@ -9,7 +9,6 @@
             where TTenantId : struct
             where TUserId : struct
         {
-            
         }
     }
 }

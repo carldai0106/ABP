@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using CMS.Application.MultiTenancy;
 using CMS.Application.MultiTenancy.Dto;
 using Shouldly;
@@ -13,6 +11,7 @@ namespace CMS.Test
     public class TenantAppService_Tests : TestBase<Guid, Guid>
     {
         private readonly ITenantAppService _tenantAppService;
+
         public TenantAppService_Tests()
         {
             _tenantAppService = Resolve<ITenantAppService>();
@@ -42,9 +41,9 @@ namespace CMS.Test
             dtoGet.ShouldNotBe(null);
             dtoEdit.TenancyName.ShouldBe("Tenant_TEST_UPDATE");
 
-            await _tenantAppService.DeleteTenant(new Abp.Application.Services.Dto.EntityRequestInput<Guid>(dtoGet.Id));
+            await _tenantAppService.DeleteTenant(new EntityRequestInput<Guid>(dtoGet.Id));
 
-            var tenant = await _tenantAppService.GetTenant(new Abp.Application.Services.Dto.EntityRequestInput<Guid>(dtoGet.Id));
+            var tenant = await _tenantAppService.GetTenant(new EntityRequestInput<Guid>(dtoGet.Id));
             tenant.ShouldBe(null);
         }
     }

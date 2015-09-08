@@ -14,7 +14,7 @@ namespace Abp.WebApi.Controllers.Dynamic
 
         static DynamicApiControllerManager()
         {
-            DynamicApiControllers = new Dictionary<string, DynamicApiControllerInfo>(StringComparer.InvariantCultureIgnoreCase); 
+            DynamicApiControllers = new Dictionary<string, DynamicApiControllerInfo>(StringComparer.InvariantCultureIgnoreCase);
         }
 
         /// <summary>

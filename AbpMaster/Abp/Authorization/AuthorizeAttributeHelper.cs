@@ -6,19 +6,19 @@ using Abp.Threading;
 
 namespace Abp.Authorization
 {
-    internal class AuthorizeAttributeHelper<TTenantId, TUserId> : IAuthorizeAttributeHelper<TTenantId, TUserId>, ITransientDependency
+    internal class AuthorizeAttributeHelper<TTenantId, TUserId> : IAuthorizeAttributeHelper<TTenantId, TUserId>,
+        ITransientDependency
         where TTenantId : struct
         where TUserId : struct
     {
-        public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
-
-        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
-
         public AuthorizeAttributeHelper()
         {
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             PermissionChecker = NullPermissionChecker<TTenantId, TUserId>.Instance;
         }
+
+        public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
+        public IPermissionChecker<TTenantId, TUserId> PermissionChecker { get; set; }
 
         public async Task AuthorizeAsync(IEnumerable<IAbpAuthorizeAttribute> authorizeAttributes)
         {
@@ -37,7 +37,7 @@ namespace Abp.Authorization
 
         public async Task AuthorizeAsync(IAbpAuthorizeAttribute authorizeAttribute)
         {
-            await AuthorizeAsync(new[] { authorizeAttribute });
+            await AuthorizeAsync(new[] {authorizeAttribute});
         }
 
         public void Authorize(IEnumerable<IAbpAuthorizeAttribute> authorizeAttributes)
@@ -47,7 +47,7 @@ namespace Abp.Authorization
 
         public void Authorize(IAbpAuthorizeAttribute authorizeAttribute)
         {
-            Authorize(new[] { authorizeAttribute });
+            Authorize(new[] {authorizeAttribute});
         }
     }
 }

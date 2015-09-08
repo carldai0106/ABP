@@ -9,6 +9,6 @@ namespace Abp.EntityFramework
     public interface IDbContextProvider<out TDbContext, TTenantId, TUserId>
         where TDbContext : DbContext
     {
-        TDbContext DbContext { get; }      
+        TDbContext DbContext { get; }
     }
 }

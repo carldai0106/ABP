@@ -71,6 +71,15 @@
         "Users.EditUser": "编辑用户",
         "Users.Setup": "设置",
         "Users.UserList": "用户信息列表",
-        "Users.ModifyPassword": "如果您想修改密码，请输入新密码；否则，请留空."
+        "Users.ModifyPassword": "如果您想修改密码，请输入新密码；否则，请留空.",
+
+        "Page.Loading": "正在加载...",
+
+        "Script.SelectedToDelete": "请选择需要删除的记录。",
+        "Script.AreYourSureDelete": "您确定要删除选择的记录？",
+        "Script.SeletedToEdit": "请选择一条需要编辑的记录。",
+        "Script.SelectOneToEdit": "请仅选择一条记录来编辑。",
+        "Script.Information": "提示信息",
+        "Script.Confirmation": "确认信息"
     }
 }

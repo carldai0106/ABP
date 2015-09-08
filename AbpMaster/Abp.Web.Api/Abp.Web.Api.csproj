@@ -114,7 +114,7 @@
     <Compile Include="WebApi\Controllers\Dynamic\Scripting\ProxyScriptType.cs" />
     <Compile Include="WebApi\Controllers\Dynamic\Scripting\ScriptProxyManager.cs" />
     <Compile Include="WebApi\Controllers\Dynamic\Selectors\DynamicHttpControllerDescriptor.cs" />
-    <Compile Include="WebApi\Controllers\Dynamic\Selectors\DyanamicHttpActionDescriptor.cs" />
+    <Compile Include="WebApi\Controllers\Dynamic\Selectors\DynamicHttpActionDescriptor.cs" />
     <Compile Include="WebApi\Controllers\Dynamic\DynamicApiMethodInfo.cs" />
     <Compile Include="WebApi\Controllers\Dynamic\Scripting\jQuery\JQueryProxyGenerator.cs" />
     <Compile Include="WebApi\Controllers\Dynamic\Builders\IApiControllerBuilder.cs" />

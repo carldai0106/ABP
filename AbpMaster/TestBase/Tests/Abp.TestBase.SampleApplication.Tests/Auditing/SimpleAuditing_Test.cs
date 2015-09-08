@@ -37,9 +37,7 @@ namespace Abp.TestBase.SampleApplication.Tests.Auditing
             /* All application service methods are audited as conventional. */
 
             await _personAppService.CreatePersonAsync(new CreatePersonInput { ContactListId = 1, Name = "john" });
-            var o = Arg.Any<AuditInfo<int, long>>();
-            var received = _auditingStore.Received();
-            received.SaveAsync(o);
+            _auditingStore.Received().SaveAsync(Arg.Any<AuditInfo<int, long>>());
         }
 
         [Fact]

@@ -1,31 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Linq;
 using System.Linq.Dynamic;
-using System.Text;
 using System.Threading.Tasks;
-using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-using Abp.Collections.Extensions;
-using Abp.Domain.Uow;
 using Abp.Linq.Extensions;
 using Abp.UI;
 using CMS.Application.Action.Dto;
-
-using CMS.Application.Localization;
-using CMS.Application.User.Dto;
 using CMS.Domain;
 using CMS.Domain.Action;
-using CMS.Domain.User;
-using Microsoft.AspNet.Identity;
 
 namespace CMS.Application.Action
 {
     public class ActionAppService : CmsAppServiceBase, IActionAppService
     {
         private readonly ICmsRepository<ActionEntity, Guid> _repository;
+
         public ActionAppService(ICmsRepository<ActionEntity, Guid> repository)
         {
             _repository = repository;
@@ -45,7 +36,6 @@ namespace CMS.Application.Action
 
         public async Task Create(ActionCreateDto input)
         {
-
             if (await _repository.FirstOrDefaultAsync(x => x.ActionCode == input.ActionCode) != null)
             {
                 throw new UserFriendlyException(string.Format(L("Identity.DuplicateActionCode"), input.ActionCode));
@@ -55,7 +45,6 @@ namespace CMS.Application.Action
             action.Id = Guid.NewGuid();
 
             await _repository.InsertAsync(action);
-
         }
 
         public async Task Update(ActionEditDto input)
@@ -76,7 +65,6 @@ namespace CMS.Application.Action
             }
 
             await _repository.UpdateAsync(rs);
-
         }
 
         public async Task Delete(IdInput<Guid> id)

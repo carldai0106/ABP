@@ -15,7 +15,7 @@ namespace Abp.Web.Mvc.Controllers.Localization
         where TTenantId : struct
         where TUserId : struct
     {
-		[DisableAuditing]
+        [DisableAuditing]
         public virtual ActionResult ChangeCulture(string cultureName, string returnUrl = "")
         {
             if (!GlobalizationHelper.IsValidCultureCode(cultureName))

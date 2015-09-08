@@ -56,7 +56,7 @@ namespace Abp.Web.Mvc.Controllers
         {
             if (!culture.IsNullOrEmpty())
             {
-                Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo(culture);                
             }
 
             var sb = new StringBuilder();
@@ -66,16 +66,16 @@ namespace Abp.Web.Mvc.Controllers
 
             sb.AppendLine(_sessionScriptManager.GetScript());
             sb.AppendLine();
-
+            
             sb.AppendLine(_localizationScriptManager.GetScript());
             sb.AppendLine();
-
+            
             sb.AppendLine(await _authorizationScriptManager.GetScriptAsync());
             sb.AppendLine();
-
+            
             sb.AppendLine(await _navigationScriptManager.GetScriptAsync());
             sb.AppendLine();
-
+            
             sb.AppendLine(await _settingScriptManager.GetScriptAsync());
 
             sb.AppendLine(GetTriggerScript());

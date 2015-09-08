@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Common;
-using System.Linq.Expressions;
 using Abp.Collections;
 using Abp.Configuration.Startup;
-using Abp.Domain.Entities;
 using Abp.Modules;
 using Abp.TestBase;
 using CMS.Application;
-using CMS.Data;
 using CMS.Data.EntityFramework;
-using CMS.Domain;
-using CMS.Domain.User;
 using EntityFramework.DynamicFilters;
 
 namespace CMS.Test
@@ -52,13 +43,15 @@ namespace CMS.Test
                 throw new Exception("There is no tenant: " + tenancyName);
             }
 
-            TTenantId? tenantId = (TTenantId)Convert.ChangeType(tenant.Id, typeof(TTenantId));
+            TTenantId? tenantId = (TTenantId) Convert.ChangeType(tenant.Id, typeof (TTenantId));
 
             AbpSession.TenantId = tenantId;
 
-            Guid guid = (Guid)Convert.ChangeType(tenantId, typeof(Guid));
+            var guid = (Guid) Convert.ChangeType(tenantId, typeof (Guid));
 
-            var user = UsingDbContext(context => context.Users.FirstOrDefault(u => u.TenantId == guid && u.UserName == userName));
+            var user =
+                UsingDbContext(
+                    context => context.Users.FirstOrDefault(u => u.TenantId == guid && u.UserName == userName));
             if (user == null)
             {
                 throw new Exception("There is no user: " + userName + " for tenant: " + tenancyName);
@@ -81,7 +74,5 @@ namespace CMS.Test
 
             return result;
         }
-
-        
     }
 }

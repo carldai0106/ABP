@@ -35,8 +35,12 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -150,9 +154,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ABP.Extension\Abp.Extensions.csproj">
+    <ProjectReference Include="..\ABP.Extension\Abp.Extended.csproj">
       <Project>{57438e73-edde-445a-a5fc-e8d22dc1f12a}</Project>
-      <Name>Abp.Extensions</Name>
+      <Name>Abp.Extended</Name>
     </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp.AutoMapper\Abp.AutoMapper.csproj">
       <Project>{06eb5f7c-b974-4775-a305-f175d645f7c9}</Project>
@@ -174,10 +178,6 @@
       <Project>{bf813e48-d151-4e31-bb2d-1fea44a9a2e5}</Project>
       <Name>CMS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CMS.FW\CMS.FW.csproj">
-      <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
-      <Name>CMS.FW</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -188,6 +188,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

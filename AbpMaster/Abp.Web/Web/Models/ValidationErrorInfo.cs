@@ -34,7 +34,7 @@ namespace Abp.Web.Models
         {
             Message = message;
         }
-
+        
         /// <summary>
         /// Creates a new instance of <see cref="ValidationErrorInfo"/>.
         /// </summary>

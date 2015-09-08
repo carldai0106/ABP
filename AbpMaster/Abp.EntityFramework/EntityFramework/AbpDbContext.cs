@@ -50,7 +50,7 @@ namespace Abp.EntityFramework
         /// </summary>
         protected AbpDbContext()
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -61,7 +61,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -72,7 +72,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(DbCompiledModel model)
             : base(model)
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -83,7 +83,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(DbConnection existingConnection, bool contextOwnsConnection)
             : base(existingConnection, contextOwnsConnection)
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -94,7 +94,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(string nameOrConnectionString, DbCompiledModel model)
             : base(nameOrConnectionString, model)
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -105,7 +105,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(ObjectContext objectContext, bool dbContextOwnsObjectContext)
             : base(objectContext, dbContextOwnsObjectContext)
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -116,7 +116,7 @@ namespace Abp.EntityFramework
         protected AbpDbContext(DbConnection existingConnection, DbCompiledModel model, bool contextOwnsConnection)
             : base(existingConnection, model, contextOwnsConnection)
         {
-			Logger = NullLogger.Instance;
+            Logger = NullLogger.Instance;
             AbpSession = NullAbpSession<TTenantId, TUserId>.Instance;
             EntityChangedEventHelper = NullEntityChangedEventHelper<TTenantId, TUserId>.Instance;
         }
@@ -152,11 +152,10 @@ namespace Abp.EntityFramework
 
             modelBuilder.Filter(AbpDataFilters.MayHaveTenant, expMay, default(TTenantId));
         }
-       
 
         public override int SaveChanges()
         {
-			try
+            try
             {
                 ApplyAbpConcepts();
                 return base.SaveChanges();
@@ -182,7 +181,7 @@ namespace Abp.EntityFramework
             }
         }
 
-      
+
         protected virtual void ApplyAbpConcepts()
         {
             foreach (var entry in ChangeTracker.Entries())
@@ -253,7 +252,7 @@ namespace Abp.EntityFramework
                Convert.ChangeType(
                    this.GetFilterParameterValue(AbpDataFilters.MustHaveTenant, AbpDataFilters.Parameters.TenantId),
                    typeof(TTenantId));
-           
+
 
             if (currentTenantId.Equals(default(TTenantId)))
             {
@@ -270,7 +269,7 @@ namespace Abp.EntityFramework
             }
         }
 
-        
+
 
         protected virtual void CheckMayHaveTenant(DbEntityEntry entry)
         {
@@ -282,10 +281,10 @@ namespace Abp.EntityFramework
             var currentTenantId =
                 Convert.ChangeType(
                     this.GetFilterParameterValue(AbpDataFilters.MayHaveTenant, AbpDataFilters.Parameters.TenantId),
-                    typeof (TTenantId));
+                    typeof(TTenantId));
 
             var entity = entry.Cast<IMayHaveTenant<TTenantId>>().Entity;
-          
+
 
             if (!entity.TenantId.Equals(currentTenantId) && !entity.TenantId.Equals(AbpSession.TenantId))
             {
@@ -354,7 +353,7 @@ namespace Abp.EntityFramework
             entity.DeletionTime = Clock.Now;
             entity.DeleterUserId = AbpSession.UserId;
         }
-		private void LogDbEntityValidationException(DbEntityValidationException exception)
+        private void LogDbEntityValidationException(DbEntityValidationException exception)
         {
             Logger.Error("There are some validation errors while saving changes in EntityFramework:");
             foreach (var ve in exception.EntityValidationErrors.SelectMany(eve => eve.ValidationErrors))

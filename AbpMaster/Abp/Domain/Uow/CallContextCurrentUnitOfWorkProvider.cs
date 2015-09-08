@@ -7,16 +7,15 @@ using Castle.Core.Logging;
 namespace Abp.Domain.Uow
 {
     /// <summary>
-    /// CallContext implementation of <see cref="ICurrentUnitOfWorkProvider{TTenantId,TUserId}"/>. 
-    /// This is the default implementation.
+    ///     CallContext implementation of <see cref="ICurrentUnitOfWorkProvider{TTenantId,TUserId}" />.
+    ///     This is the default implementation.
     /// </summary>
-    public class CallContextCurrentUnitOfWorkProvider<TTenantId, TUserId> : ICurrentUnitOfWorkProvider<TTenantId, TUserId>, ITransientDependency
+    public class CallContextCurrentUnitOfWorkProvider<TTenantId, TUserId> :
+        ICurrentUnitOfWorkProvider<TTenantId, TUserId>, ITransientDependency
         where TTenantId : struct
         where TUserId : struct
     {
-        public ILogger Logger { get; set; }
         private const string ContextKey = "Abp.UnitOfWork.Current";
-
         //TODO: Clear periodically..?
         private static readonly ConcurrentDictionary<string, IUnitOfWork<TTenantId, TUserId>> UnitOfWorkDictionary
             = new ConcurrentDictionary<string, IUnitOfWork<TTenantId, TUserId>>();
@@ -24,6 +23,16 @@ namespace Abp.Domain.Uow
         public CallContextCurrentUnitOfWorkProvider()
         {
             Logger = NullLogger.Instance;
+        }
+
+        public ILogger Logger { get; set; }
+
+        /// <inheritdoc />
+        [DoNotWire]
+        public IUnitOfWork<TTenantId, TUserId> Current
+        {
+            get { return GetCurrentUow(Logger); }
+            set { SetCurrentUow(value, Logger); }
         }
 
         private static IUnitOfWork<TTenantId, TUserId> GetCurrentUow(ILogger logger)
@@ -123,14 +132,6 @@ namespace Abp.Domain.Uow
             }
 
             CallContext.LogicalSetData(ContextKey, outerUnitOfWorkKey);
-        }
-
-        /// <inheritdoc />
-        [DoNotWire]
-        public IUnitOfWork<TTenantId, TUserId> Current
-        {
-            get { return GetCurrentUow(Logger); }
-            set { SetCurrentUow(value, Logger); }
         }
     }
 }

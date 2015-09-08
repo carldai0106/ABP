@@ -214,38 +214,15 @@ namespace Abp.Web.Mvc.Controllers
 
             base.OnActionExecuting(filterContext);
         }
-        
+
         protected override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             base.OnActionExecuted(filterContext);
 
-            HandleAuditingAfterAction(filterContext);                
+            HandleAuditingAfterAction(filterContext);
         }
 
-        protected virtual bool ShouldSaveAudit(ActionExecutingContext filterContext)
-        {
-            if (AuditingConfiguration == null)
-            {
-                return false;
-            }
-
-            if (!AuditingConfiguration.MvcControllers.IsEnabled)
-            {
-                return false;
-            }
-
-            if (filterContext.IsChildAction && !AuditingConfiguration.MvcControllers.IsEnabledForChildActions)
-            {
-                return false;                
-            }
-
-            return AuditingHelper.ShouldSaveAudit(
-                GetMethodInfo(filterContext.ActionDescriptor),
-                AuditingConfiguration,
-                AbpSession,
-                true
-                );
-        }
+        #region Auditing
 
         private static MethodInfo GetMethodInfo(ActionDescriptor actionDescriptor)
         {
@@ -264,7 +241,7 @@ namespace Abp.Web.Mvc.Controllers
                 return ((TaskAsyncActionDescriptor)actionDescriptor).MethodInfo;
             }
 
-            return null;
+            throw new AbpException("Could not get MethodInfo for the action '" + actionDescriptor.ActionName + "' of controller '" + actionDescriptor.ControllerDescriptor.ControllerName + "'.");
         }
 
         private void HandleAuditingBeforeAction(ActionExecutingContext filterContext)
@@ -305,10 +282,35 @@ namespace Abp.Web.Mvc.Controllers
 
             if (AuditInfoProvider != null)
             {
-                AuditInfoProvider.Fill(_auditInfo);                
+                AuditInfoProvider.Fill(_auditInfo);
             }
 
             AuditingStore.Save(_auditInfo);
+        }
+
+        private bool ShouldSaveAudit(ActionExecutingContext filterContext)
+        {
+            if (AuditingConfiguration == null)
+            {
+                return false;
+            }
+
+            if (!AuditingConfiguration.MvcControllers.IsEnabled)
+            {
+                return false;
+            }
+
+            if (filterContext.IsChildAction && !AuditingConfiguration.MvcControllers.IsEnabledForChildActions)
+            {
+                return false;
+            }
+
+            return AuditingHelper.ShouldSaveAudit(
+                GetMethodInfo(filterContext.ActionDescriptor),
+                AuditingConfiguration,
+                AbpSession,
+                true
+                );
         }
 
         private string ConvertArgumentsToJson(IDictionary<string, object> arguments)
@@ -341,5 +343,7 @@ namespace Abp.Web.Mvc.Controllers
                 return "{}";
             }
         }
+
+        #endregion
     }
 }

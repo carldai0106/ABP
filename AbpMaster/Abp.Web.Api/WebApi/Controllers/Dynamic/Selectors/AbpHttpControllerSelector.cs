@@ -49,7 +49,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Selectors
             string serviceNameWithAction;
             if (!routeData.Values.TryGetValue("serviceNameWithAction", out serviceNameWithAction))
             {
-                return base.SelectController(request);
+                return base.SelectController(request);                
             }
 
             //Normalize serviceNameWithAction
@@ -68,17 +68,17 @@ namespace Abp.WebApi.Controllers.Dynamic.Selectors
                 {
                     return base.SelectController(request);
                 }
-
+                
                 var serviceName = DynamicApiServiceNameHelper.GetServiceNameInServiceNameWithAction(serviceNameWithAction);
                 controllerInfo = DynamicApiControllerManager.FindOrNull(serviceName);
                 if (controllerInfo == null)
                 {
-                    return base.SelectController(request);
+                    return base.SelectController(request);                    
                 }
 
                 hasActionName = true;
             }
-
+            
             //Create the controller descriptor
             var controllerDescriptor = new DynamicHttpControllerDescriptor(_configuration, controllerInfo.ServiceName, controllerInfo.ApiControllerType, controllerInfo.Filters);
             controllerDescriptor.Properties["__AbpDynamicApiControllerInfo"] = controllerInfo;

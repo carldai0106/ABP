@@ -1,53 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.Entity;
-using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Linq.Dynamic;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 using Abp;
-using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
+using Abp.Collections.Extensions;
 using Abp.Configuration.Startup;
-using Abp.Dependency;
 using Abp.Domain.Uow;
 using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.Runtime.Security;
-using Abp.Timing;
 using Abp.UI;
+using AutoMapper;
 using CMS.Application.IdentityFramework;
-using CMS.Application.Localization;
 using CMS.Application.User.Dto;
 using CMS.Domain;
 using CMS.Domain.Action;
 using CMS.Domain.Module;
-using CMS.Domain.Role;
 using CMS.Domain.RoleRight;
 using CMS.Domain.Tenant;
 using CMS.Domain.User;
 using CMS.Domain.UserRole;
 using Microsoft.AspNet.Identity;
-using Abp.Collections.Extensions;
 
 namespace CMS.Application.User
 {
     public class UserAppService : CmsAppServiceBase, IUserAppService
     {
-        private readonly ICmsRepository<UserEntity, Guid> _repository;
-        private readonly ICmsRepository<UserRoleEntity, Guid> _userRoleRepository;
-
-        private readonly ICmsRepository<ModuleEntity, Guid> _moduleRepository;
         private readonly ICmsRepository<ActionEntity, Guid> _actionRepository;
-        private readonly ICmsRepository<RoleRightEntity, Guid> _roleRightRepository;
-
-        private readonly ICmsRepository<TenantEntity, Guid> _tenantRepository;
-
+        private readonly ICmsRepository<ModuleEntity, Guid> _moduleRepository;
         private readonly IMultiTenancyConfig _multiTenancyConfig;
+        private readonly ICmsRepository<UserEntity, Guid> _repository;
+        private readonly ICmsRepository<RoleRightEntity, Guid> _roleRightRepository;
+        private readonly ICmsRepository<TenantEntity, Guid> _tenantRepository;
+        private readonly ICmsRepository<UserRoleEntity, Guid> _userRoleRepository;
 
         public UserAppService(
             ICmsRepository<UserEntity, Guid> repository,
@@ -66,14 +59,13 @@ namespace CMS.Application.User
             _roleRightRepository = roleRightRepository;
             _multiTenancyConfig = multiTenancyConfig;
             _tenantRepository = tenantRepository;
-
         }
 
         public async Task<Guid> CreateUser(CreateUserDto input)
         {
             var user = input.MapTo<UserEntity>();
             var userId = Guid.NewGuid();
-            user.Id = Guid.NewGuid(); 
+            user.Id = Guid.NewGuid();
 
             if (!input.Password.IsNullOrEmpty())
             {
@@ -110,7 +102,9 @@ namespace CMS.Application.User
 
         public async Task<UserEditDto> GetUser(string userNameOrEmail)
         {
-            var user = await _repository.FirstOrDefaultAsync(x => x.UserName == userNameOrEmail || x.Email == userNameOrEmail);
+            var user =
+                await _repository.FirstOrDefaultAsync(x => x.UserName == userNameOrEmail || x.Email == userNameOrEmail);
+            
             var ue = user.MapTo<UserEditDto>();
             return ue;
         }
@@ -164,7 +158,6 @@ namespace CMS.Application.User
             }
 
             await _repository.UpdateAsync(user);
-
         }
 
         public async Task DeleteUser(IdInput<Guid> input)
@@ -198,7 +191,6 @@ namespace CMS.Application.User
 
         public async Task CreateOrUpdate(IEnumerable<UserRoleDto> inputs)
         {
-
             foreach (var item in inputs)
             {
                 var rs = item.MapTo<UserRoleEntity>();
@@ -218,67 +210,59 @@ namespace CMS.Application.User
                     await _userRoleRepository.UpdateAsync(rs);
                 }
             }
-
-           
         }
 
-        public async Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode, string actionCode)
+        public async Task<List<PermissionDto>> GetPermission(NullableIdInput<Guid> userId, string moduleCode,
+            string actionCode)
         {
             var modules = _moduleRepository.GetAll();
             var actions = _actionRepository.GetAll();
             var roleRightQuery = _roleRightRepository.GetAll();
             var userRoles = _userRoleRepository.GetAll();
 
-            var userRole_JoinRole_Right_Query = userRoles.WhereIf(userId.Id != null, x => x.UserId == userId.Id).Join(roleRightQuery, x => x.RoleId, y => y.RoleId, (x, y) => new
-            {
-                RoleId = y.RoleId,
-                RoleCode = x.Role.RoleCode,
-                Status = y.Status,
-                ModuleId = y.ActionModule.ModuleId,
-                ActionId = y.ActionModule.ActionId,
-                ActionModuleStatus = y.ActionModule.Status
-            }).Where(x => x.ActionModuleStatus);
+            var userRole_JoinRole_Right_Query = userRoles.WhereIf(userId.Id != null, x => x.UserId == userId.Id)
+                .Join(roleRightQuery, x => x.RoleId, y => y.RoleId, (x, y) => new
+                {
+                    y.RoleId,
+                    x.Role.RoleCode,
+                    y.Status,
+                    y.ActionModule.ModuleId,
+                    y.ActionModule.ActionId,
+                    ActionModuleStatus = y.ActionModule.Status
+                }).Where(x => x.ActionModuleStatus);
 
-            var userRole_JoinRole_Right_Query_Join_Module_Query = userRole_JoinRole_Right_Query.Join(modules, x => x.ModuleId, y => y.Id, (x, y) => new
-            {
-                RoleId = x.RoleId,
-                RoleCode = x.RoleCode,
-                ModuleId = y.Id,
-                ModuleCode = y.ModuleCode,
-                DisplayName = y.DisplayName,
-                ActionId = x.ActionId,
-                Status = x.Status,
-            }).WhereIf(!moduleCode.IsNullOrWhiteSpace(), x => x.ModuleCode == moduleCode);
+            var userRole_JoinRole_Right_Query_Join_Module_Query = userRole_JoinRole_Right_Query.Join(modules,
+                x => x.ModuleId, y => y.Id, (x, y) => new
+                {
+                    x.RoleId,
+                    x.RoleCode,
+                    ModuleId = y.Id,
+                    y.ModuleCode,
+                    y.DisplayName,
+                    x.ActionId,
+                    x.Status
+                }).WhereIf(!moduleCode.IsNullOrWhiteSpace(), x => x.ModuleCode == moduleCode);
 
-            var query = userRole_JoinRole_Right_Query_Join_Module_Query.Join(actions, x => x.ActionId, y => y.Id, (x, y) => new PermissionDto
-            {
-                ActionId = x.ActionId,
-                ActionCode = y.ActionCode,
-                ModuleId = x.ModuleId,
-                ModuleCode = x.ModuleCode,
-                DisplayName = x.DisplayName,
-                RoleId = x.RoleId,
-                RoleCode = x.RoleCode,
-                Status = x.Status
-            }).WhereIf(!actionCode.IsNullOrWhiteSpace(), x => x.ActionCode == actionCode);
+            var query = userRole_JoinRole_Right_Query_Join_Module_Query.Join(actions, x => x.ActionId, y => y.Id,
+                (x, y) => new PermissionDto
+                {
+                    ActionId = x.ActionId,
+                    ActionCode = y.ActionCode,
+                    ModuleId = x.ModuleId,
+                    ModuleCode = x.ModuleCode,
+                    DisplayName = x.DisplayName,
+                    RoleId = x.RoleId,
+                    RoleCode = x.RoleCode,
+                    Status = x.Status
+                }).WhereIf(!actionCode.IsNullOrWhiteSpace(), x => x.ActionCode == actionCode);
 
             var rs = await query.ToListAsync();
 
             return rs;
         }
 
-        private async Task<TenantEntity> GetDefaultTenantAsync()
-        {
-            var tenant = await _tenantRepository.FirstOrDefaultAsync(t => t.TenancyName == "Default");
-            if (tenant == null)
-            {
-                throw new AbpException("There should be a 'Default' tenant if multi-tenancy is disabled!");
-            }
-
-            return tenant;
-        }
-
-        public async Task<LoginResultDto> Login(string userNameOrEmailAddress, string plainPassword, string tenancyName = null)
+        public async Task<LoginResultDto> Login(string userNameOrEmailAddress, string plainPassword,
+            string tenancyName = null)
         {
             if (userNameOrEmailAddress.IsNullOrEmpty())
             {
@@ -311,11 +295,10 @@ namespace CMS.Application.User
 
             using (CurrentUnitOfWork.DisableFilter(AbpDataFilters.MustHaveTenant))
             {
-
                 var user = await _repository.FirstOrDefaultAsync(x =>
-                        x.TenantId == tenant.Id &&
-                        (x.UserName == userNameOrEmailAddress || x.Email == userNameOrEmailAddress));
-
+                    x.TenantId == tenant.Id &&
+                    (x.UserName == userNameOrEmailAddress || x.Email == userNameOrEmailAddress));
+                
                 if (user == null)
                 {
                     return new LoginResultDto(LoginResultType.InvalidUserNameOrEmailAddress);
@@ -333,19 +316,36 @@ namespace CMS.Application.User
                     return new LoginResultDto(LoginResultType.UserIsNotActive);
                 }
 
-                return new LoginResultDto(user.MapTo<UserEditDto>(), CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie));
+                var info = user.MapTo<UserEditDto>();
+
+                return new LoginResultDto(info, CreateIdentity(user, DefaultAuthenticationTypes.ApplicationCookie));
             }
+        }
+
+        private async Task<TenantEntity> GetDefaultTenantAsync()
+        {
+            var tenant = await _tenantRepository.FirstOrDefaultAsync(t => t.TenancyName == "Default");
+            if (tenant == null)
+            {
+                throw new AbpException("There should be a 'Default' tenant if multi-tenancy is disabled!");
+            }
+
+            return tenant;
         }
 
         private ClaimsIdentity CreateIdentity(UserEntity user, string authenticationType)
         {
             var roleIds = user.UserRoles.Select(x => x.RoleId).JoinAsString(",");
-            var identity = new ClaimsIdentity(authenticationType, AbpClaimTypes.UserNameClaimType, AbpClaimTypes.RoleClaimType);
+            var identity = new ClaimsIdentity(authenticationType, AbpClaimTypes.UserNameClaimType,
+                AbpClaimTypes.RoleClaimType);
 
-            identity.AddClaim(new Claim(AbpClaimTypes.UserIdClaimType, user.Id.ToString(), "http://www.w3.org/2001/XMLSchema#string"));
-            identity.AddClaim(new Claim(AbpClaimTypes.UserNameClaimType, user.UserName, "http://www.w3.org/2001/XMLSchema#string"));
+            identity.AddClaim(new Claim(AbpClaimTypes.UserIdClaimType, user.Id.ToString(),
+                "http://www.w3.org/2001/XMLSchema#string"));
+            identity.AddClaim(new Claim(AbpClaimTypes.UserNameClaimType, user.UserName,
+                "http://www.w3.org/2001/XMLSchema#string"));
             identity.AddClaim(new Claim(AbpClaimTypes.RoleClaimType, roleIds, "http://www.w3.org/2001/XMLSchema#string"));
-            identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString(), "http://www.w3.org/2001/XMLSchema#string"));
+            identity.AddClaim(new Claim(AbpClaimTypes.TenantId, user.TenantId.ToString(),
+                "http://www.w3.org/2001/XMLSchema#string"));
 
             return identity;
         }

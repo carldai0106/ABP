@@ -14,7 +14,7 @@ namespace Abp.EntityFramework
     /// <summary>
     /// This module is used to implement "Data Access Layer" in EntityFramework.
     /// </summary>
-    public class AbpEntityFrameworkModule: AbpModule
+    public class AbpEntityFrameworkModule : AbpModule
     {
         public ILogger Logger { get; set; }
 
@@ -36,12 +36,12 @@ namespace Abp.EntityFramework
             IocManager.RegisterAssemblyByConvention(Assembly.GetExecutingAssembly());
 
             IocManager.IocContainer.Register(
-                Component.For(typeof (IDbContextProvider<,,>))
-                    .ImplementedBy(typeof (UnitOfWorkDbContextProvider<,,>))
+                Component.For(typeof(IDbContextProvider<,,>))
+                    .ImplementedBy(typeof(UnitOfWorkDbContextProvider<,,>))
                     .LifestyleTransient()
                 );
 
-           RegisterGenericRepositories<TTenantId, TUserId>();
+            RegisterGenericRepositories<TTenantId, TUserId>();
             //EntityFrameworkGenericRepositoryRegistrar.RegisterGenericRepositories<TTenantId, TUserId>(_typeFinder, IocManager);
         }
 

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 using Abp.Application.Services.Dto;
 using Abp.Domain.Entities;
-using Abp.Runtime.Validation;
 using CMS.Domain.User;
 
 namespace CMS.Application.User.Dto
@@ -19,18 +13,21 @@ namespace CMS.Application.User.Dto
         [Required]
         [StringLength(UserEntity.MaxUserNameLength)]
         public virtual string UserName { get; set; }
-        
+
         [StringLength(MaxPasswordLength, MinimumLength = MinPasswordLength)]
         public virtual string Password { get; set; }
+
         [Required]
         [StringLength(UserEntity.MaxEmailLength)]
         public virtual string Email { get; set; }
+
         [Required]
         [StringLength(UserEntity.MaxFirstNameLength)]
         public virtual string FirstName { get; set; }
+
         [Required]
         [StringLength(UserEntity.MaxLastNameLength)]
-        public virtual string LastName { get; set; } 
+        public virtual string LastName { get; set; }
 
         public bool IsActive { get; set; }
     }

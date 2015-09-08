@@ -28,10 +28,10 @@ namespace Abp.Tests.Threading
             InternalAsyncHelper.AwaitTaskWithPostActionAndFinally(
                 MyMethod1Async(),
                 async () =>
-                      {
-                          _asyncMethod1Worked.ShouldBe(true);
-                          await Task.Delay(10);
-                      },
+                {
+                    _asyncMethod1Worked.ShouldBe(true);
+                    await Task.Delay(10);
+                },
                 (exception) => { }
                 ).Wait();
 
@@ -39,10 +39,10 @@ namespace Abp.Tests.Threading
             var returnValue = InternalAsyncHelper.AwaitTaskWithPostActionAndFinallyAndGetResult(
                 MyMethod2Async(),
                 async () =>
-                      {
-                          _asyncMethod2Worked.ShouldBe(true);
-                          await Task.Delay(10);
-                      },
+                {
+                    _asyncMethod2Worked.ShouldBe(true);
+                    await Task.Delay(10);
+                },
                 (exception) => { }
                 ).Result;
 

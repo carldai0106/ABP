@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
+using Abp.Application.Services.Dto;
 using Abp.Configuration.Startup;
 using CMS.Application.Action;
 using CMS.Application.Action.Dto;
 using CMS.Application.Module;
 using CMS.Application.Module.Dto;
-using CMS.Application.MultiTenancy;
 using Newtonsoft.Json;
 using Shouldly;
 using Xunit;
@@ -19,9 +17,10 @@ namespace CMS.Test
 {
     public class ModuleAppService_Tests : TestBase<Guid, Guid>
     {
-        ITestOutputHelper output;
-        private readonly IModuleAppService _moduleAppService;
         private readonly IActionAppService _actionAppService;
+        private readonly IModuleAppService _moduleAppService;
+        private readonly ITestOutputHelper output;
+
         public ModuleAppService_Tests(ITestOutputHelper output)
         {
             _moduleAppService = Resolve<IModuleAppService>();
@@ -49,7 +48,8 @@ namespace CMS.Test
                     ModuleCode = "CMS.Admin.Dashboard",
                     Order = 1,
                     ParentId = null
-                },new ModuleCreateDto
+                },
+                new ModuleCreateDto
                 {
                     AppUrl = "#",
                     ClassName = "fa fa-cog",
@@ -74,7 +74,7 @@ namespace CMS.Test
             setupModule.ShouldNotBe(null);
             setupModule.ModuleCode.ShouldBe("CMS.Admin.Setup");
 
-            Guid parentid = setupModule.Id;
+            var parentid = setupModule.Id;
             var setups = new List<ModuleCreateDto>
             {
                 new ModuleCreateDto
@@ -90,7 +90,8 @@ namespace CMS.Test
                     ModuleCode = "CMS.Admin.Users",
                     Order = 1,
                     ParentId = parentid
-                },new ModuleCreateDto
+                },
+                new ModuleCreateDto
                 {
                     AppUrl = "~/Admin/Roles/Index",
                     ClassName = "",
@@ -103,7 +104,8 @@ namespace CMS.Test
                     ModuleCode = "CMS.Admin.Roles",
                     Order = 2,
                     ParentId = parentid
-                },new ModuleCreateDto
+                },
+                new ModuleCreateDto
                 {
                     AppUrl = "~/Admin/Actions/Index",
                     ClassName = "",
@@ -116,7 +118,8 @@ namespace CMS.Test
                     ModuleCode = "CMS.Admin.Actions",
                     Order = 3,
                     ParentId = parentid
-                },new ModuleCreateDto
+                },
+                new ModuleCreateDto
                 {
                     AppUrl = "~/Admin/Modules/Index",
                     ClassName = "",
@@ -129,7 +132,8 @@ namespace CMS.Test
                     ModuleCode = "CMS.Admin.Modules",
                     Order = 4,
                     ParentId = parentid
-                },new ModuleCreateDto
+                },
+                new ModuleCreateDto
                 {
                     AppUrl = "~/Admin/RoleRights/Index",
                     ClassName = "",
@@ -142,7 +146,8 @@ namespace CMS.Test
                     ModuleCode = "CMS.Admin.RoleRights",
                     Order = 5,
                     ParentId = parentid
-                },new ModuleCreateDto
+                },
+                new ModuleCreateDto
                 {
                     AppUrl = "~/Admin/Tests/Index",
                     ClassName = "",
@@ -173,9 +178,9 @@ namespace CMS.Test
             module = await _moduleAppService.GetModule("CMS.Admin.Tests");
             module.DisplayName.ShouldBe("Tests : just a test");
 
-            await _moduleAppService.Delete(new Abp.Application.Services.Dto.IdInput<Guid> { Id = module.Id });
+            await _moduleAppService.Delete(new IdInput<Guid> {Id = module.Id});
 
-            var rs = await _moduleAppService.GetModule(new Abp.Application.Services.Dto.IdInput<Guid> { Id = module.Id });
+            var rs = await _moduleAppService.GetModule(new IdInput<Guid> {Id = module.Id});
             rs.ShouldBe(null);
         }
 
@@ -186,7 +191,7 @@ namespace CMS.Test
             var items = rs.Items;
 
             var list = await _moduleAppService.GetModules(new GetModulesInput());
-            var modules = list.Items;//list.Items.Where(x => x.ParentId != null);
+            var modules = list.Items; //list.Items.Where(x => x.ParentId != null);
 
             //var actions = items.Where(
             //        x => x.ActionCode == "CMS.Create" || x.ActionCode == "CMS.Update" || x.ActionCode == "CMS.Delete");
@@ -196,7 +201,9 @@ namespace CMS.Test
                 from a in actions
                 select new ActionModuleDto
                 {
-                    ActionId = a.Id, ModuleId = m.Id, Status = true
+                    ActionId = a.Id,
+                    ModuleId = m.Id,
+                    Status = true
                 }).ToList();
 
             await _moduleAppService.CreateOrUpdate(am);
@@ -205,7 +212,7 @@ namespace CMS.Test
         [Fact]
         public async Task Update_ActionModules_Test()
         {
-            var modules = await _moduleAppService.GetModules(new GetModulesInput()
+            var modules = await _moduleAppService.GetModules(new GetModulesInput
             {
                 Filter = "CMS.Admin.Users"
             });

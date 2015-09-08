@@ -3,31 +3,27 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Dynamic;
-using System.Text;
 using System.Threading.Tasks;
-using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Abp.AutoMapper;
-
+using Abp.Extensions;
 using Abp.Linq.Extensions;
 using Abp.UI;
-
-using CMS.Application.Localization;
 using CMS.Application.Module.Dto;
-
 using CMS.Domain;
-using CMS.Domain.Module;
-using Abp.Extensions;
 using CMS.Domain.ActionModule;
-
+using CMS.Domain.Module;
+using Newtonsoft.Json;
 
 namespace CMS.Application.Module
 {
     public class ModuleAppService : CmsAppServiceBase, IModuleAppService
     {
-        private readonly ICmsRepository<ModuleEntity, Guid> _repository;
         private readonly ICmsRepository<ActionModuleEntity, Guid> _actionModuleRepository;
-        public ModuleAppService(ICmsRepository<ModuleEntity, Guid> repository, ICmsRepository<ActionModuleEntity, Guid> actionModuleRepository)
+        private readonly ICmsRepository<ModuleEntity, Guid> _repository;
+
+        public ModuleAppService(ICmsRepository<ModuleEntity, Guid> repository,
+            ICmsRepository<ActionModuleEntity, Guid> actionModuleRepository)
         {
             _repository = repository;
             _actionModuleRepository = actionModuleRepository;
@@ -41,14 +37,17 @@ namespace CMS.Application.Module
 
         public async Task<ModuleEditDto> GetModule(string moduleCode)
         {
-            var rs = await _repository.GetAll().Include(x => x.ActionModules).FirstOrDefaultAsync(x => x.ModuleCode == moduleCode);
-            
+            var rs =
+                await
+                    _repository.GetAll()
+                        .Include(x => x.ActionModules)
+                        .FirstOrDefaultAsync(x => x.ModuleCode == moduleCode);
+
             return rs.MapTo<ModuleEditDto>();
         }
 
         public async Task<PagedResultOutput<ModuleEditDto>> GetModules(GetModulesInput input)
         {
-
             var query = _repository.GetAll()
                 .WhereIf(!input.Filter.IsNullOrWhiteSpace(),
                     x => x.ModuleCode.Contains(input.Filter) || x.DisplayName.Contains(input.Filter));
@@ -77,7 +76,6 @@ namespace CMS.Application.Module
             }
 
             await _repository.UpdateAsync(rs);
-
         }
 
         public async Task Delete(IdInput<Guid> input)
@@ -125,7 +123,7 @@ namespace CMS.Application.Module
         {
             var query = _repository.GetAll();
             var list = await query.ToListAsync();
-            var mappedList =  list.MapTo<List<ModuleTreeNode>>();
+            var mappedList = list.MapTo<List<ModuleTreeNode>>();
             var root = new ModuleTreeNode
             {
                 ModuleCode = "Root",
@@ -137,7 +135,8 @@ namespace CMS.Application.Module
             return GetSubItem(mappedList, root, input.Id);
         }
 
-        private static ModuleTreeNode GetSubItem(IEnumerable<ModuleTreeNode> source, ModuleTreeNode parentNode, Guid? currentId)
+        private static ModuleTreeNode GetSubItem(IEnumerable<ModuleTreeNode> source, ModuleTreeNode parentNode,
+            Guid? currentId)
         {
             if (source == null || parentNode == null)
             {
@@ -147,8 +146,8 @@ namespace CMS.Application.Module
 
             foreach (var item in list)
             {
-                string json = Newtonsoft.Json.JsonConvert.SerializeObject(item);
-                var child = Newtonsoft.Json.JsonConvert.DeserializeObject<ModuleTreeNode>(json);
+                var json = JsonConvert.SerializeObject(item);
+                var child = JsonConvert.DeserializeObject<ModuleTreeNode>(json);
                 child.IsActived = child.Id == currentId;
 
                 parentNode.Children.Add(GetSubItem(source, child, currentId));

@@ -29,6 +29,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         /// Action Filters to apply to the whole Dynamic Controller.
         /// </summary>
         private IFilter[] _filters;
+
         private bool _conventionalVerbs;
 
         /// <summary>
@@ -87,6 +88,7 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
             _conventionalVerbs = true;
             return this;
         }
+
         /// <summary>
         /// Builds the controller.
         /// This method must be called at last of the build operation.
@@ -94,12 +96,13 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
         public void Build()
         {
             var controllerInfo = new DynamicApiControllerInfo(
-                _serviceName,
+                _serviceName, 
                 typeof(T),
                 typeof(DynamicApiController<T, TTenantId, TUserId>),
                 typeof(AbpDynamicApiControllerInterceptor<T>),
                 _filters
                 );
+            
             foreach (var actionBuilder in _actionBuilders.Values)
             {
                 if (actionBuilder.DontCreate)
@@ -107,13 +110,9 @@ namespace Abp.WebApi.Controllers.Dynamic.Builders
                     continue;
                 }
 
-                if (_conventionalVerbs && !actionBuilder.Verb.HasValue)
-                {
-                    actionBuilder.WithVerb(DynamicApiVerbHelper.GetConventionalVerbForMethodName(actionBuilder.ActionName));
-                }
-                controllerInfo.Actions[actionBuilder.ActionName] = actionBuilder.BuildActionInfo();
+                controllerInfo.Actions[actionBuilder.ActionName] = actionBuilder.BuildActionInfo(_conventionalVerbs);
             }
-
+            
             DynamicApiControllerManager.Register(controllerInfo);
         }
     }

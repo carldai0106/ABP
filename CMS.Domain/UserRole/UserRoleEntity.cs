@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Abp.Domain.Entities.Auditing;
 using CMS.Domain.Role;
 
-
 namespace CMS.Domain.UserRole
 {
     [Table("UserRoles")]

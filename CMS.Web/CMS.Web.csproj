@@ -14,7 +14,7 @@
     <RootNamespace>CMS.Web</RootNamespace>
     <AssemblyName>CMS.Web</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -735,6 +735,7 @@
     <Content Include="Content\Uploads\ueditor\upload\image\20150318\6356229282129179801421518.jpg" />
     <Content Include="Content\Uploads\ueditor\upload\image\20150318\6356229282230191105249346.jpg" />
     <Content Include="Content\Uploads\ueditor\upload\image\20150318\6356229282292231439891738.jpg" />
+    <Content Include="Content\_test.html" />
     <Content Include="Global.asax" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -842,9 +843,9 @@
     <Folder Include="Content\plugins\ueditor\net\upload\image\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ABP.Extension\Abp.Extensions.csproj">
+    <ProjectReference Include="..\ABP.Extension\Abp.Extended.csproj">
       <Project>{57438e73-edde-445a-a5fc-e8d22dc1f12a}</Project>
-      <Name>Abp.Extensions</Name>
+      <Name>Abp.Extended</Name>
     </ProjectReference>
     <ProjectReference Include="..\AbpMaster\Abp.Web.Mvc\Abp.Web.Mvc.csproj">
       <Project>{78fc0c9b-c5a9-4900-9a46-a8f544ac5343}</Project>
@@ -882,7 +883,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>15969</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:15068/</IISUrl>
+          <IISUrl>http://localhost:8032</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -2,35 +2,31 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Xml;
 using Abp.Collections.Extensions;
 using Abp.Extensions;
-using Abp.Localization.Dictionaries.Xml;
-using Abp.Xml.Extensions;
 using Newtonsoft.Json;
 
 namespace Abp.Localization.Dictionaries.Json
 {
     /// <summary>
-    /// This class is used to build a localization dictionary from XML.
+    ///     This class is used to build a localization dictionary from XML.
     /// </summary>
     /// <remarks>
-    /// Use static Build methods to create instance of this class.
+    ///     Use static Build methods to create instance of this class.
     /// </remarks>
     public class JsonLocalizationDictionary : LocalizationDictionary
     {
         /// <summary>
-        /// Private constructor.
+        ///     Private constructor.
         /// </summary>
         /// <param name="cultureInfo">Culture of the dictionary</param>
         private JsonLocalizationDictionary(CultureInfo cultureInfo)
             : base(cultureInfo)
         {
-
         }
 
         /// <summary>
-        /// Builds an <see cref="JsonLocalizationDictionary"/> from given file.
+        ///     Builds an <see cref="JsonLocalizationDictionary" /> from given file.
         /// </summary>
         /// <param name="filePath">Path of the file</param>
         public static JsonLocalizationDictionary BuildFomFile(string filePath)
@@ -46,7 +42,7 @@ namespace Abp.Localization.Dictionaries.Json
         }
 
         /// <summary>
-        /// Builds an <see cref="JsonLocalizationDictionary"/> from given json string.
+        ///     Builds an <see cref="JsonLocalizationDictionary" /> from given json string.
         /// </summary>
         /// <param name="jsonString">Json string</param>
         public static JsonLocalizationDictionary BuildFomJsonString(string jsonString)
@@ -86,7 +82,9 @@ namespace Abp.Localization.Dictionaries.Json
 
             if (dublicateNames.Count > 0)
             {
-                throw new AbpException("A dictionary can not contain same key twice. There are some duplicated names: " + dublicateNames.JoinAsString(", "));
+                throw new AbpException(
+                    "A dictionary can not contain same key twice. There are some duplicated names: " +
+                    dublicateNames.JoinAsString(", "));
             }
 
             return dictionary;

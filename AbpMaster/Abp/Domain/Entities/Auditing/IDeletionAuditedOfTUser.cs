@@ -1,7 +1,7 @@
 namespace Abp.Domain.Entities.Auditing
 {
     /// <summary>
-    /// Adds navigation properties to <see cref="IDeletionAudited{TUserId}"/> interface for user.
+    ///     Adds navigation properties to <see cref="IDeletionAudited{TUserId}" /> interface for user.
     /// </summary>
     /// <typeparam name="TUser">Type of the user</typeparam>
     /// <typeparam name="TUserId">Type of the DeleterUserId</typeparam>
@@ -9,7 +9,7 @@ namespace Abp.Domain.Entities.Auditing
         where TUser : IEntity<TUserId>
     {
         /// <summary>
-        /// Reference to the deleter user of this entity.
+        ///     Reference to the deleter user of this entity.
         /// </summary>
         TUser DeleterUser { get; set; }
     }

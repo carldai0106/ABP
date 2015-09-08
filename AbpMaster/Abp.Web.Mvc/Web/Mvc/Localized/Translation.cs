@@ -31,7 +31,7 @@ namespace Abp.Web.Mvc.Localized
 
         private void SetLocalizationSource()
         {
-            _localizationSource =  LocalizationHelper.GetSource(LocalizationSourceName);
+            _localizationSource = LocalizationHelper.GetSource(LocalizationSourceName);
         }
 
         /// <summary>

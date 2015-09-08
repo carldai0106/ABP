@@ -18,18 +18,16 @@ namespace Abp.Auditing
         where TTenantId : struct
         where TUserId : struct
     {
-        public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
-
+	    public IAbpSession<TTenantId, TUserId> AbpSession { get; set; }
         public ILogger Logger { get; set; }
-
         public IAuditingStore<TTenantId, TUserId> AuditingStore { get; set; }
-
-        private readonly IAuditingConfiguration _configuration;
-
-        private readonly IAuditInfoProvider _auditInfoProvider;
+       
+        private readonly IAuditingConfiguration _configuration; 		
+		private readonly IAuditInfoProvider _auditInfoProvider;
         private readonly IUnitOfWorkManager<TTenantId, TUserId> _unitOfWorkManager;
 
-        public AuditingInterceptor(IAuditingConfiguration configuration, IAuditInfoProvider auditInfoProvider, IUnitOfWorkManager<TTenantId,TUserId> unitOfWorkManager)
+        public AuditingInterceptor(IAuditingConfiguration configuration, IAuditInfoProvider auditInfoProvider,
+            IUnitOfWorkManager<TTenantId, TUserId> unitOfWorkManager)
         {
             _configuration = configuration;
             _auditInfoProvider = auditInfoProvider;
@@ -67,8 +65,8 @@ namespace Abp.Auditing
                 TenantId = AbpSession.TenantId,
                 UserId = AbpSession.UserId,
                 ServiceName = invocation.MethodInvocationTarget.DeclaringType != null
-                              ? invocation.MethodInvocationTarget.DeclaringType.FullName
-                              : "",
+                    ? invocation.MethodInvocationTarget.DeclaringType.FullName
+                    : "",
                 MethodName = invocation.MethodInvocationTarget.Name,
                 Parameters = ConvertArgumentsToJson(invocation),
                 ExecutionTime = Clock.Now
@@ -99,20 +97,21 @@ namespace Abp.Auditing
                 AuditingStore.Save(auditInfo);
             }
         }
+
         private void PerformAsyncAuditing(IInvocation invocation, AuditInfo<TTenantId, TUserId> auditInfo)
         {
             var stopwatch = Stopwatch.StartNew();
 
             invocation.Proceed();
 
-            if (invocation.Method.ReturnType == typeof(Task))
+            if (invocation.Method.ReturnType == typeof (Task))
             {
                 invocation.ReturnValue = InternalAsyncHelper.AwaitTaskWithFinally(
-                    (Task)invocation.ReturnValue,
+                    (Task) invocation.ReturnValue,
                     exception => SaveAuditInfo(auditInfo, stopwatch, exception)
                     );
             }
-            else 
+            else //Task<TResult>
             {
                 invocation.ReturnValue = InternalAsyncHelper.CallAwaitTaskWithFinallyAndGetResult(
                     invocation.Method.ReturnType.GenericTypeArguments[0],
@@ -133,7 +132,7 @@ namespace Abp.Auditing
                 }
 
                 var dictionary = new Dictionary<string, object>();
-                for (int i = 0; i < parameters.Length; i++)
+                for (var i = 0; i < parameters.Length; i++)
                 {
                     var parameter = parameters[i];
                     var argument = invocation.Arguments[i];

@@ -129,10 +129,6 @@
       <Project>{bf813e48-d151-4e31-bb2d-1fea44a9a2e5}</Project>
       <Name>CMS.Domain</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CMS.FW\CMS.FW.csproj">
-      <Project>{59636974-4934-4d20-8ea8-a81d578eeb82}</Project>
-      <Name>CMS.FW</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

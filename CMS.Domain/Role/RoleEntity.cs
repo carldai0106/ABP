@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Abp.Domain.Entities;
+using Abp.Domain.Entities.Auditing;
 using CMS.Domain.RoleRight;
 using CMS.Domain.Tenant;
 using CMS.Domain.UserRole;
-using CMS.FW.Domain;
 
 namespace CMS.Domain.Role
 {
@@ -23,13 +19,17 @@ namespace CMS.Domain.Role
         [Required]
         [StringLength(MaxRoleCodeLength)]
         public virtual string RoleCode { get; set; }
+
         [Required]
         [StringLength(MaxDisplayNameLength)]
         public virtual string DisplayName { get; set; }
+
         [StringLength(MaxDescriptionLength)]
         public string Description { get; set; }
+
         public virtual bool IsActive { get; set; }
         public virtual int Order { get; set; }
+
         [ForeignKey("TenantId")]
         public virtual TenantEntity Tenant { get; set; }
 

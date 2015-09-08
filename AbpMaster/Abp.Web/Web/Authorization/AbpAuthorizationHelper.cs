@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Abp.Authorization;
 using Abp.Dependency;
 using Abp.Reflection.Extensions;
-using Abp.Runtime.Caching;
 using Abp.Runtime.Caching.Memory;
 using Abp.Runtime.Session;
 
@@ -56,8 +52,9 @@ namespace Abp.Web.Authorization
         {
             var container = IocManager.Instance.IocContainer;
 
-            var cache = container.Resolve<ThreadSafeObjectCache<object>>("_AbpBootstrapper");
-            var obj = cache.Get("_AbpWebApplicationSubClass");
+            //var cache = container.Resolve<ThreadSafeObjectCache<object>>("_AbpBootstrapper");
+            var cache = container.Resolve<AbpMemoryCache>("_AbpBootstrapper");
+            var obj = cache.GetOrDefault("_AbpWebApplicationSubClass");
 
             Type mvcAppType;
 
